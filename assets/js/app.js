@@ -1,12 +1,15 @@
- import React from 'react';
- 
-const App = () => {
-    return (
-        <div>
-            <h1>React is added very cool</h1>
-            <h3>NFQ Career Criteria Assessment is in progress</h3>
-        </div>
-    )
+import React from 'react';
+
+class App extends React.Component{
+
+    render(){
+        return(
+            <div>
+                <h1>React is added</h1>
+                <h1>NFQ Career Criteria Assessment is in progress</h1>
+            </div>
+        )
+    }
 }
 
 export default App;
