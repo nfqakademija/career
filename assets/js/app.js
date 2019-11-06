@@ -1,12 +1,12 @@
 import React from 'react';
+import NavBar from './Components/NavBar/NavBar';
 
 class App extends React.Component{
 
     render(){
         return(
             <div>
-                <h1>React is added</h1>
-                <h1>NFQ Career Criteria Assessment is in progress</h1>
+                <NavBar/>
             </div>
         )
     }
