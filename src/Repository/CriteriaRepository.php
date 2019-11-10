@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Criteria;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * @method Criteria|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,37 +14,24 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class CriteriaRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $entityManager;
+
+    public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Criteria::class);
+        $this->entityManager = $this->getEntityManager();
     }
 
-    // /**
-    //  * @return Criteria[] Returns an array of Criteria objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function fetchByCompetenceTitle(string $title)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Criteria
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $query = $this->entityManager->createQuery(
+            'SELECT c.id, c.title AS Criteria, p.title AS Competence '
+            . 'FROM App\Entity\Criteria c '
+            . 'INNER JOIN App\Entity\Competence p '
+            . 'WHERE p.id = c.fk_competence '
+            . 'AND p.title = :title')->setParameter('title', $title);
+        return $query->getResult();
     }
-    */
+
 }
