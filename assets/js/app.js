@@ -1,7 +1,10 @@
 import React from "react";
 import NavBar from "./Components/Navbar/NavBar";
 import Profile from "./Components/Profile/Profile.component";
-import Axios from "axios";
+
+// import example from '../../public/example.json';
+
+import Axios from 'axios';
 
 class App extends React.Component {
   constructor() {
@@ -16,6 +19,7 @@ class App extends React.Component {
     Axios.get("./example.json")
       .then(res => this.setState({ profile: res.data }))
       .catch(err => console.log(err));
+    // this.setState({profile:example})
   }
 
   render() {

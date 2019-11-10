@@ -8,7 +8,7 @@
                 "list": [
                     {
                         "criteria": "Released a product",
-                        "selfEvaluation": "None",
+                        "selfEvaluation": "NoneE",
                         "comments": "Nice person, good candidate",
                         "teamLeadEvaluation": false,
                         "overall": "Needs discusion"
@@ -20,7 +20,7 @@
                 "list":[
                 {
                     "criteria": "Can use PHP, OOP",
-                    "selfEvaluation": "Familiar",
+                    "selfEvaluation": "EXPERT",
                     "comments": "Nice person, good candidate",
                     "teamLeadEvaluation": false,
                     "overall": "Needs discusion"
@@ -125,7 +125,7 @@
                 },
                 {
                     "criteria": "Has knowledge of frontend",
-                    "selfEvaluation": "Familiar",
+                    "selfEvaluation": "Expert",
                     "comments": "Nice person, good candidate",
                     "teamLeadEvaluation": false,
                     "overall": "Needs discusion"
