@@ -1,0 +1,30 @@
+.Profile{
+    // border:solid 2px red;
+
+    td{
+        border: 2px solid red;
+        // padding: 8px;
+      }
+
+      .criteria{
+        background-color: red;
+    }
+    
+    .criteriaName{
+        background-color: orange;
+    }
+    
+    .u-textCenter{
+        text-align: center;;
+    }
+    
+    // .u-centerCenter{
+    //     // display: flex;
+    //     // justify-content: center;
+    //     // align-items: center;
+    // }
+    
+    .u-borderNone{
+        border:none;
+    }
+}

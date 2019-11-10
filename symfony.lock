@@ -78,6 +78,18 @@
     "doctrine/reflection": {
         "version": "v1.0.0"
     },
+    "friendsofsymfony/rest-bundle": {
+        "version": "2.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "2.2",
+            "ref": "cad41ef93d6150067ae2bb3c7fd729492dff6f0a"
+        },
+        "files": [
+            "config/packages/fos_rest.yaml"
+        ]
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
@@ -89,6 +101,15 @@
     },
     "ocramius/proxy-manager": {
         "version": "2.2.3"
+    },
+    "phpdocumentor/reflection-common": {
+        "version": "2.0.0"
+    },
+    "phpdocumentor/reflection-docblock": {
+        "version": "4.3.2"
+    },
+    "phpdocumentor/type-resolver": {
+        "version": "1.0.1"
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -197,6 +218,9 @@
     "symfony/http-kernel": {
         "version": "v4.3.5"
     },
+    "symfony/inflector": {
+        "version": "v4.3.6"
+    },
     "symfony/maker-bundle": {
         "version": "1.0",
         "recipe": {
@@ -224,6 +248,12 @@
     "symfony/polyfill-php73": {
         "version": "v1.12.0"
     },
+    "symfony/property-access": {
+        "version": "v4.3.6"
+    },
+    "symfony/property-info": {
+        "version": "v4.3.6"
+    },
     "symfony/routing": {
         "version": "4.2",
         "recipe": {
@@ -238,6 +268,15 @@
             "config/packages/test/routing.yaml",
             "config/routes.yaml"
         ]
+    },
+    "symfony/security-core": {
+        "version": "v4.3.6"
+    },
+    "symfony/serializer": {
+        "version": "v4.3.6"
+    },
+    "symfony/serializer-pack": {
+        "version": "v1.0.2"
     },
     "symfony/service-contracts": {
         "version": "v1.1.7"
@@ -268,6 +307,19 @@
     "symfony/twig-pack": {
         "version": "v1.0.0"
     },
+    "symfony/validator": {
+        "version": "4.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.3",
+            "ref": "d902da3e4952f18d3bf05aab29512eb61cabd869"
+        },
+        "files": [
+            "config/packages/test/validator.yaml",
+            "config/packages/validator.yaml"
+        ]
+    },
     "symfony/var-exporter": {
         "version": "v4.3.5"
     },
@@ -297,6 +349,15 @@
     },
     "twig/twig": {
         "version": "v2.12.1"
+    },
+    "webmozart/assert": {
+        "version": "1.5.0"
+    },
+    "willdurand/jsonp-callback-validator": {
+        "version": "v1.1.0"
+    },
+    "willdurand/negotiation": {
+        "version": "v2.3.1"
     },
     "zendframework/zend-code": {
         "version": "3.4.0"
