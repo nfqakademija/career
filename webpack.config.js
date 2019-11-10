@@ -69,6 +69,9 @@ Encore
     // uncomment if you use API Platform Admin (composer req api-admin)
     .enableReactPreset()
     //.addEntry('admin', './assets/js/admin.js')
+    .configureBabel(function(babelConfig) {
+        babelConfig.plugins.push('transform-class-properties'); 
+    })
 ;
 
 module.exports = Encore.getWebpackConfig();
