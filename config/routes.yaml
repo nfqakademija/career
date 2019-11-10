@@ -6,3 +6,7 @@ criteria_list:
   type: rest
   resource: App\Controller\CriteriaListController
   prefix: api
+career_form_list:
+    type: rest
+    resource: App\Controller\CareerFormController
+    prefix: api
