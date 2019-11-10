@@ -29,7 +29,9 @@ class CriteriaListController extends AbstractFOSRestController
      */
     public function getCriteriaListAction()
     {
-        $criteriaList = $this->criteriaRepository->findAll();
+        $criteriaList = $this->criteriaRepository->findBy([
+            'isApplicable' => 1
+        ]);
         // Tip : Inject SerializerInterface $serializer in the controller method
 // and avoid these 3 lines of instanciation/configuration
         $encoders = [new JsonEncoder()]; // If no need for XmlEncoder
@@ -53,7 +55,7 @@ class CriteriaListController extends AbstractFOSRestController
      */
     public function getCriteriaAction(string $title)
     {
-        return $this->criteriaRepository->fetchByCompetenceTitle($title);
+        return $this->criteriaRepository->fetchByCompetence($title);
     }
 
 }

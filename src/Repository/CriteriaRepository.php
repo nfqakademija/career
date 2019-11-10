@@ -22,15 +22,28 @@ class CriteriaRepository extends ServiceEntityRepository
         $this->entityManager = $this->getEntityManager();
     }
 
-    public function fetchByCompetenceTitle(string $title)
+    public function fetchByCompetence(string $title)
     {
-
         $query = $this->entityManager->createQuery(
             'SELECT c.id, c.title AS Criteria, p.title AS Competence '
             . 'FROM App\Entity\Criteria c '
             . 'INNER JOIN App\Entity\Competence p '
             . 'WHERE p.id = c.fk_competence '
             . 'AND p.title = :title')->setParameter('title', $title);
+        return $query->getResult();
+    }
+
+    public function fetchByCompetenceWithChoices(string $title)
+    {
+        $query = $this->entityManager->createQuery(
+            'SELECT c.title AS Criteria, p.title AS Competence, h.title AS Choice '
+            . 'FROM App\Entity\Criteria c '
+            . 'JOIN App\Entity\CriteriaChoice h '
+            . 'INNER JOIN App\Entity\Competence p '
+            . 'WHERE  c.id = h.fk_criteria '
+            . 'AND p.id = c.fk_competence '
+            . 'AND p.title = :title '
+            . 'AND c.isApplicable = 1')->setParameter('title', $title);
         return $query->getResult();
     }
 
