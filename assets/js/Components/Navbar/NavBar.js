@@ -31,6 +31,11 @@ const NavBar = () => {
               Profiles
             </Link>
           </li>
+          <li className="nav-item u-padding0x30 active">
+            <Link className="nav-link" to="/hrprofiles">
+              HR Profiles
+            </Link>
+          </li>
         </ul>
       </div>
     </nav>
