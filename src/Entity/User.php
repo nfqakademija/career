@@ -97,5 +97,4 @@ class User extends BaseUser
     }
 
 
-
 }

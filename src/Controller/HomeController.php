@@ -14,9 +14,9 @@ class HomeController extends AbstractController
     {
         if ($this->isGranted('ROLE_ADMIN')) {
             return $this->redirectToRoute('admin_homepage');
-        } else if ($this->isGranted('ROLE_EMPLOYEE')) {
+        } elseif ($this->isGranted('ROLE_EMPLOYEE')) {
             return $this->redirectToRoute('employee_homepage');
-        } else if ($this->isGranted('ROLE_HEAD')) {
+        } elseif ($this->isGranted('ROLE_HEAD')) {
             return $this->redirectToRoute('head_homepage');
         } else {
             return $this->redirectToRoute('fos_user_security_login');
