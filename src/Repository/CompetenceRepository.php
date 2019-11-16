@@ -20,4 +20,13 @@ class CompetenceRepository extends ServiceEntityRepository
     }
 
 
+    public function fetchApplicable()
+    {
+        $query = $this->entityManager->createQuery(
+            'SELECT id, title '
+            . 'FROM App\Entity\Competence'
+            . 'WHERE isApplicable = :isApplicable')->setParameter('isApplicable', 1);
+        return $query->getResult();
+    }
+
 }
