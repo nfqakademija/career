@@ -27,3 +27,4 @@ class CriteriaListController extends AbstractFOSRestController
         return $this->criteriaRepository->fetchByCompetenceTitle('Experience');
     }
 }
+

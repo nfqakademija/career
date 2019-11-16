@@ -39,9 +39,15 @@ class Criteria
      */
     private $criteriaChoices;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\CareerProfile", mappedBy="fkCriteria")
+     */
+    private $careerProfiles;
+
     public function __construct()
     {
         $this->criteriaChoices = new ArrayCollection();
+        $this->careerProfiles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -111,6 +117,34 @@ class Criteria
             if ($criteriaChoice->getFkCriteria() === $this) {
                 $criteriaChoice->setFkCriteria(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CareerProfile[]
+     */
+    public function getCareerProfiles(): Collection
+    {
+        return $this->careerProfiles;
+    }
+
+    public function addCareerProfile(CareerProfile $careerProfile): self
+    {
+        if (!$this->careerProfiles->contains($careerProfile)) {
+            $this->careerProfiles[] = $careerProfile;
+            $careerProfile->addFkCriterion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCareerProfile(CareerProfile $careerProfile): self
+    {
+        if ($this->careerProfiles->contains($careerProfile)) {
+            $this->careerProfiles->removeElement($careerProfile);
+            $careerProfile->removeFkCriterion($this);
         }
 
         return $this;
