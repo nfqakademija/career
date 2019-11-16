@@ -24,7 +24,7 @@ class Competence
     private $title;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Criteria", mappedBy="fk_competence")
+     * @ORM\OneToMany(targetEntity="App\Entity\Criteria", mappedBy="fkCompetence")
      */
     private $criterias;
 
