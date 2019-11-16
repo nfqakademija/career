@@ -4,8 +4,10 @@ security:
         FOS\UserBundle\Model\UserInterface: bcrypt
 
     role_hierarchy:
-        ROLE_ADMIN:       ROLE_USER
-        ROLE_SUPER_ADMIN: ROLE_ADMIN
+        ROLE_EMPLOYEE:  ROLE_EMPLOYEE
+        ROLE_HEAD:  ROLE_HEAD
+        ROLE_ADMIN: ROLE_ADMIN
+
 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
@@ -21,9 +23,12 @@ security:
             form_login:
                 provider: fos_userbundle
                 csrf_token_generator: security.csrf.token_manager
+                default_target_path:  /
 
             logout:       true
             anonymous:    true
+            remember_me:
+                secret: '%kernel.secret%'
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
@@ -32,3 +37,5 @@ security:
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }
+        - { path: ^/head/, role: ROLE_HEAD }
+        - { path: ^/employee/, role: ROLE_EMPLOYEE }

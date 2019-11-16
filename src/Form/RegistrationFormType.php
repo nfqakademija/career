@@ -17,8 +17,8 @@ class RegistrationFormType extends AbstractType
             ->add('lastName')
             ->add('roles', ChoiceType::class, [
                 'choices' => ['Administratorius' => 'ROLE_ADMIN',
-                    'Vadovas' => 'ROLE_BOSS',
-                    'Darbuotojas' => 'ROLE_USER',],
+                    'Vadovas' => 'ROLE_HEAD',
+                    'Darbuotojas' => 'ROLE_EMPLOYEE',],
                 'multiple' => true,
                 'expanded' => true])
             ->add('profession')
