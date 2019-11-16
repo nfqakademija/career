@@ -27,7 +27,7 @@ class Criteria
      * @ORM\ManyToOne(targetEntity="App\Entity\Competence", inversedBy="criterias")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $fk_competence;
+    private $fkCompetence;
 
     /**
      * @ORM\Column(type="boolean")
@@ -35,7 +35,7 @@ class Criteria
     private $isApplicable;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\CriteriaChoice", mappedBy="fk_criteria")
+     * @ORM\OneToMany(targetEntity="App\Entity\CriteriaChoice", mappedBy="fkCriteria")
      */
     private $criteriaChoices;
 
@@ -69,12 +69,12 @@ class Criteria
 
     public function getFkCompetence(): ?Competence
     {
-        return $this->fk_competence;
+        return $this->fkCompetence;
     }
 
-    public function setFkCompetence(?Competence $fk_competence): self
+    public function setFkCompetence(?Competence $fkCompetence): self
     {
-        $this->fk_competence = $fk_competence;
+        $this->fkCompetence = $fkCompetence;
 
         return $this;
     }

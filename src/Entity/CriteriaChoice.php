@@ -25,7 +25,7 @@ class CriteriaChoice
      * @ORM\ManyToOne(targetEntity="App\Entity\Criteria", inversedBy="criteriaChoices")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $fk_criteria;
+    private $fkCriteria;
 
     /**
      * @ORM\Column(type="boolean")
@@ -51,12 +51,12 @@ class CriteriaChoice
 
     public function getFkCriteria(): ?Criteria
     {
-        return $this->fk_criteria;
+        return $this->fkCriteria;
     }
 
-    public function setFkCriteria(?Criteria $fk_criteria): self
+    public function setFkCriteria(?Criteria $fkCriteria): self
     {
-        $this->fk_criteria = $fk_criteria;
+        $this->fkCriteria = $fkCriteria;
 
         return $this;
     }
