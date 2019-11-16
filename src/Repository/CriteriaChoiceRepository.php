@@ -18,6 +18,4 @@ class CriteriaChoiceRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, CriteriaChoice::class);
     }
-
-
 }

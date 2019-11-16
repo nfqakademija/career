@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Repository;
+
 use App\Entity\Criteria;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+
 /**
  * @method Criteria|null find($id, $lockMode = null, $lockVersion = null)
  * @method Criteria|null findOneBy(array $criteria, array $orderBy = null)
@@ -12,11 +15,13 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 class CriteriaRepository extends ServiceEntityRepository
 {
     private $entityManager;
+
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Criteria::class);
         $this->entityManager = $this->getEntityManager();
     }
+
     public function fetchByCompetence(string $title)
     {
         $query = $this->entityManager->createQuery(
@@ -27,6 +32,7 @@ class CriteriaRepository extends ServiceEntityRepository
             . 'AND p.title = :title')->setParameter('title', $title);
         return $query->getResult();
     }
+
     public function fetchByCompetenceWithChoices(string $title)
     {
         $query = $this->entityManager->createQuery(

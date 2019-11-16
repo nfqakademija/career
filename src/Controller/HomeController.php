@@ -12,6 +12,14 @@ class HomeController extends AbstractController
      */
     public function index()
     {
-        return $this->render('home/index.html.twig');
+        if ($this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('admin_homepage');
+        } elseif ($this->isGranted('ROLE_EMPLOYEE')) {
+            return $this->redirectToRoute('employee_homepage');
+        } elseif ($this->isGranted('ROLE_HEAD')) {
+            return $this->redirectToRoute('head_homepage');
+        } else {
+            return $this->redirectToRoute('fos_user_security_login');
+        }
     }
 }
