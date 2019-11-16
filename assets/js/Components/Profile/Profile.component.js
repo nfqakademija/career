@@ -1,6 +1,6 @@
 import React from "react";
 import "./Profile.style.scss";
-import Comment from "./changeComment.profile.comp";
+import Input from "./input.profile.comp";
 
 class Profile extends React.Component {
   constructor() {
@@ -65,10 +65,15 @@ class Profile extends React.Component {
                             <option value="Expert">Expert</option>
                           </select>
                         </td>
-                        {/* <td onClick={()=>this.showProfile("changeComment")}>
-                          {this.state.changeComment?(<input type="text"placeholder={data.list[0].comments}/>):(data.list[0].comments)}
-                        </td> */}
-                        <Comment id={id} rowId={data.id} criteriaId={data.list[0].id} criteriaName="comments" change={this.handle} name={data.list[0].comments} />
+
+                        <Input
+                          id={id}
+                          rowId={data.id}
+                          criteriaId={data.list[0].id}
+                          criteriaName="comments"
+                          change={this.handle}
+                          name={data.list[0].comments}
+                        />
                         <td>
                           <select
                             name="teamLeadEvaluation"
@@ -89,7 +94,16 @@ class Profile extends React.Component {
                             <option value="False">False</option>
                           </select>
                         </td>
-                        <td>{data.list[0].overall}</td>
+                        {/* <td>{data.list[0].overall}</td>
+                         */}
+                        <Input
+                          id={id}
+                          rowId={data.id}
+                          criteriaId={data.list[0].id}
+                          criteriaName="overall"
+                          change={this.handle}
+                          name={data.list[0].overall}
+                        />
                       </tr>
                       {data.list
                         .filter((check, i) => i !== 0)
@@ -117,8 +131,15 @@ class Profile extends React.Component {
                                   <option value="Expert">Expert</option>
                                 </select>
                               </td>
-                              {/* <td>{list.comments}</td> */}
-                              <Comment id={id} rowId={data.id} criteriaId={list.id} criteriaName="comments" change={this.handle} name={list.comments} />
+
+                              <Input
+                                id={id}
+                                rowId={data.id}
+                                criteriaId={list.id}
+                                criteriaName="comments"
+                                change={this.handle}
+                                name={list.comments}
+                              />
                               <td>
                                 <select
                                   name="teamLeadEvaluation"
@@ -139,7 +160,15 @@ class Profile extends React.Component {
                                   <option value="False">False</option>
                                 </select>
                               </td>
-                              <td>{list.overall}</td>
+                              {/* <td>{list.overall}</td> */}
+                              <Input
+                                id={id}
+                                rowId={data.id}
+                                criteriaId={list.id}
+                                criteriaName="overall"
+                                change={this.handle}
+                                name={list.overall}
+                              />
                             </tr>
                           );
                         })}
@@ -156,92 +185,3 @@ class Profile extends React.Component {
 }
 
 export default Profile;
-
-// return [
-//   <tr key={data.id}>
-//     <td className="u-centerCenter">{data.name}</td>
-//     <td>
-//       {data.list.map(listCriteria => (
-//         <table key={listCriteria.id}>
-//           <tbody>
-//             <tr>
-//               <td className="u-borderNone">
-//                 {listCriteria.criteria}
-//               </td>
-//             </tr>
-//           </tbody>
-//         </table>
-//       ))}
-//     </td>
-//     <td>
-//       {data.list.map(listSelfEvaluation => (
-//         <table key={listSelfEvaluation.id}>
-//           <tbody>
-//             <tr>
-//               <td className="u-borderNone">
-// <select
-//   name="level"
-//   defaultValue={listSelfEvaluation.selfEvaluation}
-//   onChange={value =>
-//     this.handle(
-//       id,
-//       data.id,
-//       listSelfEvaluation.id,
-//       "selfEvaluation",
-//       value.target.value
-//     )
-//   }
-// >
-//   <option value="Unfamiliar">Unfamiliar</option>
-//   <option value="Familiar">Familiar</option>
-//   <option value="Expert">Expert</option>
-// </select>
-//               </td>
-//             </tr>
-//           </tbody>
-//         </table>
-//       ))}
-//     </td>
-//     <td>
-//       {data.list.map(listComments => (
-//         <table key={listComments.id}>
-//           <tbody>
-//             <tr>
-//               <td className="u-borderNone">
-//                 {listComments.comments}
-//               </td>
-//             </tr>
-//           </tbody>
-//         </table>
-//       ))}
-//     </td>
-//     <td>
-//       {data.list.map(listTeamLeadEvaluation => (
-//         <table key={listTeamLeadEvaluation.id}>
-//           <tbody>
-//             <tr>
-//               <td className="u-borderNone">
-//                 {listTeamLeadEvaluation.teamLeadEvaluation
-//                   ? "True"
-//                   : "False"}
-//               </td>
-//             </tr>
-//           </tbody>
-//         </table>
-//       ))}
-//     </td>
-//     <td>
-//       {data.list.map(listOverall => (
-//         <table key={listOverall.id}>
-//           <tbody>
-//             <tr>
-//               <td className="u-borderNone">
-//                 {listOverall.overall}
-//               </td>
-//             </tr>
-//           </tbody>
-//         </table>
-//       ))}
-//     </td>
-//   </tr>
-// ];

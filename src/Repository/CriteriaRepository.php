@@ -1,11 +1,8 @@
 <?php
-
 namespace App\Repository;
-
 use App\Entity\Criteria;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-
 /**
  * @method Criteria|null find($id, $lockMode = null, $lockVersion = null)
  * @method Criteria|null findOneBy(array $criteria, array $orderBy = null)
@@ -15,16 +12,13 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 class CriteriaRepository extends ServiceEntityRepository
 {
     private $entityManager;
-
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Criteria::class);
         $this->entityManager = $this->getEntityManager();
     }
-
-    public function fetchByCompetenceTitle(string $title)
+    public function fetchByCompetence(string $title)
     {
-
         $query = $this->entityManager->createQuery(
             'SELECT c.id, c.title AS Criteria, p.title AS Competence '
             . 'FROM App\Entity\Criteria c '
@@ -33,5 +27,17 @@ class CriteriaRepository extends ServiceEntityRepository
             . 'AND p.title = :title')->setParameter('title', $title);
         return $query->getResult();
     }
-
+    public function fetchByCompetenceWithChoices(string $title)
+    {
+        $query = $this->entityManager->createQuery(
+            'SELECT c.title AS Criteria, p.title AS Competence, h.title AS Choice '
+            . 'FROM App\Entity\Criteria c '
+            . 'JOIN App\Entity\CriteriaChoice h '
+            . 'INNER JOIN App\Entity\Competence p '
+            . 'WHERE  c.id = h.fk_criteria '
+            . 'AND p.id = c.fk_competence '
+            . 'AND p.title = :title '
+            . 'AND c.isApplicable = 1')->setParameter('title', $title);
+        return $query->getResult();
+    }
 }
