@@ -1,0 +1,86 @@
+[
+  {
+    "position": "Any",
+    "experience": [
+      {
+        "criteria": [
+          {
+            "1": "Released a product"
+          }
+        ]
+      }
+    ],
+    "technical-skills": [
+      {
+        "criteria": [
+          {
+            "2": "Can use PHP, OOP",
+            "3": "Can use relational database",
+            "4": "Can use PDO or other database abstraction",
+            "5": "Can use a modern PHP framework (Symfony)",
+            "6": "Can use UNIX",
+            "7": "Can use version control system (GIT)",
+            "8": "Can use NoSQL database",
+            "9": "Can use JavaScript",
+            "10": "Can refactor code",
+            "11": "Can automate development process (CI/CD)",
+            "12": "Can write tests",
+            "13": "Has knowledge of security",
+            "14": "Has knowledge of API standards",
+            "15": "Has knowledge of design patterns, SOLID",
+            "16": "Has knowledge of server infrastructure",
+            "17": "Has knowledge of frontend"
+          }
+        ]
+      }
+    ],
+    "responsibilities": [
+      {
+        "criteria": [
+          {
+            "18": "Can build features",
+            "19": "Can fix bugs",
+            "20": "Can demonstrate ownership",
+            "21": "Features testing",
+            "22": "Reviewing code",
+            "23": "Asking and giving help",
+            "24": "Receiving and giving feedback",
+            "25": "Presenting technologies/case studies",
+            "26": "Mentoring",
+            "27": "Following internal processes",
+            "28": "Showing positive attitude towards others",
+            "29": "Writing unit, integration and acceptance tests"
+          }
+        ]
+      }
+    ],
+    "english": [
+      {
+        "criteria": [
+          {
+            "30": "Can communicate in writing",
+            "31": "Is able to understand others",
+            "32": "Speaks in full sentences",
+            "33": "Is able to discuss and argue his results",
+            "34": "Can present his/her ideas and defend them",
+            "35": "Can manage discussions and/or conflicts"
+          }
+        ]
+      }
+    ],
+    "Other competences": [
+      {
+        "criteria": [
+          {
+            "36": "Dealing with Ambiguity",
+            "37": "Customer Focus",
+            "38": "Planning",
+            "39": "Problem Solving",
+            "40": "Drive for Results",
+            "41": "Timely Decision Making"
+          }
+        ]
+      }
+    ]
+  }
+]
