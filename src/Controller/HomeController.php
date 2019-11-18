@@ -10,6 +10,10 @@ namespace App\Controller;
 //     /**
 //      * @Route("/", name="home")
 //      */
+<<<<<<< HEAD
+=======
+
+>>>>>>> FE-routes
 //     public function index()
 //     {
 //         if ($this->isGranted('ROLE_ADMIN')) {

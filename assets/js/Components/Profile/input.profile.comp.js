@@ -11,20 +11,19 @@ class ChangeComment extends React.Component {
   }
 
   handle = () => {
-    const {id, rowId, criteriaId, criteriaName, change} = this.props
-    change(id,rowId, criteriaId, criteriaName, this.state.inputValue);
+    const { id, rowId, criteriaId, criteriaName, change } = this.props;
+    change(id, rowId, criteriaId, criteriaName, this.state.inputValue);
     this.setState({ changeComment: !this.state.changeComment });
   };
 
   render() {
-    const { name } = this.props;
     return (
       <td>
         {this.state.changeComment ? (
           <React.Fragment>
             <input
               type="text"
-              placeholder={name}
+              placeholder={this.state.inputValue}
               onChange={value =>
                 this.setState({ inputValue: value.target.value })
               }
@@ -33,7 +32,7 @@ class ChangeComment extends React.Component {
           </React.Fragment>
         ) : (
           <React.Fragment>
-            {name}
+            {this.state.inputValue}
             <button
               onClick={() =>
                 this.setState({ changeComment: !this.state.changeComment })

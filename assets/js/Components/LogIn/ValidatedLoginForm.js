@@ -1,97 +1,63 @@
 import React from "react";
-import { Formik } from "formik";
-import * as EmailValidator from "email-validator";
-import * as Yup from "yup";
 import "./logIn.style.scss";
+import { connect } from "react-redux";
+import { setPassword, setUsername, isLoggedIn } from "../../Actions/action";
+// import { Redirect } from "react-router-dom";
 
-const ValidatedLoginForm = () => (
-  <div class="loginForm">
-    <Formik
-      initialValues={{ email: "", password: "" }}
-      onSubmit={(values, { setSubmitting }) => {
-        setTimeout(() => {
-          console.log("Logging in", values);
-          setSubmitting(false);
-        }, 500);
-      }}
-      //********Handling validation messages yourself*******/
-      // validate={values => {
-      //   let errors = {};
-      //   if (!values.email) {
-      //     errors.email = "Required";
-      //   } else if (!EmailValidator.validate(values.email)) {
-      //     errors.email = "Invalid email address";
-      //   }
+class ValidatedLoginForm extends React.Component {
+  handleUserChange = e => {
+    this.props.onSetUsername(e.target.value);
+  };
 
-      //   const passwordRegex = /(?=.*[0-9])/;
-      //   if (!values.password) {
-      //     errors.password = "Required";
-      //   } else if (values.password.length < 8) {
-      //     errors.password = "Password must be 8 characters long.";
-      //   } else if (!passwordRegex.test(values.password)) {
-      //     errors.password = "Invalida password. Must contain one number";
-      //   }
+  handlePassChange = e => {
+    this.props.onSetPassword(e.target.value);
+  };
 
-      //   return errors;
-      // }}
-      //********Using Yum for validation********/
+  handleSubmit = e => {
+    e.preventDefault();
+    // if (this.props.username === "123" && this.props.password === "123") {
+    //   this.props.onSetLoggedIn(!this.props.logged);
 
-      validationSchema={Yup.object().shape({
-        email: Yup.string()
-          .email()
-          .required("Required"),
-        password: Yup.string()
-          .required("No password provided.")
-          .min(8, "Password is too short - should be 8 chars minimum.")
-          .matches(/(?=.*[0-9])/, "Password must contain a number.")
-      })}
-    >
-      {props => {
-        const {
-          values,
-          touched,
-          errors,
-          isSubmitting,
-          handleChange,
-          handleBlur,
-          handleSubmit
-        } = props;
-        return (
-          <form onSubmit={handleSubmit}>
-            <label htmlFor="email">Email</label>
-            <input
-              name="email"
-              type="text"
-              placeholder="Enter your email"
-              value={values.email}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              className={errors.email && touched.email && "error"}
-            />
-            {errors.email && touched.email && (
-              <div className="input-feedback">{errors.email}</div>
-            )}
-            <label htmlFor="email">Password</label>
-            <input
-              name="password"
-              type="password"
-              placeholder="Enter your password"
-              value={values.password}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              className={errors.password && touched.password && "error"}
-            />
-            {errors.password && touched.password && (
-              <div className="input-feedback">{errors.password}</div>
-            )}
-            <button type="submit" disabled={isSubmitting}>
-              Login
-            </button>
-          </form>
-        );
-      }}
-    </Formik>
-  </div>
-);
+    //   // <Redirect to="/profiles" />;
+    // }
+  };
 
-export default ValidatedLoginForm;
+  render() {
+    return (
+      <div className="Login">
+        <form onSubmit={this.handleSubmit}>
+          <label>User Name</label>
+          <input
+            type="text"
+            data-test="username"
+            value={this.props.username}
+            onChange={this.handleUserChange}
+          />
+
+          <label>Password</label>
+          <input
+            type="password"
+            data-test="password"
+            value={this.props.password}
+            onChange={e => this.props.onSetPassword(e.target.value)}
+          />
+
+          <input type="submit" value="Log In" data-test="submit" />
+        </form>
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = state => ({
+  username: state.username.username,
+  password: state.password.password,
+  logged: state.logged.logged
+});
+const mapDispatchToProps = dispatch => ({
+  onSetUsername: username => dispatch(setUsername(username)),
+  onSetPassword: password => dispatch(setPassword(password)),
+  onSetLoggedIn: logged => dispatch(isLoggedIn(logged))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ValidatedLoginForm);
