@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react";
 
-const ProfileButtons = ({name}) =>{
-    return(
-        <div>
-
-        </div>
-    )
-}
+const ProfileButtons = ({ name, showButton }) => {
+  return (
+    <div>
+      <button onClick={() => showButton("showProfile")}>{name}</button>
+    </div>
+  );
+};
 
 export default ProfileButtons;

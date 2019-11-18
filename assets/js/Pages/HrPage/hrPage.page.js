@@ -18,9 +18,40 @@ class HrPage extends React.Component {
 
   render() {
     return (
-      <div>
-        {/* {this.state.profiles.map(data => )} */}
-        {console.log(this.state.profiles)}
+      <div className="hrPage">
+        <label>Enter position name: </label>
+        <input type="text"/>
+        <table className="Profile">
+          <tbody>
+            <tr className="u-textCenter">
+              <th></th>
+              <th>Criteria</th>
+            </tr>
+            {this.state.profiles.map(competences => {
+              return (
+                <React.Fragment key={competences.id}>
+                  <tr>
+                    <td className="competence" rowSpan={competences.criterias.length}>
+                      {competences.title}
+                    </td>
+                    <td>{competences.criterias[0].title}</td>
+                  </tr>
+
+                  {competences.criterias
+                    .filter((check, i) => i !== 0)
+                    .map(criterias => {
+                      return (
+                        <tr key={criterias.id}>
+                          <td>{criterias.title}</td>
+                        </tr>
+                      );
+                    })}
+                </React.Fragment>
+              );
+            })}
+          </tbody>
+        </table>
+        <button>Save</button>
       </div>
     );
   }

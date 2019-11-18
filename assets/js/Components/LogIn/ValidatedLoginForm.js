@@ -15,20 +15,17 @@ class ValidatedLoginForm extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    if (this.props.username === "123" && this.props.password === "123") {
-      this.props.onSetLoggedIn(!this.props.logged);
+    // if (this.props.username === "123" && this.props.password === "123") {
+    //   this.props.onSetLoggedIn(!this.props.logged);
 
-      // <Redirect to="/profiles" />;
-    }
+    //   // <Redirect to="/profiles" />;
+    // }
   };
 
   render() {
-    // NOTE: I use data-attributes for easier E2E testing
-    // but you don't need to target those (any css-selector will work)
-
     return (
       <div className="Login">
-         <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit}>
           <label>User Name</label>
           <input
             type="text"
@@ -46,10 +43,7 @@ class ValidatedLoginForm extends React.Component {
           />
 
           <input type="submit" value="Log In" data-test="submit" />
-        </form> 
-        
-        <h5>username: 123 | password: 123</h5>
-        {/* {console.log(!this.props.logged)} */}
+        </form>
       </div>
     );
   }

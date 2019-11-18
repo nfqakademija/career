@@ -4,7 +4,7 @@ import "./NavBar.scss";
 
 const NavBar = () => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg">
       <Link className="navbar-brand navLogo" to="/">
         CCA
       </Link>

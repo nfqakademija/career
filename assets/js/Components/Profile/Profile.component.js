@@ -1,6 +1,7 @@
 import React from "react";
 import "./Profile.style.scss";
 import Input from "./input.profile.comp";
+// import ProfileButton from "../ProfileButtons/ProfileButtons.component";
 
 class Profile extends React.Component {
   constructor() {
@@ -22,14 +23,15 @@ class Profile extends React.Component {
   render() {
     const { id, name, position, all } = this.props;
     return (
-      <div>
+      <div className="Profile">
         <button onClick={() => this.showProfile("showProfile")}>{name}</button>
+        {/* <ProfileButton key={id} name={name} showButton={this.showProfile}/> */}
         {this.state.showProfile ? (
           <div>
             <h5>
               Name: {name} Position: {position}
             </h5>
-            <table className="Profile">
+            <table>
               <tbody>
                 <tr className="u-textCenter">
                   <th></th>
@@ -43,9 +45,8 @@ class Profile extends React.Component {
                   return (
                     <React.Fragment key={data.id}>
                       <tr>
-                        <td rowSpan={data.list.length}>{data.name}</td>
+                        <td className="competence" rowSpan={data.list.length}>{data.name}</td>
                         <td>{data.list[0].criteria}</td>
-
                         <td>
                           <select
                             name="level"
@@ -65,7 +66,6 @@ class Profile extends React.Component {
                             <option value="Expert">Expert</option>
                           </select>
                         </td>
-
                         <Input
                           id={id}
                           rowId={data.id}
@@ -94,8 +94,7 @@ class Profile extends React.Component {
                             <option value="False">False</option>
                           </select>
                         </td>
-                        {/* <td>{data.list[0].overall}</td>
-                         */}
+
                         <Input
                           id={id}
                           rowId={data.id}
@@ -160,7 +159,6 @@ class Profile extends React.Component {
                                   <option value="False">False</option>
                                 </select>
                               </td>
-                              {/* <td>{list.overall}</td> */}
                               <Input
                                 id={id}
                                 rowId={data.id}

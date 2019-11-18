@@ -1,13 +1,8 @@
 import React from "react";
-// import NavBar from "../../Components/Navbar/NavBar";
 import Profile from "../../Components/Profile/Profile.component";
 import { setSelectedProfileButton, setProfilesList } from "../../Actions/action";
-
-// import example from '../../public/example.json';
-
 import Axios from "axios";
 import { connect } from "react-redux";
-// import { string } from "postcss-selector-parser";
 
 class ProfilePage extends React.Component {
   componentDidMount() {
@@ -55,7 +50,7 @@ class ProfilePage extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  selectedProfile: state.profileId.profileId, //selected profile id
+  selectedProfile: state.profileId.profileId,
   profilesList: state.profilesList.profiles
 });
 const mapDispatchToProps = dispatch => ({
