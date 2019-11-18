@@ -26,7 +26,7 @@ class ValidatedLoginForm extends React.Component {
     return (
       <div className="Login">
         <form onSubmit={this.handleSubmit}>
-          <label>User Name</label>
+          <label>E-mail: </label>
           <input
             type="text"
             data-test="username"
@@ -34,7 +34,7 @@ class ValidatedLoginForm extends React.Component {
             onChange={this.handleUserChange}
           />
 
-          <label>Password</label>
+          <label>Password: </label>
           <input
             type="password"
             data-test="password"
