@@ -35,6 +35,7 @@ class HrPage extends React.Component {
                       {competences.title}
                     </td>
                     <td>{competences.criterias[0].title}</td>
+                    <td><input type="checkbox" name="add"/></td>
                   </tr>
 
                   {competences.criterias
@@ -43,6 +44,7 @@ class HrPage extends React.Component {
                       return (
                         <tr key={criterias.id}>
                           <td>{criterias.title}</td>
+                          <td><input type="checkbox" name="add"/></td>
                         </tr>
                       );
                     })}
