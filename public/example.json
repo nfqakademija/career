@@ -1,0 +1,717 @@
+[{
+	"id": 1,
+	"name": "Algis Nezinau",
+	"position": "Front-end Junior developer",
+	"all": [{
+			"id": 1,
+			"name": "Experience",
+			"list": [{
+				"id": 1,
+				"criteria": "Released a product",
+				"selfEvaluation": "Expert",
+				"comments": "Nice person, good candidate",
+				"teamLeadEvaluation": false,
+				"overall": "Needs discusion"
+			}]
+		},
+		{
+			"id": 2,
+			"name": "Technical-Skills",
+			"list": [{
+					"id": 1,
+					"criteria": "Can use PHP, OOP",
+					"selfEvaluation": "Unfamiliar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 2,
+					"criteria": "Can use relational database",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 3,
+					"criteria": "Can use PDO or other database abstraction",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 4,
+					"criteria": "Can use a modern PHP framework (Symfony)",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 5,
+					"criteria": "Can use UNIX",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 6,
+					"criteria": "Can use version control system (GIT)",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 7,
+					"criteria": "Can use NoSQL database",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 8,
+					"criteria": "Can use JavaScript",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 9,
+					"criteria": "Can refactor code",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 10,
+					"criteria": "Can automate development process (CI/CD)",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 11,
+					"criteria": "Can write tests",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 12,
+					"criteria": "Has knowledge of security",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 13,
+					"criteria": "Has knowledge of API standards",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 14,
+					"criteria": "Has knowledge of design patterns, SOLID",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 15,
+					"criteria": "Has knowledge of server infrastructure",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 16,
+					"criteria": "Has knowledge of frontend",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				}
+
+			]
+		},
+		{
+			"id": 3,
+			"name": "Responsibilities",
+			"list": [{
+					"id": 1,
+					"criteria": "Can build features",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 2,
+					"criteria": "Can fix bugs",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 3,
+					"criteria": "Can demonstrate ownership",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 4,
+					"criteria": "Features testing",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 5,
+					"criteria": "Reviewing code",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 6,
+					"criteria": "Asking and giving help",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 7,
+					"criteria": "Receiving and giving feedback",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 8,
+					"criteria": "Presenting technologies/case studies",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 9,
+					"criteria": "Mentoring",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 10,
+					"criteria": "Following internal processess",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 11,
+					"criteria": "Showing positive attitude towards others",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 12,
+					"criteria": "Writing unit, integration and acceptance tests",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				}
+			]
+		},
+		{
+			"id": 4,
+			"name": "English",
+			"list": [{
+					"id": 1,
+					"criteria": "Can communicate in writing",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 2,
+					"criteria": "Is able to understand others",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 3,
+					"criteria": "Speaks in full sentences",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 4,
+					"criteria": "Is able to discuss and argue his results",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 5,
+					"criteria": "Can present his/her ideas and defend them",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 6,
+					"criteria": "Can manage discussions and/or conflicts",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				}
+			]
+		},
+		{
+			"id": 5,
+			"name": "Competencies",
+			"list": [{
+					"id": 1,
+					"criteria": "Dealing with Ambiguity",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 2,
+					"criteria": "Customer Focus",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 3,
+					"criteria": "Planning",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 4,
+					"criteria": "Problem Solving",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 5,
+					"criteria": "Drive for Results",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 6,
+					"criteria": "Timely Decision Making",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				}
+			]
+		}
+	]
+},{
+	"id": 2,
+	"name": "Jonas Jonaitis",
+	"position": "Front-end Junior developer",
+	"all": [{
+			"id": 1,
+			"name": "Experience",
+			"list": [{
+				"id": 1,
+				"criteria": "Released a product",
+				"selfEvaluation": "Expert",
+				"comments": "Nice person, good candidate",
+				"teamLeadEvaluation": false,
+				"overall": "Needs discusion"
+			}]
+		},
+		{
+			"id": 2,
+			"name": "Technical-Skills",
+			"list": [{
+					"id": 1,
+					"criteria": "Can use PHP, OOP",
+					"selfEvaluation": "Unfamiliar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 2,
+					"criteria": "Can use relational database",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 3,
+					"criteria": "Can use PDO or other database abstraction",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 4,
+					"criteria": "Can use a modern PHP framework (Symfony)",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 5,
+					"criteria": "Can use UNIX",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 6,
+					"criteria": "Can use version control system (GIT)",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 7,
+					"criteria": "Can use NoSQL database",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 8,
+					"criteria": "Can use JavaScript",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 9,
+					"criteria": "Can refactor code",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 10,
+					"criteria": "Can automate development process (CI/CD)",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 11,
+					"criteria": "Can write tests",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 12,
+					"criteria": "Has knowledge of security",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 13,
+					"criteria": "Has knowledge of API standards",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 14,
+					"criteria": "Has knowledge of design patterns, SOLID",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 15,
+					"criteria": "Has knowledge of server infrastructure",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 16,
+					"criteria": "Has knowledge of frontend",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				}
+
+			]
+		},
+		{
+			"id": 3,
+			"name": "Responsibilities",
+			"list": [{
+					"id": 1,
+					"criteria": "Can build features",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 2,
+					"criteria": "Can fix bugs",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 3,
+					"criteria": "Can demonstrate ownership",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 4,
+					"criteria": "Features testing",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 5,
+					"criteria": "Reviewing code",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 6,
+					"criteria": "Asking and giving help",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 7,
+					"criteria": "Receiving and giving feedback",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 8,
+					"criteria": "Presenting technologies/case studies",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 9,
+					"criteria": "Mentoring",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 10,
+					"criteria": "Following internal processess",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 11,
+					"criteria": "Showing positive attitude towards others",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 12,
+					"criteria": "Writing unit, integration and acceptance tests",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				}
+			]
+		},
+		{
+			"id": 4,
+			"name": "English",
+			"list": [{
+					"id": 1,
+					"criteria": "Can communicate in writing",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 2,
+					"criteria": "Is able to understand others",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 3,
+					"criteria": "Speaks in full sentences",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 4,
+					"criteria": "Is able to discuss and argue his results",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 5,
+					"criteria": "Can present his/her ideas and defend them",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 6,
+					"criteria": "Can manage discussions and/or conflicts",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				}
+			]
+		},
+		{
+			"id": 5,
+			"name": "Competencies",
+			"list": [{
+					"id": 1,
+					"criteria": "Dealing with Ambiguity",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 2,
+					"criteria": "Customer Focus",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 3,
+					"criteria": "Planning",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 4,
+					"criteria": "Problem Solving",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 5,
+					"criteria": "Drive for Results",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				},
+				{
+					"id": 6,
+					"criteria": "Timely Decision Making",
+					"selfEvaluation": "Familiar",
+					"comments": "Nice person, good candidate",
+					"teamLeadEvaluation": false,
+					"overall": "Needs discusion"
+				}
+			]
+		}
+	]
+}]

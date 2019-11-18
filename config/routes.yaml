@@ -1,3 +1,12 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+
+criteria_list:
+  type: rest
+  resource: App\Controller\CriteriaListController
+  prefix: api
+competence_list:
+  type: rest
+  resource: App\Controller\CriteriaListController
+  prefix: api

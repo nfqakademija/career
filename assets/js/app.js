@@ -1,17 +1,23 @@
-/*
- * Welcome to your app's main JavaScript file!
- *
- * We recommend including the built version of this JavaScript file
- * (and its CSS file) in your base layout (base.html.twig).
- */
+import React from "react";
+import NavBar from "./Components/Navbar/NavBar";
+import { Switch, Route } from "react-router-dom";
+import HomePage from "./Components/LogIn/ValidatedLoginForm";
+import ProfilePage from "./Pages/ProfilePage/ProfilePage.page";
+import HrProfiles from "./Pages/HrPage/hrPage.page";
 
-// any CSS you require will output into a single css file (app.css in this case)
-require('../css/app.scss');
+class App extends React.Component {
+  render() {
+    return (
+      <div>
+        <NavBar />
+        <Switch>
+          <Route exact path="/" component={HomePage} />
+          <Route path="/profiles" component={ProfilePage} />
+          <Route path="/hrprofiles" component={HrProfiles} />
+        </Switch>
+      </div>
+    );
+  }
+}
 
-// Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
-const $ = require('jquery');
-require('bootstrap');
-
-$(document).ready(function() {
-    $('[data-toggle="popover"]').popover();
-});
+export default App;
