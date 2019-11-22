@@ -34,6 +34,12 @@ class CareerForm
      */
     private $userAnswers;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="careerForm", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $fkUser;
+
     public function __construct()
     {
         $this->userAnswers = new ArrayCollection();
@@ -95,6 +101,18 @@ class CareerForm
                 $userAnswer->setFkCareerForm(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFkUser(): ?User
+    {
+        return $this->fkUser;
+    }
+
+    public function setFkUser(User $fkUser): self
+    {
+        $this->fkUser = $fkUser;
 
         return $this;
     }

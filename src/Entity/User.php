@@ -35,6 +35,11 @@ class User extends BaseUser
      */
     private $profession;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\CareerForm", mappedBy="fkUser", cascade={"persist", "remove"})
+     */
+    private $careerForm;
+
 
     public function __construct()
     {
@@ -94,6 +99,23 @@ class User extends BaseUser
     public function setProfession($profession): void
     {
         $this->profession = $profession;
+    }
+
+    public function getCareerForm(): ?CareerForm
+    {
+        return $this->careerForm;
+    }
+
+    public function setCareerForm(CareerForm $careerForm): self
+    {
+        $this->careerForm = $careerForm;
+
+        // set the owning side of the relation if necessary
+        if ($careerForm->getFkUser() !== $this) {
+            $careerForm->setFkUser($this);
+        }
+
+        return $this;
     }
 
 

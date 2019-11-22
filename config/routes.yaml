@@ -10,3 +10,7 @@ competence_list:
   type: rest
   resource: App\Controller\CriteriaListController
   prefix: api
+career_form:
+  type: rest
+  resource: App\Controller\CareerFormController
+  prefix: api
