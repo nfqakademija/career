@@ -8,7 +8,8 @@ class Profile extends React.Component {
     super();
 
     this.state = {
-      showProfile: false
+      showProfile: false,
+      showCompetence: false
     };
   }
 
@@ -31,8 +32,9 @@ class Profile extends React.Component {
             <h5>
               Name: {name} Position: {position}
             </h5>
-            <table>
-              <tbody>
+            <div>
+            <table className="tab">
+              <thead>
                 <tr className="u-textCenter">
                   <th></th>
                   <th>Criteria</th>
@@ -41,13 +43,17 @@ class Profile extends React.Component {
                   <th>Team lead evaluation</th>
                   <th>Overall</th>
                 </tr>
+                </thead>
+                <tbody>
                 {all.map(data => {
                   return (
                     <React.Fragment key={data.id}>
                       <tr>
-                        <td className="competence" rowSpan={data.list.length}>{data.name}</td>
-                        <td>{data.list[0].criteria}</td>
-                        <td>
+                        <td className="competence" rowSpan={data.list.length+1}>{data.name}</td>
+                      </tr>
+                      <tr>
+                        <td data-label="Criteria">{data.list[0].criteria}</td>
+                        <td data-label="Self Evaluation">
                           <select
                             name="level"
                             defaultValue={data.list[0].selfEvaluation}
@@ -74,7 +80,7 @@ class Profile extends React.Component {
                           change={this.handle}
                           name={data.list[0].comments}
                         />
-                        <td>
+                        <td data-label="Team lead evaluation">
                           <select
                             name="teamLeadEvaluation"
                             defaultValue={
@@ -95,7 +101,7 @@ class Profile extends React.Component {
                           </select>
                         </td>
 
-                        <Input
+                        <Input 
                           id={id}
                           rowId={data.id}
                           criteriaId={data.list[0].id}
@@ -109,9 +115,9 @@ class Profile extends React.Component {
                         .map(list => {
                           return (
                             <tr key={list.id}>
-                              <td>{list.criteria}</td>
+                              <td data-label="Criteria">{list.criteria}</td>
 
-                              <td>
+                              <td data-label="Self Evaluation">
                                 <select
                                   name="level"
                                   defaultValue={list.selfEvaluation}
@@ -139,7 +145,7 @@ class Profile extends React.Component {
                                 change={this.handle}
                                 name={list.comments}
                               />
-                              <td>
+                              <td data-label="Team Lead Evaluation">
                                 <select
                                   name="teamLeadEvaluation"
                                   defaultValue={
@@ -175,6 +181,7 @@ class Profile extends React.Component {
                 })}
               </tbody>
             </table>
+            </div>
           </div>
         ) : null}
       </div>

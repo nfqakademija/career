@@ -1,6 +1,8 @@
 import React from "react";
 import Axios from "axios";
 
+import './hrPage.style.scss'
+
 class HrPage extends React.Component {
   constructor() {
     super();
