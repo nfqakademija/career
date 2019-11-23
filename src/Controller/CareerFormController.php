@@ -20,19 +20,17 @@ use Symfony\Component\Serializer\Serializer;
 
 class CareerFormController extends AbstractFOSRestController
 {
-    private $criteriaRepository = null;
-    private $careerProfileRepository = null;
+
+    private $careerFormRepository = null;
     private $normalizers = [];
     private $encoders = [];
     private $serializer = null;
 
 
     public function __construct(
-        CriteriaRepository $criteriaRepository,
-        CareerProfileRepository $careerProfileRepository)
+        CareerFormRepository $careerFormRepository)
     {
-        $this->careerProfileRepository = $careerProfileRepository;
-        $this->criteriaRepository = $criteriaRepository;
+        $this->careerFormRepository = $careerFormRepository;
         $this->normalizers[] = new ObjectNormalizer();
         $this->encoders[] = new JsonEncoder();
         $this->serializer = new Serializer($this->normalizers, $this->encoders);
@@ -40,41 +38,47 @@ class CareerFormController extends AbstractFOSRestController
 
     /**
      *
-     * @param Request $request
+     *
+     * @return Response
      */
-    public function postCareerAction(Request $request)
+    public function getFormListAction()
+    {
+        $formList = $this->careerFormRepository->findAll();
+
+        $jsonObject = $this->serializer->serialize($formList, 'json', [
+            'circular_reference_handler' => function ($object) {
+                return $object->getId();
+            }
+        ]);
+        return new Response($jsonObject, Response::HTTP_OK, ['Content-Type' => 'application/json']);
+    }
+
+
+    /**
+     *
+     * @param $slug
+     * @return Response
+     */
+    public function getFormAction($slug)
+    {
+        $careerForm = $this->careerFormRepository->findBy(['id' => $slug]);
+
+        $jsonObject = $this->serializer->serialize($careerForm, 'json', [
+            'circular_reference_handler' => function ($object) {
+                return $object->getId();
+            }
+        ]);
+        return new Response($jsonObject, Response::HTTP_OK, ['Content-Type' => 'application/json']);
+    }
+
+    /**
+     *
+     * @param Request $request
+     *
+     */
+    public function postFormAction(Request $request)
     {
         $json = $request->request->all();
-        $position = array_shift($json)['position'];
-        $competences = array_shift($json)['competence'];
-
-        $careerProfile = new CareerProfile();
-
-
-        // sort the array by cirteria IDs from JSON/ remove unnecessary
-        $idList = array();
-        foreach ($competences as $competenceId => $competenceBody) {
-            foreach ($competenceBody as $key => $value) {
-                if ($key === 'criteria') {
-                    foreach ($value as $item => $field) {
-                        $idList[] = ((int)$field['id']);
-                    }
-                }
-            }
-        }
-        // get available Criterias From Database as an array of Criteria objects
-        $availableCriterias = $this->criteriaRepository->findBy(array('id' => $idList));
-
-// run foreach to add Criterias to CareerProfile
-        foreach ($availableCriterias as $criteria) {
-            $careerProfile->addFkCriterion($criteria);
-        }
-
-//        foreach ($careerProfile->getFkCriteria() as $crit) {
-//            var_dump("CRITERIA TITLE: " . $crit->getTitle());
-//        }
-
-        $this->careerProfileRepository->save($careerProfile);
-
+        var_dump($json);
     }
 }
