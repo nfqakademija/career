@@ -31,8 +31,7 @@ class CriteriaListController extends AbstractFOSRestController
     public function __construct(
         CriteriaRepository $criteriaRepository,
         CompetenceRepository $competenceRepository
-    )
-    {
+    ) {
         $this->criteriaRepository = $criteriaRepository;
         $this->competenceRepository = $competenceRepository;
         $this->normalizers[] = new ObjectNormalizer();
