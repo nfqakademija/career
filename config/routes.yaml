@@ -14,3 +14,7 @@ career_form:
   type: rest
   resource: App\Controller\CareerFormController
   prefix: api
+career_profile:
+  type: rest
+  resource: App\Controller\CareerProfileController
+  prefix: api

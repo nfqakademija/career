@@ -18,7 +18,7 @@ class ChangeComment extends React.Component {
 
   render() {
     return (
-      <td>
+      <td data-label={this.props.criteriaName}>
         {this.state.changeComment ? (
           <React.Fragment>
             <input
@@ -28,18 +28,25 @@ class ChangeComment extends React.Component {
                 this.setState({ inputValue: value.target.value })
               }
             />
-            <button onClick={this.handle}>Save</button>
+            {/* <button onClick={this.handle}>Save</button> */}
+            <i className="fas fa-plus" onClick={this.handle} />
           </React.Fragment>
         ) : (
           <React.Fragment>
             {this.state.inputValue}
-            <button
+            <i
+              className="fas fa-plus"
+              onClick={() =>
+                this.setState({ changeComment: !this.state.changeComment })
+              }
+            />
+            {/* <button
               onClick={() =>
                 this.setState({ changeComment: !this.state.changeComment })
               }
             >
               Change
-            </button>
+            </button> */}
           </React.Fragment>
         )}
       </td>

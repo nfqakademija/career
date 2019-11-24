@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Entity\CareerProfile;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * @method CareerProfile|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,37 +14,17 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class CareerProfileRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $entityManager;
+
+    public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, CareerProfile::class);
+        $this->entityManager = $this->getEntityManager();
     }
 
-    // /**
-    //  * @return CareerProfile[] Returns an array of CareerProfile objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function save(CareerProfile $careerProfile)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $this->entityManager->persist($careerProfile);
+        $this->entityManager->flush();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?CareerProfile
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
