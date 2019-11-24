@@ -5,9 +5,16 @@ import "./HomePage.style.scss";
 class HomePage extends React.Component {
   render() {
     return (
-      <div >
+      <div>
+        {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+          <path
+            fill="#086a75"
+            fillOpacity="1"
+            d="M0,128L40,112C80,96,160,64,240,69.3C320,75,400,117,480,117.3C560,117,640,75,720,64C800,53,880,75,960,74.7C1040,75,1120,53,1200,74.7C1280,96,1360,160,1400,192L1440,224L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"
+          ></path>
+        </svg> */}
         <div className="homePage">
-        <LogIn />
+          <LogIn />
         </div>
         <div>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">

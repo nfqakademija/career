@@ -2,9 +2,11 @@
 
 .navbar{
    padding: 10px 10%;
-    background-color: transparent;
+    // background-color: transparent;
     position: fixed;
     width: 100%;
+    // border-bottom: solid 2px black;
+    //     border-width: 80%;
 
     .my-color-logo{
         color:black;
@@ -18,16 +20,17 @@
 
     .nav-item{
         // border: solid 2px rgba(4, 89, 26, 0.3);
-        border:solid 2px black;
+        // border:solid 2px black;
         border-radius: 10px;
         margin: 0 1vw;
         min-width: 9vw;
         text-align: center;
+        // padding: auto 0;
     }
 
     .nav-item:hover{
         transition: all 0.3s;
-        background-color: grey;
+        // background-color: grey;
         // border-color: ;
         
         .my-color{
