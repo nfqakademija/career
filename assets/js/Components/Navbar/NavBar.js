@@ -75,7 +75,7 @@ class NavBar extends React.Component {
                 onClick={() => this.setState({ route: false })}
               >
                 <Link className="nav-link" to="/hrprofiles">
-                  <span className="my-color">HR Profiles</span>
+                  <span className="my-color">HR Page</span>
                 </Link>
               </li>
             </ul>

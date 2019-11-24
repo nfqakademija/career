@@ -67,7 +67,7 @@ class HrPage extends React.Component {
   };
 
   submit = () => {
-    let copy = this.state.profiles;
+    let copy = [...this.state.profiles];
     //to remove 0 which we assign below
     Array.prototype.remove = function() {
       var what,
@@ -107,8 +107,56 @@ class HrPage extends React.Component {
         competences: copy
       }
     ];
+    console.log(obj);
+    // this.setState({ profileCopy: obj });
+    this.sendData(obj);
 
-    this.setState({ profileCopy: obj });
+    // this.setState({ profileCopy: obj });
+  };
+
+  sendData = obj => {
+    // Axios({
+    //   url: "/api/profiles",
+    //   method: "post",
+    //   data: obj
+    // })
+    //   .then(function(response) {
+    //     // your action after success
+    //     console.log(response);
+    //   })
+    //   .catch(function(error) {
+    //     // your action on error success
+    //     console.log(error);
+    // });
+
+    Axios.post("/api/profiles", {
+      data: obj
+    })
+      .then(function(response) {
+        // your action after success
+        console.log(response);
+      })
+      .catch(function(error) {
+        // your action on error success
+        console.log(error);
+      });
+
+    // fetch("/api/profiles", {
+    //   method: "POST",
+    //   // headers: {
+    //   //   Accept: "application/json",
+    //   //   "Content-Type": "application/json"
+    //   // },
+    //   data: JSON.stringify(obj)
+    // })
+    //   .then(function(response) {
+    //     // your action after success
+    //     console.log(response);
+    //   })
+    //   .catch(function(error) {
+    //     // your action on error success
+    //     console.log(error);
+    //   });
   };
 
   render() {
