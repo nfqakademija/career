@@ -1,18 +1,40 @@
-.u-padding0x30{
-    padding: 0 30px;
-}
-
-.navLogo{
-    font-size: 1.7em;
-}
+// @import "~bootstrap/scss/bootstrap";
 
 .navbar{
-    border-bottom: solid 4px #ff9824;
-    width: 90%;
-    margin:auto;
-    border-radius: 30px;
-}
+   padding: 10px 10%;
+    // background-color: transparent;
+    position: fixed;
+    width: 100%;
+    // border-bottom: solid 2px black;
+    //     border-width: 80%;
 
-a{
-    color:#423a31;
+    .my-color-logo{
+        color:black;
+        font-size: 2em;
+    }
+
+    .my-color{
+        // color:white;
+        color:black;
+    }
+
+    .nav-item{
+        // border: solid 2px rgba(4, 89, 26, 0.3);
+        // border:solid 2px black;
+        border-radius: 10px;
+        margin: 0 1vw;
+        min-width: 9vw;
+        text-align: center;
+        // padding: auto 0;
+    }
+
+    .nav-item:hover{
+        transition: all 0.3s;
+        // background-color: grey;
+        // border-color: ;
+        
+        .my-color{
+            color:white;
+        }
+    }
 }
