@@ -2,22 +2,26 @@
 
 namespace App\Controller;
 
-use App\Entity\CareerForm;
-use App\Entity\CareerProfile;
-use App\Entity\Criteria;
 use App\Repository\CareerFormRepository;
-use App\Repository\CareerProfileRepository;
-use App\Repository\CompetenceRepository;
-use App\Repository\CriteriaRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
+
+/**
+ * Class CareerFormController
+ *
+ * routes:
+ * /api/forms/{slug} - get career form by id; TODO: get career form by User id;
+ * /api/form/list - get career form list; TODO: get career form list by team;
+ * /api/forms - post new career form
+ * TODO: get career form list by profession;
+ *
+ * @package App\Controller
+ */
 class CareerFormController extends AbstractFOSRestController
 {
 
@@ -91,6 +95,7 @@ class CareerFormController extends AbstractFOSRestController
      */
     public function postFormAction(Request $request)
     {
+        // TODO: implement;
         $json = $request->request->all();
         var_dump($json);
     }

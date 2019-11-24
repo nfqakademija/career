@@ -6,14 +6,22 @@ use App\Entity\CareerProfile;
 use App\Repository\CareerProfileRepository;
 use App\Repository\CriteriaRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
+/**
+ * Class CareerProfileController
+ *
+ * routes:
+ * /api/profiles/{slug} - get career profile by its id; TODO: get career profile by profession id
+ * /api/profile/list - get all career profiles;
+ * /api/profiles - post new career profile
+ *
+ * @package App\Controller
+ */
 class CareerProfileController extends AbstractFOSRestController
 {
     private $criteriaRepository = null;
