@@ -48,7 +48,8 @@ class CareerProfileController extends AbstractFOSRestController
      */
     public function postProfileAction(Request $request)
     {
-        $json = $request->request->all();
+
+        $json = $request->request->all()['data'];
         $position = array_shift($json)['position'];
         $competences = array_shift($json)['competences'];
 
@@ -78,6 +79,7 @@ class CareerProfileController extends AbstractFOSRestController
 //        }
 
         $this->careerProfileRepository->save($careerProfile);
+        return new Response(json_encode(["message" => "Created"]), Response::HTTP_CREATED);
     }
 
     /**
