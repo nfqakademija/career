@@ -28,6 +28,11 @@ class Profession
      */
     private $users;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\CareerProfile", mappedBy="profession", cascade={"persist", "remove"})
+     */
+    private $careerProfile;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -76,6 +81,23 @@ class Profession
             if ($user->getProfession() === $this) {
                 $user->setProfession(null);
             }
+        }
+
+        return $this;
+    }
+
+    public function getCareerProfile(): ?CareerProfile
+    {
+        return $this->careerProfile;
+    }
+
+    public function setCareerProfile(CareerProfile $careerProfile): self
+    {
+        $this->careerProfile = $careerProfile;
+
+        // set the owning side of the relation if necessary
+        if ($careerProfile->getProfession() !== $this) {
+            $careerProfile->setProfession($this);
         }
 
         return $this;
