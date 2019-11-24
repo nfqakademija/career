@@ -43,7 +43,9 @@ class CriteriaRepository extends ServiceEntityRepository
             . 'WHERE  c.id = h.fkCriteria '
             . 'AND p.id = c.fkCompetence '
             . 'AND p.title = :title '
-            . 'AND c.isApplicable = 1')->setParameter('title', $title);
+            . 'AND c.isApplicable = 1'
+        )
+            ->setParameter('title', $title);
         return $query->getResult();
     }
 }

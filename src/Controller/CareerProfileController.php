@@ -32,7 +32,9 @@ class CareerProfileController extends AbstractFOSRestController
 
 
     public function __construct(
-        CriteriaRepository $criteriaRepository, CareerProfileRepository $careerProfileRepository)
+        CriteriaRepository $criteriaRepository,
+        CareerProfileRepository $careerProfileRepository
+    )
     {
         $this->careerProfileRepository = $careerProfileRepository;
         $this->criteriaRepository = $criteriaRepository;

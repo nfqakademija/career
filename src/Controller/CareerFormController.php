@@ -30,8 +30,7 @@ class CareerFormController extends AbstractFOSRestController
     private $serializer = null;
 
 
-    public function __construct(
-        CareerFormRepository $careerFormRepository)
+    public function __construct(CareerFormRepository $careerFormRepository)
     {
         $this->careerFormRepository = $careerFormRepository;
         $this->normalizers[] = new ObjectNormalizer();
