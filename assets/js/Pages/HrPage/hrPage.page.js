@@ -11,7 +11,7 @@ class HrPage extends React.Component {
 
     this.state = {
       profiles: [],
-      profileCopy: [],
+      // profileCopy: [],
       position: null,
       competenceList: [],
       criteriaList: []
@@ -217,7 +217,7 @@ class HrPage extends React.Component {
         </table>
         <button onClick={this.submit}>Save</button>
         {console.log("Sukurta pozicija: ")}
-        {console.log(this.state.profileCopy)}
+        {/* {console.log(this.state.profileCopy)} */}
         {/* {console.log(this.state.profileCopy)} */}
         {/* {console.log(this.props.location)} */}
       </div>
