@@ -50,7 +50,7 @@ class CareerProfileController extends AbstractFOSRestController
     {
         $json = $request->request->all();
         $position = array_shift($json)['position'];
-        $competences = array_shift($json)['competence'];
+        $competences = array_shift($json)['competences'];
 
         $careerProfile = new CareerProfile();
 
@@ -58,7 +58,7 @@ class CareerProfileController extends AbstractFOSRestController
         $idList = array();
         foreach ($competences as $competenceId => $competenceBody) {
             foreach ($competenceBody as $key => $value) {
-                if ($key === 'criteria') {
+                if ($key === 'criterias') {
                     foreach ($value as $item => $field) {
                         $idList[] = ((int)$field['id']);
                     }
