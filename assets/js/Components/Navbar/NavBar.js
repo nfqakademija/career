@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./NavBar.scss";
+import logo from '../../../pics/logo6.png'
 // import withRouter from 'react-router-dom';
 
 class NavBar extends React.Component {
@@ -20,13 +21,19 @@ class NavBar extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="navigation"
+      // style={
+      //   this.state.route
+      //     ? null 
+      //     : { width: "100%" }
+      // }
+      >
         <nav
           className="navbar navbar-expand-lg navbar-dark"
           style={
             this.state.route
-              ? { background: "transparent" }
-              : { background: "rgb(237, 219, 187)" }
+              ? { background: "rgb(224, 107, 18)" }
+              : { background: "rgb(237, 219, 187)", border: "none", width: "100%" }
           }
         >
           <div className="d-flex flex-grow-1">
@@ -36,7 +43,8 @@ class NavBar extends React.Component {
               to="/"
               onClick={() => this.setState({ route: true })}
             >
-              <span className="my-color-logo">CCA</span>
+              {/* <span className="my-color-logo">CCA</span> */}
+              <img src={logo} className="my-logo" />
             </Link>
             <div className="w-100 text-right">
               <button
