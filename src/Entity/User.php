@@ -45,14 +45,15 @@ class User implements UserInterface
     private $lastName;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Profession", mappedBy="fkProfession", cascade={"persist", "remove"})
-     */
-    private $fkProfession;
-
-    /**
      * @ORM\OneToOne(targetEntity="App\Entity\CareerForm", mappedBy="fkUser", cascade={"persist", "remove"})
      */
     private $careerForm;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Profession", inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $profession;
 
 
     public function getId(): ?int
@@ -189,5 +190,17 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getProfession(): ?Profession
+    {
+        return $this->profession;
+    }
+
+    public function setProfession(?Profession $profession): self
+    {
+        $this->profession = $profession;
+
+        return $this;
     }
 }
