@@ -45,11 +45,17 @@ class CareerFormController extends AbstractFOSRestController
     {
         $formList = $this->careerFormRepository->findAll();
 
-        $jsonObject = $this->serializer->serialize($formList, 'json', [
-            'circular_reference_handler' => function ($object) {
-                return $object->getId();
-            }
-        ]);
+        $jsonObject = null;
+        if (empty($formList)) {
+            $jsonObject = json_encode(['message' => 'empty']);
+        } else {
+            $jsonObject = $this->serializer->serialize($formList, 'json', [
+                'circular_reference_handler' => function ($object) {
+                    return $object->getId();
+                }
+            ]);
+        }
+
         return new Response($jsonObject, Response::HTTP_OK, ['Content-Type' => 'application/json']);
     }
 
@@ -63,11 +69,18 @@ class CareerFormController extends AbstractFOSRestController
     {
         $careerForm = $this->careerFormRepository->findBy(['id' => $slug]);
 
-        $jsonObject = $this->serializer->serialize($careerForm, 'json', [
-            'circular_reference_handler' => function ($object) {
-                return $object->getId();
-            }
-        ]);
+        $jsonObject = null;
+        if (empty($careerForm)) {
+
+            $jsonObject = json_encode(['message' => 'empty']);
+        } else {
+            $jsonObject = $this->serializer->serialize($careerForm, 'json', [
+                'circular_reference_handler' => function ($object) {
+                    return $object->getId();
+                }
+            ]);
+        }
+
         return new Response($jsonObject, Response::HTTP_OK, ['Content-Type' => 'application/json']);
     }
 

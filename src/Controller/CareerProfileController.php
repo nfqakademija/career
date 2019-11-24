@@ -101,11 +101,10 @@ class CareerProfileController extends AbstractFOSRestController
      */
     public function getProfileAction($slug)
     {
-        $careerProfile = $this->careerFormRepository->findBy(['id' => $slug]);
+        $careerProfile = $this->careerProfileRepository->findBy(['id' => $slug]);
 
         $jsonObject = null;
         if (empty($careerProfile)) {
-
             $jsonObject = json_encode(['message' => 'empty']);
         } else {
             $jsonObject = $this->serializer->serialize($careerProfile, 'json', [
@@ -116,7 +115,5 @@ class CareerProfileController extends AbstractFOSRestController
         }
 
         return new Response($jsonObject, Response::HTTP_OK, ['Content-Type' => 'application/json']);
-
     }
-
 }
