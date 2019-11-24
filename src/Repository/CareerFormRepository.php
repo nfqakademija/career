@@ -30,5 +30,4 @@ class CareerFormRepository extends ServiceEntityRepository
         $this->entityManager->persist($careerForm);
         $this->entityManager->flush();
     }
-
 }

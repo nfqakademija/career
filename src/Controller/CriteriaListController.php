@@ -29,8 +29,7 @@ class CriteriaListController extends AbstractFOSRestController
     private $serializer = null;
 
     public function __construct(
-        CriteriaRepository $criteriaRepository,
-        CompetenceRepository $competenceRepository)
+        CriteriaRepository $criteriaRepository, CompetenceRepository $competenceRepository)
     {
         $this->criteriaRepository = $criteriaRepository;
         $this->competenceRepository = $competenceRepository;
@@ -89,4 +88,3 @@ class CriteriaListController extends AbstractFOSRestController
         return new Response($jsonObject, Response::HTTP_OK, ['Content-Type' => 'application/json']);
     }
 }
-

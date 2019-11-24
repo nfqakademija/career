@@ -10,7 +10,6 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
-
 /**
  * Class CareerFormController
  *
@@ -75,7 +74,6 @@ class CareerFormController extends AbstractFOSRestController
 
         $jsonObject = null;
         if (empty($careerForm)) {
-
             $jsonObject = json_encode(['message' => 'empty']);
         } else {
             $jsonObject = $this->serializer->serialize($careerForm, 'json', [
