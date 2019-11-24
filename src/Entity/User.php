@@ -47,7 +47,7 @@ class User implements UserInterface
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Profession", mappedBy="fkProfession", cascade={"persist", "remove"})
      */
-    private $fk_profession;
+    private $fkProfession;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\CareerForm", mappedBy="fkUser", cascade={"persist", "remove"})
@@ -109,7 +109,7 @@ class User implements UserInterface
      */
     public function getFkProfession(): ?Profession
     {
-        return $this->fk_profession;
+        return $this->fkProfession;
     }
 
 

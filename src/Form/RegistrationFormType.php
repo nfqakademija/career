@@ -20,7 +20,7 @@ class RegistrationFormType extends AbstractType
                     'Darbuotojas' => 'ROLE_EMPLOYEE',],
                 'multiple' => true,
                 'expanded' => true])
-            ->add('profession')
+            ->add('title')
             ->remove('username');
     }
 
