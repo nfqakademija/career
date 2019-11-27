@@ -18,3 +18,7 @@ career_profile:
   type: rest
   resource: App\Controller\CareerProfileController
   prefix: api
+profession:
+  type: rest
+  resource: App\Controller\ProfessionController
+  prefix: api
