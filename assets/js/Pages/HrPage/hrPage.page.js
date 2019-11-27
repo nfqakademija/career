@@ -5,7 +5,7 @@ import Axios from "axios";
 import "./hrPage.style.scss";
 
 import CheckBox from "../../Components/checkbox/checkbox.comp";
-import { red } from "ansi-colors";
+// import { red } from "ansi-colors";
 
 class HrPage extends React.Component {
   constructor() {
@@ -127,19 +127,27 @@ class HrPage extends React.Component {
   };
 
   sendData = obj => {
+    let status;
+
     Axios.post("/api/profiles", {
       data: obj
     })
       .then(function(response) {
         console.log(response);
+        // status = response.statusText;
+        // alert(response.statusText)
+        // if(!alert(response.statusText)){window.location.reload();}
       })
       .catch(function(error) {
         console.log(error);
+        // status = error;
       });
 
+    // if(!alert(status)){window.location.reload();}
+    // window.location.reload();
     // this.setState({ competenceList: [] });
     // this.setState({ criteriaList: [] });
-    this.componentDidMount();
+    // this.componentDidMount();
   };
 
   positonInput = e => {

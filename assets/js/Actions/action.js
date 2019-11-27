@@ -3,23 +3,8 @@ export const setProfilesList = profiles =>({
     profiles
 })
 //////////////////////////////////////
-export const setSelectedProfileButton = profileId =>({
-    type: 'setSelectedProfileButton',
-    profileId
-})
-////////////////////////////////////////
-export const setUsername = (username) =>({
-    type: 'setUsername',
-    username
-})
 
-export const setPassword = (password) =>({
-    type: 'setPassword',
-    password
+export const setSelectedProfile = profile => ({
+    type: 'setSelectedProfile',
+    profile
 })
-
-export const isLoggedIn = (logged) =>({
-    type: 'isLoggedIn',
-    logged
-})
-/////////////////////////////////////////
