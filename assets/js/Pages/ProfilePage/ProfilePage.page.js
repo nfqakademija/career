@@ -1,9 +1,9 @@
 import React from "react";
 import Profile from "../../Components/Profile/Profile.competence.comp";
-import { setSelectedProfileButton, setProfilesList } from "../../Actions/action";
+import { setProfilesList } from "../../Actions/action";
 import Axios from "axios";
 import { connect } from "react-redux";
-import './ProfilePage.style.scss';
+import "./ProfilePage.style.scss";
 
 class ProfilePage extends React.Component {
   componentDidMount() {
@@ -51,11 +51,9 @@ class ProfilePage extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  selectedProfile: state.profileId.profileId,
   profilesList: state.profilesList.profiles
 });
 const mapDispatchToProps = dispatch => ({
-  onSetSelectedProfile: profileId => dispatch(setSelectedProfileButton(profileId)), //selected profile
   onSetProfileList: profile => dispatch(setProfilesList(profile))
 });
 
