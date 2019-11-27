@@ -14,9 +14,9 @@ use Symfony\Component\Serializer\Serializer;
  * Class CriteriaListController
  *
  * routes:
- * All criteria list with competence name they belong to and choice list - /api/criterias
- * All competences, their criteria list and criteria choice list - /api/competences
- * Criteria list fetched by competence title - /api/competences/{slug}/criterias
+ * /api/criterias - All criteria list with competence name and choice list TODO: is it really necessary?
+ * /api/competences - competence list with their criteria list and criteria choice list
+ * /api/competences/{slug}/criterias - Criteria list fetched by competence title
  *
  * @package App\Controller
  */
@@ -30,8 +30,8 @@ class CriteriaListController extends AbstractFOSRestController
 
     public function __construct(
         CriteriaRepository $criteriaRepository,
-        CompetenceRepository $competenceRepository)
-    {
+        CompetenceRepository $competenceRepository
+    ) {
         $this->criteriaRepository = $criteriaRepository;
         $this->competenceRepository = $competenceRepository;
         $this->normalizers[] = new ObjectNormalizer();
@@ -89,4 +89,3 @@ class CriteriaListController extends AbstractFOSRestController
         return new Response($jsonObject, Response::HTTP_OK, ['Content-Type' => 'application/json']);
     }
 }
-

@@ -28,6 +28,17 @@ class CareerProfile
      */
     private $careerForms;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Profession", inversedBy="careerProfile", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $profession;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isArchived;
+
     public function __construct()
     {
         $this->fkCriteria = new ArrayCollection();
@@ -92,6 +103,30 @@ class CareerProfile
                 $careerForm->setFkCareerProfile(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getProfession(): ?Profession
+    {
+        return $this->profession;
+    }
+
+    public function setProfession(Profession $profession): self
+    {
+        $this->profession = $profession;
+
+        return $this;
+    }
+
+    public function getIsArchived(): ?bool
+    {
+        return $this->isArchived;
+    }
+
+    public function setIsArchived(bool $isArchived): self
+    {
+        $this->isArchived = $isArchived;
 
         return $this;
     }

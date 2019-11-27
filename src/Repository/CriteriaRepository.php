@@ -29,7 +29,9 @@ class CriteriaRepository extends ServiceEntityRepository
             . 'FROM App\Entity\Criteria c '
             . 'INNER JOIN App\Entity\Competence p '
             . 'WHERE p.id = c.fkCompetence '
-            . 'AND p.title = :title')->setParameter('title', $title);
+            . 'AND p.title = :title'
+        )
+            ->setParameter('title', $title);
         return $query->getResult();
     }
 
@@ -43,7 +45,9 @@ class CriteriaRepository extends ServiceEntityRepository
             . 'WHERE  c.id = h.fkCriteria '
             . 'AND p.id = c.fkCompetence '
             . 'AND p.title = :title '
-            . 'AND c.isApplicable = 1')->setParameter('title', $title);
+            . 'AND c.isApplicable = 1'
+        )
+            ->setParameter('title', $title);
         return $query->getResult();
     }
 }

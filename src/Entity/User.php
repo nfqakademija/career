@@ -3,10 +3,12 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
 class User implements UserInterface
 {
@@ -45,14 +47,15 @@ class User implements UserInterface
     private $lastName;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Profession", mappedBy="fkProfession", cascade={"persist", "remove"})
-     */
-    private $fk_profession;
-
-    /**
      * @ORM\OneToOne(targetEntity="App\Entity\CareerForm", mappedBy="fkUser", cascade={"persist", "remove"})
      */
     private $careerForm;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Profession", inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $profession;
 
 
     public function getId(): ?int
@@ -109,7 +112,7 @@ class User implements UserInterface
      */
     public function getFkProfession(): ?Profession
     {
-        return $this->fk_profession;
+        return $this->fkProfession;
     }
 
 
@@ -189,5 +192,17 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getProfession(): ?Profession
+    {
+        return $this->profession;
+    }
+
+    public function setProfession(?Profession $profession): self
+    {
+        $this->profession = $profession;
+
+        return $this;
     }
 }
