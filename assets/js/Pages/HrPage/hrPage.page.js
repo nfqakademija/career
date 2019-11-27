@@ -11,7 +11,6 @@ class HrPage extends React.Component {
 
     this.state = {
       profiles: [],
-      // profileCopy: [],
       position: null,
       competenceList: [],
       criteriaList: []
@@ -21,7 +20,11 @@ class HrPage extends React.Component {
   componentDidMount() {
     Axios.get("/api/competences")
       .then(res => {
-        this.setState({ profiles: res.data });
+        // if (res.data.length === 0) {
+        //   console.log("No data");
+        // } else {
+          this.setState({ profiles: res.data });
+        // }
       })
       .catch(err => console.log(err));
   }
@@ -108,55 +111,19 @@ class HrPage extends React.Component {
       }
     ];
     console.log(obj);
-    // this.setState({ profileCopy: obj });
     this.sendData(obj);
-
-    // this.setState({ profileCopy: obj });
   };
 
   sendData = obj => {
-    // Axios({
-    //   url: "/api/profiles",
-    //   method: "post",
-    //   data: obj
-    // })
-    //   .then(function(response) {
-    //     // your action after success
-    //     console.log(response);
-    //   })
-    //   .catch(function(error) {
-    //     // your action on error success
-    //     console.log(error);
-    // });
-
     Axios.post("/api/profiles", {
       data: obj
     })
       .then(function(response) {
-        // your action after success
         console.log(response);
       })
       .catch(function(error) {
-        // your action on error success
         console.log(error);
       });
-
-    // fetch("/api/profiles", {
-    //   method: "POST",
-    //   // headers: {
-    //   //   Accept: "application/json",
-    //   //   "Content-Type": "application/json"
-    //   // },
-    //   data: JSON.stringify(obj)
-    // })
-    //   .then(function(response) {
-    //     // your action after success
-    //     console.log(response);
-    //   })
-    //   .catch(function(error) {
-    //     // your action on error success
-    //     console.log(error);
-    //   });
   };
 
   render() {
@@ -216,10 +183,6 @@ class HrPage extends React.Component {
           </tbody>
         </table>
         <button onClick={this.submit}>Save</button>
-        {console.log("Sukurta pozicija: ")}
-        {/* {console.log(this.state.profileCopy)} */}
-        {/* {console.log(this.state.profileCopy)} */}
-        {/* {console.log(this.props.location)} */}
       </div>
     );
   }

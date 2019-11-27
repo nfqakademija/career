@@ -1,5 +1,5 @@
 import React from "react";
-import Profile from "../../Components/Profile/Profile.component";
+import Profile from "../../Components/Profile/Profile.competence.comp";
 import { setSelectedProfileButton, setProfilesList } from "../../Actions/action";
 import Axios from "axios";
 import { connect } from "react-redux";
