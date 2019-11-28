@@ -3,8 +3,10 @@
 
 namespace App\View;
 
-class CriteriaView
+
+class ChoiceView
 {
+
     /**
      * @var int
      */
@@ -15,8 +17,4 @@ class CriteriaView
      */
     public $title;
 
-    /**
-     * @var array
-     */
-    public $choiceList;
 }

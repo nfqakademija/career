@@ -37,10 +37,12 @@ class CriteriaListController extends AbstractFOSRestController
     public function __construct(
         ViewHandlerInterface $viewHandler,
         CriteriaRepository $criteriaRepository,
-        CompetenceRepository $competenceRepository
-    ) {
+        CompetenceRepository $competenceRepository,
+        CompetenceListViewFactory $competenceListViewFactory
+    )
+    {
         $this->viewHandler = $viewHandler;
-        $this->competenceListViewFactory = new CompetenceListViewFactory();
+        $this->competenceListViewFactory = $competenceListViewFactory;
         $this->criteriaRepository = $criteriaRepository;
         $this->competenceRepository = $competenceRepository;
         $this->normalizers[] = new ObjectNormalizer();

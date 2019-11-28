@@ -10,13 +10,13 @@ use App\Factory\CriteriaListViewFactory;
 class CompetenceViewFactory
 {
     /**
-     * @var \App\Factory\CriteriaListViewFactory
+     * @var CriteriaViewFactory
      */
-    private $criteriaListViewFactory;
+    private $criteriaViewFactory;
 
-    public function __construct(\App\Factory\CriteriaListViewFactory $criteriaListViewFactory)
+    public function __construct(CriteriaViewFactory $criteriaViewFactory)
     {
-        $this->criteriaListViewFactory = $criteriaListViewFactory;
+        $this->criteriaViewFactory = $criteriaViewFactory;
     }
 
     public function create(Competence $competence): CompetenceView
@@ -25,7 +25,9 @@ class CompetenceViewFactory
         $competenceView = new CompetenceView();
         $competenceView->id = $competence->getId();
         $competenceView->title = $competence->getTitle();
-        $competenceView->criteriaList = $this->criteriaListViewFactory->create($competence->getCriterias());
+        foreach ($competence->getCriterias() as $criteria) {
+            $competenceView->criteriaList[] = $this->criteriaViewFactory->create($criteria);
+        }
 
         return $competenceView;
     }
