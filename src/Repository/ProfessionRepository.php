@@ -29,4 +29,6 @@ class ProfessionRepository extends ServiceEntityRepository
 
         return $query->getResult();
     }
+
+
 }

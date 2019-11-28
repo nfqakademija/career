@@ -14,9 +14,10 @@ use Symfony\Component\Serializer\Serializer;
  * Class CriteriaListController
  *
  * routes:
- * /api/criterias - All criteria list with competence name and choice list TODO: is it really necessary?
+ * /api/criterias - All criteria list with competence name
  * /api/competences - competence list with their criteria list and criteria choice list
- * /api/competences/{slug}/criterias - Criteria list fetched by competence title
+ * /api/criterias/{slug} - Criteria list fetched by competence title
+ * /api/choices/{slug} - Criteria Choice list fetched by criteria id
  *
  * @package App\Controller
  */
@@ -31,7 +32,8 @@ class CriteriaListController extends AbstractFOSRestController
     public function __construct(
         CriteriaRepository $criteriaRepository,
         CompetenceRepository $competenceRepository
-    ) {
+    )
+    {
         $this->criteriaRepository = $criteriaRepository;
         $this->competenceRepository = $competenceRepository;
         $this->normalizers[] = new ObjectNormalizer();
@@ -44,9 +46,7 @@ class CriteriaListController extends AbstractFOSRestController
      */
     public function getCriteriasAction()
     {
-        $criteriaList = $this->criteriaRepository->findBy([
-            'isApplicable' => 1
-        ]);
+        $criteriaList = $this->competenceRepository->fetchApplicable();
         $jsonObject = $this->serializer->serialize($criteriaList, 'json', [
             'circular_reference_handler' => function ($object) {
                 return $object->getId();
@@ -59,9 +59,9 @@ class CriteriaListController extends AbstractFOSRestController
      * @param string $slug
      * @return Response
      */
-    public function getCompetenceCriteriasAction(string $slug)
+    public function getCriteriaAction(string $slug)
     {
-        $criteriaList = $this->competenceRepository->findBy(['title' => $slug, 'isApplicable' => 1]);
+        $criteriaList = $this->competenceRepository->fetchApplicableByCompetence($slug);
 
         $jsonObject = $this->serializer->serialize($criteriaList, 'json', [
             'circular_reference_handler' => function ($object) {
@@ -88,4 +88,21 @@ class CriteriaListController extends AbstractFOSRestController
         ]);
         return new Response($jsonObject, Response::HTTP_OK, ['Content-Type' => 'application/json']);
     }
+
+    /**
+     * @param string $slug
+     * @return Response
+     */
+    public function getChoiceAction(string $slug)
+    {
+        $choiceList = $this->criteriaRepository->fetchChoicesByCriteria($slug);
+
+        $jsonObject = $this->serializer->serialize($choiceList, 'json', [
+            'circular_reference_handler' => function ($object) {
+                return $object->getId();
+            }
+        ]);
+        return new Response($jsonObject, Response::HTTP_OK, ['Content-Type' => 'application/json']);
+    }
+
 }

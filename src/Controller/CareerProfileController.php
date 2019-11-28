@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\CareerProfile;
-use App\Entity\Profession;
 use App\Repository\CareerProfileRepository;
 use App\Repository\CriteriaRepository;
 use App\Repository\ProfessionRepository;
@@ -18,7 +17,7 @@ use Symfony\Component\Serializer\Serializer;
  * Class CareerProfileController
  *
  * routes:
- * /api/profiles/{slug} - get career profile by its id; TODO: get career profile by title id
+ * /api/profiles/{slug} - get career profile title and id by profession id;
  * /api/profile/list - get all career profiles;
  * /api/profiles - post new career profile
  *
@@ -54,41 +53,48 @@ class CareerProfileController extends AbstractFOSRestController
      */
     public function postProfileAction(Request $request)
     {
+        // Fetch data from JSON
+        $data = ((array)json_decode(((string)$request->getContent()), true))['data'];
 
-        $array = ((array)json_decode(((string)$request->getContent()), true))['data'];
-        $position = (int)array_shift($array)['position'];
-        $competences = (array)array_shift($array)['competences'];
+        // Get position ID from data
+        $positionId = (int)array_shift($data)['position'];
 
-        $careerProfile = new CareerProfile();
+        // Check if position has its career profile and create career profile object depending on the decision
+        $careerProfile = ($this->careerProfileRepository->fetchProfileByProfession($positionId)) ?
+            $this->careerProfileRepository->findOneBy(['profession' => $positionId])
+            : new CareerProfile();
 
-        // sort the array by cirteria IDs from JSON/ remove unnecessary
-        $checkedCriteriaList = array();
+        // Get competence array from data
+        $competences = (array)array_shift($data)['competences'];
+
+        // Gather all checked criteria ids
+        $checkedCriteriaIdList = array();
         foreach ($competences as $competenceId => $competenceBody) {
             foreach ($competenceBody as $key => $value) {
                 if ($key === 'criterias') {
                     foreach ($value as $item => $field) {
-                        $checkedCriteriaList[] = ((int)$field['id']);
+                        $checkedCriteriaIdList[] = ((int)$field['id']);
                     }
                 }
             }
         }
-        // get available Criterias From Database as an array of Criteria objects
-        $availableCriterias = $this->criteriaRepository->findBy(array('id' => $checkedCriteriaList));
 
-        // run foreach to add Criterias to CareerProfile
-        foreach ($availableCriterias as $criteria) {
-            $careerProfile->addFkCriterion($criteria);
+        // get available Criterias from Database by criteria ids
+        $checkedCriteriaObjects = $this->criteriaRepository->findBy(array('id' => $checkedCriteriaIdList));
+
+        // loop through checked criterias and add to Criteria array
+        if ($checkedCriteriaObjects != null) {
+            foreach ($checkedCriteriaObjects as $criteria) {
+                $careerProfile->addFkCriterion($criteria);
+            }
         }
 
-        $profession = $this->professionRepository->findOneBy(['id' => $position]);
+        $profession = $this->professionRepository->findOneBy(['id' => $positionId]);
         $careerProfile->setProfession($profession);
         $careerProfile->setIsArchived(0);
-//        foreach ($careerProfile->getFkCriteria() as $crit) {
-//            var_dump("CRITERIA TITLE: " . $crit->getTitle());
-//        }
 
         $this->careerProfileRepository->save($careerProfile);
-        return new Response(json_encode(["message" => "Created"]), Response::HTTP_CREATED);
+        return new Response(json_encode(['message' => 'Created']), Response::HTTP_CREATED);
     }
 
     /**
@@ -98,7 +104,6 @@ class CareerProfileController extends AbstractFOSRestController
     public function getProfileListAction()
     {
         $profileList = $this->careerProfileRepository->findAll();
-
         $jsonObject = null;
         if (empty($profileList)) {
             $jsonObject = json_encode(['message' => 'empty']);
@@ -120,7 +125,7 @@ class CareerProfileController extends AbstractFOSRestController
      */
     public function getProfileAction($slug)
     {
-        $careerProfile = $this->careerProfileRepository->findBy(['id' => $slug]);
+        $careerProfile = $this->careerProfileRepository->fetchProfileByProfession($slug);
 
         $jsonObject = null;
         if (empty($careerProfile)) {

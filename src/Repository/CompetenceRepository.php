@@ -3,9 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Competence;
-use App\Entity\Criteria;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -25,10 +23,23 @@ class CompetenceRepository extends ServiceEntityRepository
     }
 
 
-    public function fetchApplicable()
+    public function fetchApplicable(int $isApplicable = 1)
     {
-        $query = $this->entityManager->createQuery('SELECT id, title '
-            . 'FROM App\Entity\Competence' . 'WHERE isApplicable = :isApplicable')->setParameter('isApplicable', 1);
+        $query = $this->entityManager->createQuery('SELECT comp.title AS competence, cr.id, cr.title AS criteria '
+            . 'FROM App\Entity\Competence comp JOIN App\Entity\Criteria cr '
+            . 'WHERE comp.id=cr.fkCompetence '
+            . 'AND comp.isApplicable = :isApplicable')
+            ->setParameter('isApplicable', $isApplicable);
+        return $query->getResult();
+    }
+
+    public function fetchApplicableByCompetence(string $title, int $isApplicable = 1)
+    {
+        $query = $this->entityManager->createQuery('SELECT cr.id, cr.title AS criteria '
+            . 'FROM App\Entity\Competence comp JOIN App\Entity\Criteria cr '
+            . 'WHERE comp.id=cr.fkCompetence '
+            . 'AND comp.isApplicable = :isApplicable AND comp.title = :title')
+            ->setParameters(['isApplicable' => $isApplicable, 'title' => $title]);
         return $query->getResult();
     }
 }
