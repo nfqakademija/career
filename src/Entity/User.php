@@ -57,6 +57,11 @@ class User implements UserInterface
      */
     private $profession;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isActive;
+
 
     public function getId(): ?int
     {
@@ -197,4 +202,22 @@ class User implements UserInterface
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }
+
+
+    public function setIsActive($isActive = TRUE): self
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+
 }
