@@ -27,4 +27,17 @@ class CareerProfileRepository extends ServiceEntityRepository
         $this->entityManager->persist($careerProfile);
         $this->entityManager->flush();
     }
+
+    public function fetchProfileByProfession(int $id, int $isArchived = 0)
+    {
+        $query = $this->entityManager->createQuery('SELECT pr.title AS position, ca.id '
+            . 'FROM App\Entity\Profession pr JOIN App\Entity\CareerProfile ca '
+            . 'WHERE ca.profession=pr.id '
+            . 'AND ca.isArchived = :isArchived '
+            . 'AND pr.id=:id')
+            ->setParameters(['isArchived' => $isArchived, 'id' => $id]);
+
+        return $query->getResult();
+    }
+
 }
