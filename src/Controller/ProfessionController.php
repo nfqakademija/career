@@ -53,5 +53,4 @@ class ProfessionController extends AbstractFOSRestController
 
         return new Response($jsonObject, Response::HTTP_OK, ['Content-Type' => 'application/json']);
     }
-
 }

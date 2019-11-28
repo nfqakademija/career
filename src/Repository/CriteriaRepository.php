@@ -30,7 +30,8 @@ class CriteriaRepository extends ServiceEntityRepository
             . 'JOIN App\Entity\Criteria cr '
             . 'WHERE cr.id = ch.fkCriteria '
             . 'AND cr.id = :id '
-            . 'AND cr.isApplicable = :isApplicable')
+            . 'AND cr.isApplicable = :isApplicable'
+        )
             ->setParameters(['isApplicable' => $isApplicable, 'id' => $id]);
         return $query->getResult();
     }
