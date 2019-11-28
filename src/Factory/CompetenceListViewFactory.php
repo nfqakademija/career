@@ -11,9 +11,9 @@ class CompetenceListViewFactory
     /** @var CompetenceViewFactory */
     private $competenceViewFactory;
 
-    public function __construct()
+    public function __construct(CompetenceViewFactory $competenceViewFactory)
     {
-        $this->competenceViewFactory = new CompetenceViewFactory();
+        $this->competenceViewFactory = $competenceViewFactory;
     }
 
     public function create(Array $competences): CompetenceListView

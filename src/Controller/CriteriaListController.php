@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\Serializer;
 /**
  * Class CriteriaListController
  *
- * routes:
+ * endpoints:
  * /api/criterias - All criteria list with competence name
  * /api/competences - competence list with their criteria list and criteria choice list
  * /api/criterias/{slug} - Criteria list fetched by competence title
@@ -37,10 +37,12 @@ class CriteriaListController extends AbstractFOSRestController
     public function __construct(
         ViewHandlerInterface $viewHandler,
         CriteriaRepository $criteriaRepository,
-        CompetenceRepository $competenceRepository
-    ) {
+        CompetenceRepository $competenceRepository,
+        CompetenceListViewFactory $competenceListViewFactory
+    )
+    {
         $this->viewHandler = $viewHandler;
-        $this->competenceListViewFactory = new CompetenceListViewFactory();
+        $this->competenceListViewFactory = $competenceListViewFactory;
         $this->criteriaRepository = $criteriaRepository;
         $this->competenceRepository = $competenceRepository;
         $this->normalizers[] = new ObjectNormalizer();
@@ -121,4 +123,5 @@ class CriteriaListController extends AbstractFOSRestController
 
         return $this->viewHandler->handle(View::create($this->competenceListViewFactory->create($competenceList)));
     }
+
 }

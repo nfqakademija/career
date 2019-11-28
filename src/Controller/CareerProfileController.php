@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\Serializer;
 /**
  * Class CareerProfileController
  *
- * routes:
+ * endpoints:
  * /api/profiles/{slug} - get career profile title and id by profession id;
  * /api/profile/list - get all career profiles;
  * /api/profiles - post new career profile

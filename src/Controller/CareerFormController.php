@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\Serializer;
 /**
  * Class CareerFormController
  *
- * routes:
+ * endpoints:
  * /api/forms/{slug} - get career form by id; TODO: get career form by User id;
  * /api/form/list - get career form list; TODO: get career form list by team;
  * /api/forms - post new career form
