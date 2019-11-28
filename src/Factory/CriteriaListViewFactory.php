@@ -11,9 +11,9 @@ class CriteriaListViewFactory
     /** @var CriteriaViewFactory */
     private $criteriaViewFactory;
 
-    public function __construct()
+    public function __construct(CriteriaViewFactory $criteriaViewFactory)
     {
-        $this->criteriaViewFactory = new CriteriaViewFactory();
+        $this->criteriaViewFactory = $criteriaViewFactory;
     }
 
     public function create(Array $criterias): CriteriaListView

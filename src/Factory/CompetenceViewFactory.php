@@ -14,9 +14,9 @@ class CompetenceViewFactory
      */
     private $criteriaListViewFactory;
 
-    public function __construct()
+    public function __construct(\App\Factory\CriteriaListViewFactory $criteriaListViewFactory)
     {
-        $this->criteriaListViewFactory = new CriteriaListViewFactory();
+        $this->criteriaListViewFactory = $criteriaListViewFactory;
     }
 
     public function create(Competence $competence): CompetenceView
