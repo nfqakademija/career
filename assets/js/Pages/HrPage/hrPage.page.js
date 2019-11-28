@@ -1,9 +1,11 @@
 import React from "react";
 import Axios from "axios";
+// import _ from 'loadash';
 
 import "./hrPage.style.scss";
 
 import CheckBox from "../../Components/checkbox/checkbox.comp";
+// import { red } from "ansi-colors";
 
 class HrPage extends React.Component {
   constructor() {
@@ -11,7 +13,8 @@ class HrPage extends React.Component {
 
     this.state = {
       profiles: [],
-      // profileCopy: [],
+      // profilesCopy:[],
+      positions: [],
       position: null,
       competenceList: [],
       criteriaList: []
@@ -21,7 +24,18 @@ class HrPage extends React.Component {
   componentDidMount() {
     Axios.get("/api/competences")
       .then(res => {
+        // if (res.data.length === 0) {
+        //   console.log("No data");
+        // } else {
         this.setState({ profiles: res.data });
+        // this.setState({profilesCopy: res.data})
+        // }
+      })
+      .catch(err => console.log(err));
+
+    Axios.get("/api/profession/list")
+      .then(res => {
+        this.setState({ positions: res.data });
       })
       .catch(err => console.log(err));
   }
@@ -49,25 +63,22 @@ class HrPage extends React.Component {
     });
 
     if (count === 1) {
-      let copy = this.state.competenceList;
+      let copy = [...this.state.competenceList];
       let index = copy.indexOf(competenceId);
       copy.splice(index, 1);
       this.setState({ competenceList: copy });
       console.log("dd");
     }
 
-    let copy = this.state.criteriaList;
+    let copy = [...this.state.criteriaList];
     let index = copy.indexOf(criteriaId);
     copy.splice(index, 1);
     this.setState({ criteriaList: copy });
   };
 
-  positonInput = e => {
-    this.setState({ position: e.target.value });
-  };
-
   submit = () => {
     let copy = [...this.state.profiles];
+    // let copy = this.state.profilesCopy;
     //to remove 0 which we assign below
     Array.prototype.remove = function() {
       var what,
@@ -108,62 +119,56 @@ class HrPage extends React.Component {
       }
     ];
     console.log(obj);
-    // this.setState({ profileCopy: obj });
-    this.sendData(obj);
-
-    // this.setState({ profileCopy: obj });
+    if (this.state.position === null || copy.length === 0) {
+      alert("Select position or criterias");
+    } else {
+      this.sendData(obj);
+    }
   };
 
   sendData = obj => {
-    // Axios({
-    //   url: "/api/profiles",
-    //   method: "post",
-    //   data: obj
-    // })
-    //   .then(function(response) {
-    //     // your action after success
-    //     console.log(response);
-    //   })
-    //   .catch(function(error) {
-    //     // your action on error success
-    //     console.log(error);
-    // });
+    let status;
 
     Axios.post("/api/profiles", {
       data: obj
     })
       .then(function(response) {
-        // your action after success
         console.log(response);
+        // status = response.statusText;
+        // alert(response.statusText)
+        // if(!alert(response.statusText)){window.location.reload();}
       })
       .catch(function(error) {
-        // your action on error success
         console.log(error);
+        // status = error;
       });
 
-    // fetch("/api/profiles", {
-    //   method: "POST",
-    //   // headers: {
-    //   //   Accept: "application/json",
-    //   //   "Content-Type": "application/json"
-    //   // },
-    //   data: JSON.stringify(obj)
-    // })
-    //   .then(function(response) {
-    //     // your action after success
-    //     console.log(response);
-    //   })
-    //   .catch(function(error) {
-    //     // your action on error success
-    //     console.log(error);
-    //   });
+    // if(!alert(status)){window.location.reload();}
+    // window.location.reload();
+    // this.setState({ competenceList: [] });
+    // this.setState({ criteriaList: [] });
+    // this.componentDidMount();
+  };
+
+  positonInput = e => {
+    console.log("ee");
+    this.setState({ position: e.target.value });
   };
 
   render() {
     return (
       <div className="hrPage">
-        <label>Enter position namee: </label>
-        <input type="text" onChange={e => this.positonInput(e)} />
+        <label>Choose position: </label>
+        <select onChange={e => this.positonInput(e)}>
+          <option id={null} value={null}>
+            --Select--
+          </option>
+          {this.state.positions.map(positions => (
+            <option key={positions.id} value={positions.id}>
+              {positions.title}
+            </option>
+          ))}
+        </select>
         <table className="Profile">
           <tbody>
             <tr className="u-textCenter">
@@ -216,10 +221,7 @@ class HrPage extends React.Component {
           </tbody>
         </table>
         <button onClick={this.submit}>Save</button>
-        {console.log("Sukurta pozicija: ")}
-        {/* {console.log(this.state.profileCopy)} */}
-        {/* {console.log(this.state.profileCopy)} */}
-        {/* {console.log(this.props.location)} */}
+        {/* {console.log(this.state.profiles)} */}
       </div>
     );
   }

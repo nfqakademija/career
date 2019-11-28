@@ -1,5 +1,5 @@
 import React from "react";
-import LogIn from "../../Components/LogIn/ValidatedLoginForm";
+// import LogIn from "../../Components/LogIn/ValidatedLoginForm";
 import "./HomePage.style.scss";
 import picture from "../../../pics/office2.png";
 

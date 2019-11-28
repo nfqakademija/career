@@ -1,14 +1,26 @@
 import React from "react";
-import Profile from "../../Components/Profile/Profile.component";
-import { setSelectedProfileButton, setProfilesList } from "../../Actions/action";
+import Profile from "../../Components/Profile/Profile.competence.comp";
+import { setProfilesList } from "../../Actions/action";
 import Axios from "axios";
 import { connect } from "react-redux";
-import './ProfilePage.style.scss';
+import "./ProfilePage.style.scss";
+import ProfileButtons from "../../Components/ProfileButtons/ProfileButtons.component";
 
 class ProfilePage extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      profileNames: []
+    };
+  }
   componentDidMount() {
     Axios.get("./example.json")
       .then(res => this.props.onSetProfileList(res.data))
+      .catch(err => console.log(err));
+
+    Axios.get("./example.buttons.json")
+      .then(res => this.setState({ profileNames: res.data }))
       .catch(err => console.log(err));
   }
 
@@ -35,6 +47,14 @@ class ProfilePage extends React.Component {
   render() {
     return (
       <div className="profilePage">
+        {this.state.profileNames.map(profileNames => (
+          <ProfileButtons
+            key={profileNames.id}
+            id={profileNames.id}
+            name={profileNames.title}
+          />
+        ))}
+
         {this.props.profilesList.map(data => (
           <Profile
             key={data.id}
@@ -45,18 +65,18 @@ class ProfilePage extends React.Component {
             change={this.change}
           />
         ))}
+        {console.log(this.props.selectedProfile)}
       </div>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  selectedProfile: state.profileId.profileId,
-  profilesList: state.profilesList.profiles
+  profilesList: state.profilesList.profiles,
+  selectedProfile: state.selectedProfile.id
 });
 const mapDispatchToProps = dispatch => ({
-  onSetSelectedProfile: profileId => dispatch(setSelectedProfileButton(profileId)), //selected profile
-  onSetProfileList: profile => dispatch(setProfilesList(profile))
+  onSetProfileList: profiles => dispatch(setProfilesList(profiles))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfilePage);

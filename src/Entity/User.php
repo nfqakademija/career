@@ -107,14 +107,6 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getFkProfession(): ?Profession
-    {
-        return $this->fkProfession;
-    }
-
 
     public function getCareerForm(): ?CareerForm
     {
