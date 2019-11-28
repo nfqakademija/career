@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Factory\CompetenceListViewFactory;
 use App\Repository\CompetenceRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
+use FOS\RestBundle\View\ViewHandlerInterface;
+use FOS\RestBundle\View\View;
 use App\Repository\CriteriaRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -28,12 +31,17 @@ class CriteriaListController extends AbstractFOSRestController
     private $normalizers = [];
     private $encoders = [];
     private $serializer = null;
+    private $viewHandler;
+    private $competenceListViewFactory;
 
     public function __construct(
+        ViewHandlerInterface $viewHandler,
         CriteriaRepository $criteriaRepository,
         CompetenceRepository $competenceRepository
     )
     {
+        $this->viewHandler = $viewHandler;
+        $this->competenceListViewFactory = new CompetenceListViewFactory();
         $this->criteriaRepository = $criteriaRepository;
         $this->competenceRepository = $competenceRepository;
         $this->normalizers[] = new ObjectNormalizer();
@@ -44,7 +52,8 @@ class CriteriaListController extends AbstractFOSRestController
     /**
      * @return Response
      */
-    public function getCriteriasAction()
+    public
+    function getCriteriasAction()
     {
         $criteriaList = $this->competenceRepository->fetchApplicable();
         $jsonObject = $this->serializer->serialize($criteriaList, 'json', [
@@ -59,7 +68,8 @@ class CriteriaListController extends AbstractFOSRestController
      * @param string $slug
      * @return Response
      */
-    public function getCriteriaAction(string $slug)
+    public
+    function getCriteriaAction(string $slug)
     {
         $criteriaList = $this->competenceRepository->fetchApplicableByCompetence($slug);
 
@@ -75,7 +85,8 @@ class CriteriaListController extends AbstractFOSRestController
     /**
      * @return Response
      */
-    public function getCompetencesAction()
+    public
+    function getCompetencesAction()
     {
         $competenceList = $this->competenceRepository->findBy([
             'isApplicable' => 1
@@ -93,7 +104,8 @@ class CriteriaListController extends AbstractFOSRestController
      * @param string $slug
      * @return Response
      */
-    public function getChoiceAction(string $slug)
+    public
+    function getChoiceAction(string $slug)
     {
         $choiceList = $this->criteriaRepository->fetchChoicesByCriteria($slug);
 
@@ -103,6 +115,16 @@ class CriteriaListController extends AbstractFOSRestController
             }
         ]);
         return new Response($jsonObject, Response::HTTP_OK, ['Content-Type' => 'application/json']);
+    }
+
+
+    public function getCompviewAction()
+    {
+        $competenceList = $this->competenceRepository->findBy([
+            'isApplicable' => 1
+        ]);
+
+        return $this->viewHandler->handle(View::create($this->competenceListViewFactory->create($competenceList)));
     }
 
 }
