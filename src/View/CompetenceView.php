@@ -3,7 +3,6 @@
 
 namespace App\View;
 
-
 class CompetenceView
 {
     /**
@@ -15,5 +14,4 @@ class CompetenceView
      * @var string
      */
     public $title;
-
 }

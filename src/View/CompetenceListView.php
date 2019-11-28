@@ -9,5 +9,4 @@ class CompetenceListView
      * @var CompetenceView[]
      */
     public $list;
-
 }

@@ -27,5 +27,4 @@ class CompetenceListViewFactory
 
         return $competenceListView;
     }
-
 }

@@ -9,7 +9,6 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
-
 /**
  * Class ProfessionController
  * @package App\Controller
@@ -25,8 +24,7 @@ class ProfessionController extends AbstractFOSRestController
     private $serializer = null;
 
 
-    public function __construct(
-        ProfessionRepository $professionRepository)
+    public function __construct(ProfessionRepository $professionRepository)
     {
         $this->professionRepository = $professionRepository;
         $this->normalizers[] = new ObjectNormalizer();

@@ -38,8 +38,7 @@ class CriteriaListController extends AbstractFOSRestController
         ViewHandlerInterface $viewHandler,
         CriteriaRepository $criteriaRepository,
         CompetenceRepository $competenceRepository
-    )
-    {
+    ) {
         $this->viewHandler = $viewHandler;
         $this->competenceListViewFactory = new CompetenceListViewFactory();
         $this->criteriaRepository = $criteriaRepository;
@@ -52,8 +51,7 @@ class CriteriaListController extends AbstractFOSRestController
     /**
      * @return Response
      */
-    public
-    function getCriteriasAction()
+    public function getCriteriasAction()
     {
         $criteriaList = $this->competenceRepository->fetchApplicable();
         $jsonObject = $this->serializer->serialize($criteriaList, 'json', [
@@ -68,8 +66,7 @@ class CriteriaListController extends AbstractFOSRestController
      * @param string $slug
      * @return Response
      */
-    public
-    function getCriteriaAction(string $slug)
+    public function getCriteriaAction(string $slug)
     {
         $criteriaList = $this->competenceRepository->fetchApplicableByCompetence($slug);
 
@@ -85,8 +82,7 @@ class CriteriaListController extends AbstractFOSRestController
     /**
      * @return Response
      */
-    public
-    function getCompetencesAction()
+    public function getCompetencesAction()
     {
         $competenceList = $this->competenceRepository->findBy([
             'isApplicable' => 1
@@ -104,8 +100,7 @@ class CriteriaListController extends AbstractFOSRestController
      * @param string $slug
      * @return Response
      */
-    public
-    function getChoiceAction(string $slug)
+    public function getChoiceAction(string $slug)
     {
         $choiceList = $this->criteriaRepository->fetchChoicesByCriteria($slug);
 
@@ -126,5 +121,4 @@ class CriteriaListController extends AbstractFOSRestController
 
         return $this->viewHandler->handle(View::create($this->competenceListViewFactory->create($competenceList)));
     }
-
 }

@@ -37,8 +37,7 @@ class CareerProfileController extends AbstractFOSRestController
         CriteriaRepository $criteriaRepository,
         ProfessionRepository $professionRepository,
         CareerProfileRepository $careerProfileRepository
-    )
-    {
+    ) {
         $this->professionRepository = $professionRepository;
         $this->careerProfileRepository = $careerProfileRepository;
         $this->criteriaRepository = $criteriaRepository;

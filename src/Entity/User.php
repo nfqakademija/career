@@ -212,12 +212,10 @@ class User implements UserInterface
     }
 
 
-    public function setIsActive($isActive = TRUE): self
+    public function setIsActive($isActive = true): self
     {
         $this->isActive = $isActive;
 
         return $this;
     }
-
-
 }
