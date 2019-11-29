@@ -39,5 +39,4 @@ class CareerProfileRepository extends ServiceEntityRepository
 
         return $query->getResult();
     }
-
 }

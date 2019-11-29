@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Factory\CompetenceListViewFactory;
 use App\Repository\CompetenceRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
+use FOS\RestBundle\View\ViewHandlerInterface;
+use FOS\RestBundle\View\View;
 use App\Repository\CriteriaRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -13,7 +16,7 @@ use Symfony\Component\Serializer\Serializer;
 /**
  * Class CriteriaListController
  *
- * routes:
+ * endpoints:
  * /api/criterias - All criteria list with competence name
  * /api/competences - competence list with their criteria list and criteria choice list
  * /api/criterias/{slug} - Criteria list fetched by competence title
@@ -28,12 +31,18 @@ class CriteriaListController extends AbstractFOSRestController
     private $normalizers = [];
     private $encoders = [];
     private $serializer = null;
+    private $viewHandler;
+    private $competenceListViewFactory;
 
     public function __construct(
+        ViewHandlerInterface $viewHandler,
         CriteriaRepository $criteriaRepository,
-        CompetenceRepository $competenceRepository
+        CompetenceRepository $competenceRepository,
+        CompetenceListViewFactory $competenceListViewFactory
     )
     {
+        $this->viewHandler = $viewHandler;
+        $this->competenceListViewFactory = $competenceListViewFactory;
         $this->criteriaRepository = $criteriaRepository;
         $this->competenceRepository = $competenceRepository;
         $this->normalizers[] = new ObjectNormalizer();
@@ -103,6 +112,16 @@ class CriteriaListController extends AbstractFOSRestController
             }
         ]);
         return new Response($jsonObject, Response::HTTP_OK, ['Content-Type' => 'application/json']);
+    }
+
+
+    public function getCompviewAction()
+    {
+        $competenceList = $this->competenceRepository->findBy([
+            'isApplicable' => 1
+        ]);
+
+        return $this->viewHandler->handle(View::create($this->competenceListViewFactory->create($competenceList)));
     }
 
 }
