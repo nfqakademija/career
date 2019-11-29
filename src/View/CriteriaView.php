@@ -3,6 +3,9 @@
 
 namespace App\View;
 
+use App\Entity\CriteriaChoice;
+use Doctrine\Common\Collections\Collection;
+
 class CriteriaView
 {
     /**
@@ -16,7 +19,7 @@ class CriteriaView
     public $title;
 
     /**
-     * @var array
+     * @var Collection|CriteriaChoice[]
      */
     public $choiceList;
 }
