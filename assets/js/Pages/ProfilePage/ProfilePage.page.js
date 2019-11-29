@@ -4,7 +4,7 @@ import { setProfilesList } from "../../Actions/action";
 import Axios from "axios";
 import { connect } from "react-redux";
 import "./ProfilePage.style.scss";
-import ProfileButtons from "../../Components/ProfileButtons/ProfileButtons.component";
+import ProfileButtons from "../../Components/ProfileButtons/ProfileButtons.comp";
 
 class ProfilePage extends React.Component {
   constructor() {
@@ -65,7 +65,7 @@ class ProfilePage extends React.Component {
             change={this.change}
           />
         ))}
-        {console.log(this.props.selectedProfile)}
+        {/* {console.log(this.props.selectedProfile)} */}
       </div>
     );
   }

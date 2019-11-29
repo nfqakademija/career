@@ -11,6 +11,7 @@ import { allReducer } from "./Reducers/index";
 import { BrowserRouter as Router } from "react-router-dom";
 
 const store = createStore(allReducer, applyMiddleware(logger));
+// , applyMiddleware(logger)
 
 ReactDOM.render(
   <Router>
