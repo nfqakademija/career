@@ -4,6 +4,8 @@
 namespace App\View;
 
 
+use App\Entity\CareerForm;
+
 class UserView
 {
 
@@ -31,4 +33,10 @@ class UserView
      * @var array
      */
     public $roles;
+
+    /**
+     * @var int
+     */
+    public $careerFormId;
 }
+
