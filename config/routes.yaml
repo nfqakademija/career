@@ -22,3 +22,7 @@ profession:
   type: rest
   resource: App\Controller\ProfessionController
   prefix: api
+user:
+  type: rest
+  resource: App\Controller\UserController
+  prefix: api
