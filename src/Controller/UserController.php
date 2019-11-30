@@ -20,9 +20,9 @@ use FOS\RestBundle\View\View;
  * Class UserController
  *
  *  * endpoints:
- * /api/users/logins/ - get user from login; TODO: get user by UserName and Password;
+ * /api/users/logins/ - get user from login; TODO: get user by Email and Password;
  * /api/users/{id} - get user information by id; TODO: get user by Id;
- * /api/users/all - get all users; TODO: get all registered users;
+ * /api/user/all - get all active registered users; TODO: get all active registered users;
  * @package App\Controller
  */
 class UserController extends AbstractFOSRestController
@@ -59,12 +59,10 @@ class UserController extends AbstractFOSRestController
      */
     public function postUserLoginAction(Request $request)
     {
-
         // Fetch data from JSON
         $data = json_decode($request->getContent(), true);
 
         $user = $this->userRepository->findOneBy(['email' => $data['email']]);
-
 
         if (!$user) {
             // fail authentication with a custom error
@@ -72,15 +70,12 @@ class UserController extends AbstractFOSRestController
         }
 
         if (!$this->passwordEncoder->isPasswordValid($user, $data['password'])) {
-
             // fail authentication because bad password
             return new Response(Response::HTTP_UNAUTHORIZED);
-
         }
 
         return $this->viewHandler->handle(View::create($this->userViewFactory->create($user)));
     }
-
 
     /**
      *
@@ -90,6 +85,13 @@ class UserController extends AbstractFOSRestController
     public function getUserAction(int $id)
     {
         $user = $this->userRepository->findOneBy(['id' => $id]);
+
+        return $this->viewHandler->handle(View::create($this->userViewFactory->create($user)));
+    }
+
+    public function getUserAllAction()
+    {
+        $user = $this->userRepository->findBy(['isActive' => 1]);
 
         return $this->viewHandler->handle(View::create($this->userViewFactory->create($user)));
     }
