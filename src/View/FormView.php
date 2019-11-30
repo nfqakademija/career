@@ -19,7 +19,7 @@ class FormView
     /**
      * @var ProfileView
      */
-    public $profileView;
+    public $profile;
 
     /**
      * @var UserView

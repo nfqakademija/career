@@ -38,7 +38,7 @@ class FormViewFactory
         $formView = new FormView();
         $formView->id = $form->getId();
         $formView->createdAt = $form->getCreatedAt();
-        $formView->profileView = $this->profileViewFactory->create($form->getFkCareerProfile());
+        $formView->profile = $this->profileViewFactory->create($form->getFkCareerProfile());
         $formView->userFirstName = $form->getFkUser()->getFirstName();
         $formView->userLastName = $form->getFkUser()->getLastName();
 

@@ -10,9 +10,9 @@ class UserAnswerView
     public $id;
 
     /** @var CriteriaView */
-    public $criteriaView;
+    public $criteria;
 
     /** @var ChoiceView */
-    public $choiceView;
+    public $choice;
 
 }
