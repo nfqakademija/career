@@ -5,6 +5,7 @@ import Axios from "axios";
 import "./hrPage.style.scss";
 
 import CheckBox from "../../Components/checkbox/checkbox.comp";
+import { timingSafeEqual } from "crypto";
 // import { red } from "ansi-colors";
 
 class HrPage extends React.Component {
@@ -17,7 +18,8 @@ class HrPage extends React.Component {
       positions: [],
       position: null,
       competenceList: [],
-      criteriaList: []
+      criteriaList: [],
+      show: []
     };
   }
 
@@ -25,7 +27,7 @@ class HrPage extends React.Component {
     Axios.get("/api/compview")
       .then(res => {
         // const copy = res.data.list;
-        this.setState({ profiles: res.data.list});
+        this.setState({ profiles: res.data.list });
         console.log(res);
       })
       .catch(err => console.log(err));
@@ -33,10 +35,9 @@ class HrPage extends React.Component {
     Axios.get("/api/profession/list")
       .then(res => {
         this.setState({ positions: res.data });
-        console.log(res)
+        console.log(res);
       })
       .catch(err => console.log(err));
-
   }
 
   add = (competenceId, criteriaId) => {
@@ -76,7 +77,7 @@ class HrPage extends React.Component {
 
   submit = () => {
     //copy object without reference(dirty way). We can use loadash.
-    let copy =JSON.parse(JSON.stringify(this.state.profiles))
+    let copy = JSON.parse(JSON.stringify(this.state.profiles));
     //to remove 0 which we assign below
     Array.prototype.remove = function() {
       var what,
@@ -125,7 +126,6 @@ class HrPage extends React.Component {
   };
 
   sendData = obj => {
-
     Axios.post("/api/profiles", {
       data: obj
     })
@@ -142,6 +142,17 @@ class HrPage extends React.Component {
   positonInput = e => {
     console.log("ee");
     this.setState({ position: e.target.value });
+  };
+
+  toogle = i => {
+    if (this.state.show.includes(i)) {
+      const array = [...this.state.show];
+      const index = array.indexOf(i);
+      array.splice(index, 1);
+      this.setState({ show: array });
+    } else {
+      this.setState({ show: this.state.show.concat(i) });
+    }
   };
 
   render() {
@@ -164,11 +175,12 @@ class HrPage extends React.Component {
               <th></th>
               <th>Criteria</th>
             </tr>
-            {this.state.profiles.map(competences => {
+            {this.state.profiles.map((competences, i) => {
               return (
                 <React.Fragment key={competences.id}>
                   <tr>
                     <td
+                      onClick={() => this.toogle(i)}
                       className="competence"
                       rowSpan={competences.criteriaList.length}
                     >

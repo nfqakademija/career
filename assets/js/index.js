@@ -10,7 +10,7 @@ import { allReducer } from "./Reducers/index";
 //reactrouter
 import { BrowserRouter as Router } from "react-router-dom";
 
-const store = createStore(allReducer, applyMiddleware(logger));
+const store = createStore(allReducer);
 // , applyMiddleware(logger)
 
 ReactDOM.render(

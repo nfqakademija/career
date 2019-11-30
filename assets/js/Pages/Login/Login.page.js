@@ -2,30 +2,40 @@ import React from "react";
 import "./Login.style.scss";
 import { connect } from "react-redux";
 import { setEmail } from "../../Actions/action";
+import Axios from "axios";
 
 class Login extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      password: ''
+      password: ""
     };
   }
 
   change = e => {
-    if(e.target.name === 'email'){
-      this.props.onSetEmail(e.target.value)
+    if (e.target.name === "email") {
+      this.props.onSetEmail(e.target.value);
     }
 
-    if(e.target.name === 'password'){
-      this.setState({password: e.target.value})
+    if (e.target.name === "password") {
+      this.setState({ password: e.target.value });
     }
   };
 
   submit = e => {
     e.preventDefault();
 
-    
+    Axios.post("/api/users/logins", {
+      email: this.props.email,
+      password: this.state.password
+    })
+      .then(function(response) {
+        console.log(response);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   };
 
   render() {
