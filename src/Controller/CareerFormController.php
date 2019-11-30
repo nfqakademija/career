@@ -106,11 +106,13 @@ class CareerFormController extends AbstractFOSRestController
         $careerProfile = $this->careerProfileRepository->findOneBy(['profession' => $professionId]);
         $user = $this->userRepository->findOneBy(['id' => $userId]);
 
+        $existingForm = $this->careerFormRepository->findOneBy(['fkUser' => $userId]);
+        $careerForm = ($existingForm) ? $existingForm : new CareerForm();
+
         if (!$user || !$careerProfile) {
             return JsonResponse::create(['message' => 'not found']);
         }
 
-        $careerForm = new CareerForm();
         $careerForm->setFkUser($user);
         $careerForm->setFkCareerProfile($careerProfile);
         $careerForm->setIsArchived(0);
