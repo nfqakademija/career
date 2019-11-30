@@ -22,22 +22,21 @@ class HrPage extends React.Component {
   }
 
   componentDidMount() {
-    Axios.get("/api/competences")
+    Axios.get("/api/compview")
       .then(res => {
-        // if (res.data.length === 0) {
-        //   console.log("No data");
-        // } else {
-        this.setState({ profiles: res.data });
-        // this.setState({profilesCopy: res.data})
-        // }
+        // const copy = res.data.list;
+        this.setState({ profiles: res.data.list});
+        console.log(res.data.list);
       })
       .catch(err => console.log(err));
 
     Axios.get("/api/profession/list")
       .then(res => {
         this.setState({ positions: res.data });
+        console.log(res)
       })
       .catch(err => console.log(err));
+
   }
 
   add = (competenceId, criteriaId) => {
@@ -67,7 +66,6 @@ class HrPage extends React.Component {
       let index = copy.indexOf(competenceId);
       copy.splice(index, 1);
       this.setState({ competenceList: copy });
-      console.log("dd");
     }
 
     let copy = [...this.state.criteriaList];
@@ -77,8 +75,8 @@ class HrPage extends React.Component {
   };
 
   submit = () => {
-    let copy = [...this.state.profiles];
-    // let copy = this.state.profilesCopy;
+    //copy object without reference(dirty way). We can use loadash.
+    let copy =JSON.parse(JSON.stringify(this.state.profiles))
     //to remove 0 which we assign below
     Array.prototype.remove = function() {
       var what,
@@ -101,14 +99,14 @@ class HrPage extends React.Component {
     copy.remove(0);
     //same steps but with criteria
     copy.map((data, index) =>
-      data.criterias.map((criteria, i) => {
+      data.criteriaList.map((criteria, i) => {
         this.state.criteriaList.includes(criteria.id)
           ? null
-          : (copy[index].criterias[i] = 0);
+          : (copy[index].criteriaList[i] = 0);
       })
     );
 
-    copy.map((data, index) => copy[index].criterias.remove(0));
+    copy.map((data, index) => copy[index].criteriaList.remove(0));
 
     let obj = [
       {
@@ -127,27 +125,18 @@ class HrPage extends React.Component {
   };
 
   sendData = obj => {
-    let status;
 
     Axios.post("/api/profiles", {
       data: obj
     })
       .then(function(response) {
-        console.log(response);
-        // status = response.statusText;
-        // alert(response.statusText)
-        // if(!alert(response.statusText)){window.location.reload();}
+        console.log(response.statusText);
+        alert("Created successfully");
       })
       .catch(function(error) {
         console.log(error);
-        // status = error;
+        alert("Something went wrong... Try again later");
       });
-
-    // if(!alert(status)){window.location.reload();}
-    // window.location.reload();
-    // this.setState({ competenceList: [] });
-    // this.setState({ criteriaList: [] });
-    // this.componentDidMount();
   };
 
   positonInput = e => {
@@ -181,23 +170,23 @@ class HrPage extends React.Component {
                   <tr>
                     <td
                       className="competence"
-                      rowSpan={competences.criterias.length}
+                      rowSpan={competences.criteriaList.length}
                     >
                       {competences.title}
                     </td>
-                    <td>{competences.criterias[0].title}</td>
+                    <td>{competences.criteriaList[0].title}</td>
                     <td>
                       <CheckBox
                         add={this.add}
                         remove={this.remove}
                         competenceId={competences.id}
-                        criteriaId={competences.criterias[0].id}
-                        criteriaList={competences.criterias}
+                        criteriaId={competences.criteriaList[0].id}
+                        criteriaList={competences.criteriaList}
                       />
                     </td>
                   </tr>
 
-                  {competences.criterias
+                  {competences.criteriaList
                     .filter((check, i) => i !== 0)
                     .map(criterias => {
                       return (
@@ -209,7 +198,7 @@ class HrPage extends React.Component {
                               remove={this.remove}
                               competenceId={competences.id}
                               criteriaId={criterias.id}
-                              criteriaList={competences.criterias}
+                              criteriaList={competences.criteriaList}
                             />
                           </td>
                         </tr>
@@ -221,7 +210,6 @@ class HrPage extends React.Component {
           </tbody>
         </table>
         <button onClick={this.submit}>Save</button>
-        {/* {console.log(this.state.profiles)} */}
       </div>
     );
   }

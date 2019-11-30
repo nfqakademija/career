@@ -3,10 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\CareerProfile;
+use FOS\RestBundle\View\ViewHandlerInterface;
+use App\Factory\ProfileListViewFactory;
 use App\Repository\CareerProfileRepository;
 use App\Repository\CriteriaRepository;
 use App\Repository\ProfessionRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
+use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -31,13 +34,20 @@ class CareerProfileController extends AbstractFOSRestController
     private $normalizers = [];
     private $encoders = [];
     private $serializer = null;
+    private $viewHandler;
+    private $profileListViewFactory;
 
 
     public function __construct(
+        ViewHandlerInterface $viewHandler,
         CriteriaRepository $criteriaRepository,
         ProfessionRepository $professionRepository,
-        CareerProfileRepository $careerProfileRepository
-    ) {
+        CareerProfileRepository $careerProfileRepository,
+        ProfileListViewFactory $profileListViewFactory
+    )
+    {
+        $this->viewHandler = $viewHandler;
+        $this->profileListViewFactory = $profileListViewFactory;
         $this->professionRepository = $professionRepository;
         $this->careerProfileRepository = $careerProfileRepository;
         $this->criteriaRepository = $criteriaRepository;
@@ -139,4 +149,15 @@ class CareerProfileController extends AbstractFOSRestController
 
         return new Response($jsonObject, Response::HTTP_OK, ['Content-Type' => 'application/json']);
     }
+
+    /**
+     *
+     * @return Response
+     */
+    public function getProfviewAction()
+    {
+        $profileList = $this->careerProfileRepository->findBy(['isArchived' => 0]);
+        return $this->viewHandler->handle(View::create($this->profileListViewFactory->create($profileList)));
+    }
+
 }

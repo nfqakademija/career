@@ -2,15 +2,7 @@
 
 .homePage{
     
-    // background-color: #086a75;
-    // min-height: 80vh;
-    // padding-top:100px;
-    // background-color: #41619c;
-    // font-family: 'Alata', sans-serif;
     font-family: 'Overpass', sans-serif;
-    // svg{
-    //     padding-top: 40px;
-    // }
 
     img{
         width: 400px;
@@ -28,6 +20,24 @@
 
     h1{
         letter-spacing: 2px;
+    }
+
+    a{
+        text-decoration: none;
+        color: black;
+    }
+
+    button{
+        font-size: 19px;
+        background-color: transparent;
+        border: solid 2px black;
+        padding: 5px 30px;
+        border-radius: 50px;
+    }
+
+    button:hover{
+        transition: all 0.3s;
+        padding: 5px 60px;
     }
 }
 

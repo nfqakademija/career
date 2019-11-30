@@ -1,39 +1,51 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./NavBar.scss";
-import logo from '../../../pics/logo6.png'
-// import withRouter from 'react-router-dom';
+import logo from "../../../pics/logo6.png";
+import { withRouter } from "react-router";
+
 
 class NavBar extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
-      route: null
+      route: props.location.pathname
     };
   }
 
-  componentDidMount(){
-    if(window.location.pathname !== '/'){
-      this.setState({route: false})
-    } else {this.setState({route: true})}
+  componentDidMount() {
+    if (this.props.location.pathname === "/") {
+      this.setState({ route: '/' });
+    } else {
+      this.setState({ route: false });
+    }
+  }
+
+  componentDidUpdate(prevProps){
+    if(this.props.location.pathname === '/' && prevProps.location.pathname !== '/'){
+      this.setState({route: '/'})
+    }
+
+    if(this.props.location.pathname !== '/' && prevProps.location.pathname === '/'){
+      this.setState({route: 'false'})
+    }
   }
 
   render() {
     return (
-      <div className="navigation"
-      // style={
-      //   this.state.route
-      //     ? null 
-      //     : { width: "100%" }
-      // }
-      >
+      <div
+        className="navigation">
         <nav
           className="navbar navbar-expand-lg navbar-dark"
           style={
-            this.state.route
+            this.state.route === '/'
               ? { background: "rgb(224, 107, 18)" }
-              : { background: "rgb(237, 219, 187)", border: "none", width: "100%" }
+              : {
+                  background: "rgb(237, 219, 187)",
+                  border: "none",
+                  width: "100%"
+                }
           }
         >
           <div className="d-flex flex-grow-1">
@@ -41,9 +53,7 @@ class NavBar extends React.Component {
             <Link
               className="navbar-brand"
               to="/"
-              onClick={() => this.setState({ route: true })}
             >
-              {/* <span className="my-color-logo">CCA</span> */}
               <img src={logo} className="my-logo" />
             </Link>
             <div className="w-100 text-right">
@@ -64,7 +74,6 @@ class NavBar extends React.Component {
             <ul className="navbar-nav ml-auto flex-nowrap">
               <li
                 className="nav-item"
-                onClick={() => this.setState({ route: true })}
               >
                 <Link className="nav-link" to="/">
                   <span className="my-color">Home</span>
@@ -72,7 +81,6 @@ class NavBar extends React.Component {
               </li>
               <li
                 className="nav-item"
-                onClick={() => this.setState({ route: false })}
               >
                 <Link className="nav-link" to="/profiles">
                   <span className="my-color">Profiles</span>
@@ -80,7 +88,6 @@ class NavBar extends React.Component {
               </li>
               <li
                 className="nav-item"
-                onClick={() => this.setState({ route: false })}
               >
                 <Link className="nav-link" to="/hrprofiles">
                   <span className="my-color">HR Page</span>
@@ -94,4 +101,4 @@ class NavBar extends React.Component {
   }
 }
 
-export default NavBar;
+export default withRouter(NavBar);
