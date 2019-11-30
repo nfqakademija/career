@@ -1,0 +1,32 @@
+<?php
+
+
+namespace App\View;
+
+
+use Doctrine\Common\Collections\Collection;
+
+class FormView
+{
+    /**
+     * @var int
+     */
+    public $id;
+
+    /** @var datetime */
+    public $createdAt;
+
+    /**
+     * @var ProfileView
+     */
+    public $profileView;
+
+    /**
+     * @var UserView
+     */
+    public $userView;
+
+    /** @var Collection|UserAnswerView[] */
+    public $userAnswerList;
+
+}
