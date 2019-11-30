@@ -8,7 +8,7 @@ class HomePage extends React.Component {
     return (
       <div className="homePage">
         <div className="content">
-          <div>
+          <div className="u-flexCenter">
             <h1>Career Criteria Assessment</h1>
             <br />
             <Link to="login">

@@ -9,9 +9,8 @@ export const setSelectedProfile = profile => ({
     profile
 })
 
-////////////////////////////////////////
-
-export const setRoute = route => ({
-    type: 'setRoute',
-    route
+/////////////////////////////////////////////////////
+export const setEmail = email => ({
+    type: 'setEmail',
+    email
 })

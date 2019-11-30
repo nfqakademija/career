@@ -26,7 +26,7 @@ class HrPage extends React.Component {
       .then(res => {
         // const copy = res.data.list;
         this.setState({ profiles: res.data.list});
-        console.log(res.data.list);
+        console.log(res);
       })
       .catch(err => console.log(err));
 
