@@ -50,8 +50,7 @@ class UserController extends AbstractFOSRestController
     {
 
         // Fetch data from JSON
-        $data = ((array)json_decode(((string)$request->getContent()), true))['data'];
-
+        $data = json_decode($request->getContent(), true);
 
         $user = $this->userRepository->findOneBy(['email' => $data['email']]);
 
