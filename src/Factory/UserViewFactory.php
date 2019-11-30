@@ -17,6 +17,8 @@ class UserViewFactory
         $userView->firstName = $user->getFirstName();
         $userView->lastName = $user->getLastName();
         $userView->professionTitle = $user->getProfession()->getTitle();
-    }
+        $userView->roles = $user->getRoles();
 
+        return  $userView;
+    }
 }

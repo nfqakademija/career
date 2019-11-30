@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Factory\UserViewFactory;
 use App\Repository\UserRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,6 +12,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use FOS\RestBundle\View\ViewHandlerInterface;
+use FOS\RestBundle\View\View;
 
 
 /**
@@ -30,15 +33,23 @@ class UserController extends AbstractFOSRestController
     private $encoders = [];
     private $serializer = null;
     private $passwordEncoder;
+    private $viewHandler;
+    private $userViewFactory;
 
-
-    public function __construct(UserRepository $userRepository, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(
+        UserRepository $userRepository,
+        UserPasswordEncoderInterface $passwordEncoder,
+        ViewHandlerInterface $viewHandler,
+        UserViewFactory $userViewFactory
+    )
     {
         $this->userRepository = $userRepository;
         $this->normalizers[] = new ObjectNormalizer();
         $this->encoders[] = new JsonEncoder();
         $this->serializer = new Serializer($this->normalizers, $this->encoders);
         $this->passwordEncoder = $passwordEncoder;
+        $this->viewHandler = $viewHandler;
+        $this->userViewFactory = $userViewFactory;
     }
 
 
@@ -67,14 +78,7 @@ class UserController extends AbstractFOSRestController
 
         }
 
-        $jsonObject = null;
-        $jsonObject = $this->serializer->serialize($user, 'json', [
-            'circular_reference_handler' => function ($object) {
-                return $object->getId();
-            }
-        ]);
-
-        return new Response($jsonObject, Response::HTTP_OK, ['Content-Type' => 'application/json']);
+        return $this->viewHandler->handle(View::create($this->userViewFactory->create($user)));
     }
 
 
@@ -87,17 +91,6 @@ class UserController extends AbstractFOSRestController
     {
         $user = $this->userRepository->findOneBy(['id' => $id]);
 
-        $jsonObject = null;
-        if (empty($professionList)) {
-            $jsonObject = json_encode(['message' => 'empty']);
-        } else {
-            $jsonObject = $this->serializer->serialize($user, 'json', [
-                'circular_reference_handler' => function ($object) {
-                    return $object->getId();
-                }
-            ]);
-        }
-
-        return new Response($jsonObject, Response::HTTP_OK, ['Content-Type' => 'application/json']);
+        return $this->viewHandler->handle(View::create($this->userViewFactory->create($user)));
     }
 }

@@ -26,4 +26,9 @@ class UserView
      * @var string
      */
     public $professionTitle;
+
+    /**
+     * @var array
+     */
+    public $roles;
 }
