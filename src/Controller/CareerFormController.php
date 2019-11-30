@@ -2,13 +2,18 @@
 
 namespace App\Controller;
 
+use App\Factory\FormListViewFactory;
+use App\Factory\FormViewFactory;
 use App\Repository\CareerFormRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use FOS\RestBundle\View\ViewHandlerInterface;
+use FOS\RestBundle\View\View;
 
 /**
  * Class CareerFormController
@@ -28,10 +33,21 @@ class CareerFormController extends AbstractFOSRestController
     private $normalizers = [];
     private $encoders = [];
     private $serializer = null;
+    private $viewHandler;
+    private $formListViewFactory;
+    private $formViewFactory;
 
 
-    public function __construct(CareerFormRepository $careerFormRepository)
+    public function __construct(
+        CareerFormRepository $careerFormRepository,
+        ViewHandlerInterface $viewHandler,
+        FormListViewFactory $formListViewFactory,
+        FormViewFactory $formViewFactory
+    )
     {
+        $this->formListViewFactory = $formListViewFactory;
+        $this->formViewFactory = $formViewFactory;
+        $this->viewHandler = $viewHandler;
         $this->careerFormRepository = $careerFormRepository;
         $this->normalizers[] = new ObjectNormalizer();
         $this->encoders[] = new JsonEncoder();
@@ -46,19 +62,7 @@ class CareerFormController extends AbstractFOSRestController
     public function getFormListAction()
     {
         $formList = $this->careerFormRepository->findAll();
-
-        $jsonObject = null;
-        if (empty($formList)) {
-            $jsonObject = json_encode(['message' => 'empty']);
-        } else {
-            $jsonObject = $this->serializer->serialize($formList, 'json', [
-                'circular_reference_handler' => function ($object) {
-                    return $object->getId();
-                }
-            ]);
-        }
-
-        return new Response($jsonObject, Response::HTTP_OK, ['Content-Type' => 'application/json']);
+        return $this->viewHandler->handle(View::create($this->formListViewFactory->create($formList)));
     }
 
 
@@ -69,20 +73,11 @@ class CareerFormController extends AbstractFOSRestController
      */
     public function getFormAction($slug)
     {
-        $careerForm = $this->careerFormRepository->findBy(['id' => $slug]);
-
-        $jsonObject = null;
-        if (empty($careerForm)) {
-            $jsonObject = json_encode(['message' => 'empty']);
-        } else {
-            $jsonObject = $this->serializer->serialize($careerForm, 'json', [
-                'circular_reference_handler' => function ($object) {
-                    return $object->getId();
-                }
-            ]);
+        $careerForm = $this->careerFormRepository->findOneBy(['id' => $slug]);
+        if ($careerForm === null) {
+            return JsonResponse::create(['message' => 'Form not found']);
         }
-
-        return new Response($jsonObject, Response::HTTP_OK, ['Content-Type' => 'application/json']);
+        return $this->viewHandler->handle(View::create($this->formViewFactory->create($careerForm)));
     }
 
     /**
