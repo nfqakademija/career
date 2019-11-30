@@ -21,11 +21,10 @@ class FormView
      */
     public $profileView;
 
-    /** @var string */
-    public $userFirstName;
-
-    /** @var string */
-    public $userLastName;
+    /**
+     * @var UserView
+     */
+    public $userView;
 
     /** @var Collection|UserAnswerView[] */
     public $userAnswerList;
