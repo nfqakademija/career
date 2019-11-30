@@ -3,21 +3,25 @@
 namespace App\Controller;
 
 use App\Entity\CareerForm;
+use App\Entity\UserAnswer;
 use App\Factory\FormListViewFactory;
 use App\Factory\FormViewFactory;
 use App\Factory\ProfileViewFactory;
+use App\Factory\UserAnswerViewFactory;
 use App\Repository\CareerFormRepository;
 use App\Repository\CareerProfileRepository;
+use App\Repository\CriteriaChoiceRepository;
+use App\Repository\CriteriaRepository;
 use App\Repository\UserRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use FOS\RestBundle\View\ViewHandlerInterface;
+use FOS\RestBundle\View\View;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
-use FOS\RestBundle\View\ViewHandlerInterface;
-use FOS\RestBundle\View\View;
 
 /**
  * Class CareerFormController
@@ -35,14 +39,14 @@ class CareerFormController extends AbstractFOSRestController
 
     private $careerFormRepository = null;
     private $careerProfileRepository;
-    private $normalizers = [];
-    private $encoders = [];
-    private $serializer = null;
     private $viewHandler;
     private $formListViewFactory;
     private $formViewFactory;
     private $profileViewFactory;
     private $userRepository;
+    private $criteriaRepository;
+    private $criteriaChoiceRepository;
+    private $userAnswerViewFactory;
 
 
     public function __construct(
@@ -52,7 +56,10 @@ class CareerFormController extends AbstractFOSRestController
         UserRepository $userRepository,
         ViewHandlerInterface $viewHandler,
         FormListViewFactory $formListViewFactory,
-        FormViewFactory $formViewFactory
+        FormViewFactory $formViewFactory,
+        CriteriaRepository $criteriaRepository,
+        CriteriaChoiceRepository $criteriaChoiceRepository,
+        UserAnswerViewFactory $userAnswerViewFactory
     )
     {
         $this->formListViewFactory = $formListViewFactory;
@@ -62,9 +69,9 @@ class CareerFormController extends AbstractFOSRestController
         $this->careerProfileRepository = $careerProfileRepository;
         $this->profileViewFactory = $profileViewFactory;
         $this->userRepository = $userRepository;
-        $this->normalizers[] = new ObjectNormalizer();
-        $this->encoders[] = new JsonEncoder();
-        $this->serializer = new Serializer($this->normalizers, $this->encoders);
+        $this->criteriaRepository = $criteriaRepository;
+        $this->criteriaChoiceRepository = $criteriaChoiceRepository;
+        $this->userAnswerViewFactory = $userAnswerViewFactory;
     }
 
     /**
@@ -97,6 +104,7 @@ class CareerFormController extends AbstractFOSRestController
      *
      * @param Request $request
      * @return JsonResponse|Response
+     * @throws \Exception
      */
     public function postFormAction(Request $request)
     {
@@ -120,5 +128,43 @@ class CareerFormController extends AbstractFOSRestController
         $this->careerFormRepository->save($careerForm);
 
         return $this->viewHandler->handle(View::create($this->formViewFactory->create($careerForm)));
+    }
+
+    /**
+     *
+     * @param Request $request
+     * @return JsonResponse|Response
+     * @throws \Exception
+     */
+    public function postAnswerAction(Request $request)
+    {
+
+        $data = ((array)json_decode(((string)$request->getContent()), true));
+        $formId = (array_key_exists('formId', $data[0])) ? (int)$data[0]['formId'] : null;
+        $answers = (array_key_exists('answers', $data[1])) ? (array)$data[1]['answers'] : null;
+
+        $choiceIds = array();
+        foreach ($answers as $answerId => $answerBody) {
+            foreach ($answerBody as $key => $value) {
+                if ($key === 'choice') {
+                    $choiceIds[] = (int) $value;
+                }
+            }
+        }
+
+        $choices = $this->criteriaChoiceRepository->findBy(array('id' => $choiceIds));
+
+        $form = $this->careerFormRepository->findOneBy(['id' => $formId]);
+
+        foreach ($choices as $choice) {
+            $userAnswer = new UserAnswer();
+            $userAnswer->setFkChoice($choice);
+            $userAnswer->setFkCriteria($choice->getFkCriteria());
+            $userAnswer->setFkCareerForm($form);
+            $form->addUserAnswer($userAnswer);
+        };
+
+        return $this->viewHandler->handle(View::create($this->formViewFactory->create($form)));
+
     }
 }
