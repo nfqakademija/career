@@ -59,6 +59,7 @@ class CareerProfileController extends AbstractFOSRestController
     /**
      *
      * @param Request $request
+     * @return Response
      */
     public function postProfileAction(Request $request)
     {
@@ -69,18 +70,16 @@ class CareerProfileController extends AbstractFOSRestController
         $positionId = (int)array_shift($data)['position'];
 
         // Check if position has its career profile and create career profile object depending on the decision
-        $careerProfile = ($this->careerProfileRepository->fetchProfileByProfession($positionId)) ?
-            $this->careerProfileRepository->findOneBy(['profession' => $positionId])
-            : new CareerProfile();
+        $existingProfile = $this->careerProfileRepository->findOneBy(['profession' => $positionId]);
+        $careerProfile = ($existingProfile) ? $existingProfile : new CareerProfile();
 
         // Get competence array from data
         $competences = (array)array_shift($data)['competences'];
-
         // Gather all checked criteria ids
         $checkedCriteriaIdList = array();
         foreach ($competences as $competenceId => $competenceBody) {
             foreach ($competenceBody as $key => $value) {
-                if ($key === 'criterias') {
+                if ($key === 'criteriaList') {
                     foreach ($value as $item => $field) {
                         $checkedCriteriaIdList[] = ((int)$field['id']);
                     }
@@ -90,7 +89,6 @@ class CareerProfileController extends AbstractFOSRestController
 
         // get available Criterias from Database by criteria ids
         $checkedCriteriaObjects = $this->criteriaRepository->findBy(array('id' => $checkedCriteriaIdList));
-
         // loop through checked criterias and add to Criteria array
         if ($checkedCriteriaObjects != null) {
             foreach ($checkedCriteriaObjects as $criteria) {

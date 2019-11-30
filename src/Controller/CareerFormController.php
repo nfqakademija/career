@@ -119,6 +119,6 @@ class CareerFormController extends AbstractFOSRestController
         $careerForm->setCreatedAt(new \DateTime("now"));
         $this->careerFormRepository->save($careerForm);
 
-        return $this->viewHandler->handle(View::create($this->profileViewFactory->create($careerProfile)));
+        return $this->viewHandler->handle(View::create($this->formViewFactory->create($careerForm)));
     }
 }
