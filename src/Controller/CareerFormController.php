@@ -19,17 +19,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\View\ViewHandlerInterface;
 use FOS\RestBundle\View\View;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 
 /**
  * Class CareerFormController
  *
  * endpoints:
- * /api/forms/{slug} - get career form by id; TODO: get career form by User id;
+ * /api/forms/{slug} - get career form by User id.
+ * If User does not have a career form assigned, create one by career profile;
  * /api/form/list - get career form list; TODO: get career form list by team;
- * /api/forms - post new career form
+ * /api/answers - post answer
  * TODO: get career form list by title;
  *
  * @package App\Controller
@@ -90,43 +88,24 @@ class CareerFormController extends AbstractFOSRestController
      *
      * @param $slug
      * @return Response
+     * @throws \Exception
      */
     public function getFormAction($slug)
     {
-        $careerForm = $this->careerFormRepository->findOneBy(['id' => $slug]);
-        if ($careerForm === null) {
-            return JsonResponse::create(['message' => 'Not found']);
-        }
-        return $this->viewHandler->handle(View::create($this->formViewFactory->create($careerForm)));
-    }
 
-    /**
-     *
-     * @param Request $request
-     * @return JsonResponse|Response
-     * @throws \Exception
-     */
-    public function postFormAction(Request $request)
-    {
-        $data = ((array)json_decode(((string)$request->getContent()), true));
-        $userId = (array_key_exists('userId', $data[0])) ? (int)$data[0]['userId'] : null;
-        $professionId = (array_key_exists('professionId', $data[2])) ? (int)$data[2]['professionId'] : null;
-        $careerProfile = $this->careerProfileRepository->findOneBy(['profession' => $professionId]);
-        $user = $this->userRepository->findOneBy(['id' => $userId]);
+        $user = $this->userRepository->findOneBy(['id' => $slug]);
+        $careerProfile = $this->careerProfileRepository->findOneBy(['profession' => $user->getProfession()->getId()]);
 
-        $existingForm = $this->careerFormRepository->findOneBy(['fkUser' => $userId]);
+        $existingForm = $this->careerFormRepository->findOneBy(['fkUser' => $user]);
         $careerForm = ($existingForm) ? $existingForm : new CareerForm();
 
-        if (!$user || !$careerProfile) {
-            return JsonResponse::create(['message' => 'not found']);
+        if (!$careerForm->getId()) {
+            $careerForm->setFkUser($user);
+            $careerForm->setFkCareerProfile($careerProfile);
+            $careerForm->setIsArchived(0);
+            $careerForm->setCreatedAt(new \DateTime("now"));
+            $this->careerFormRepository->save($careerForm);
         }
-
-        $careerForm->setFkUser($user);
-        $careerForm->setFkCareerProfile($careerProfile);
-        $careerForm->setIsArchived(0);
-        $careerForm->setCreatedAt(new \DateTime("now"));
-        $this->careerFormRepository->save($careerForm);
-
         return $this->viewHandler->handle(View::create($this->formViewFactory->create($careerForm)));
     }
 
@@ -147,7 +126,7 @@ class CareerFormController extends AbstractFOSRestController
         foreach ($answers as $answerId => $answerBody) {
             foreach ($answerBody as $key => $value) {
                 if ($key === 'choice') {
-                    $choiceIds[] = (int) $value;
+                    $choiceIds[] = (int)$value;
                 }
             }
         }
