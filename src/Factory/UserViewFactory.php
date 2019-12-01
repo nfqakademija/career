@@ -19,8 +19,8 @@ class UserViewFactory
         $userView->professionTitle = $user->getProfession()->getTitle();
         $userView->professionId = $user->getProfession()->getId();
         $userView->roles = $user->getRoles();
-        // patikrinti ar ne null.
-        $userView->careerFormId = $user->getCareerForm()->getId();
+        // return if career form is set.
+        $userView->careerFormId = ($user->getCareerForm())? $user->getCareerForm()->getId() : 'not set';
 
         return $userView;
     }

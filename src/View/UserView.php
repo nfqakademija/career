@@ -40,7 +40,7 @@ class UserView
     public $roles;
 
     /**
-     * @var int
+     * @var string
      */
     public $careerFormId;
 }
