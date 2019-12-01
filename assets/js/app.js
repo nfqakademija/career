@@ -14,6 +14,7 @@ class App extends React.Component {
         <NavBar />
         <Switch>
           <Route exact path="/" component={HomePage} />
+          
           <Route path="/profiles" component={ProfilePage} />
           <Route path="/hrprofiles" component={HrProfiles} />
 

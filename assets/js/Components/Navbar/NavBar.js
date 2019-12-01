@@ -90,7 +90,7 @@ class NavBar extends React.Component {
                 className="nav-item"
               >
                 <Link className="nav-link" to="/hrprofiles">
-                  <span className="my-color">HR Page</span>
+                  <span className="my-color">Create Profiles</span>
                 </Link>
               </li>
             </ul>
