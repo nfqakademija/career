@@ -87,11 +87,19 @@ class NavBar extends React.Component {
                   </Link>
                 </li>
               )}
+
+              {this.props.logged ? (
+                <li className="nav-item">
+                  <Link className="nav-link" to="/user">
+                    <span className="my-color">My Profile</span>
+                  </Link>
+                </li>
+              ) : null}
               {this.props.roles.includes("ROLE_HEAD") &&
               this.props.logged === true ? (
                 <li className="nav-item">
                   <Link className="nav-link" to="/profiles">
-                    <span className="my-color">Profiles</span>
+                    <span className="my-color">Team Profiles</span>
                   </Link>
                 </li>
               ) : null}
