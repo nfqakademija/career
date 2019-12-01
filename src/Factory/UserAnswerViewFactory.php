@@ -36,6 +36,8 @@ class UserAnswerViewFactory
         $userAnswerView->id = $userAnswer->getId();
         $userAnswerView->criteria = $this->criteriaViewFactory->create($userAnswer->getFkCriteria());
         $userAnswerView->choice = $this->choiceViewFactory->create($userAnswer->getFkChoice());
+
+        return $userAnswerView;
     }
 
 

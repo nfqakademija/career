@@ -17,9 +17,11 @@ class UserViewFactory
         $userView->firstName = $user->getFirstName();
         $userView->lastName = $user->getLastName();
         $userView->professionTitle = $user->getProfession()->getTitle();
+        $userView->professionId = $user->getProfession()->getId();
         $userView->roles = $user->getRoles();
-        $userView->careerFormId = $user->getCareerForm()->getId();
+        // return if career form is set.
+        $userView->careerFormId = ($user->getCareerForm())? $user->getCareerForm()->getId() : 'not set';
 
-        return  $userView;
+        return $userView;
     }
 }

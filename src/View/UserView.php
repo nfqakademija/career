@@ -30,12 +30,17 @@ class UserView
     public $professionTitle;
 
     /**
+     * @var int
+     */
+    public $professionId;
+
+    /**
      * @var array
      */
     public $roles;
 
     /**
-     * @var int
+     * @var string
      */
     public $careerFormId;
 }
