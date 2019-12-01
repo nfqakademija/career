@@ -41,16 +41,18 @@ class NavBar extends React.Component {
 
   render() {
     return (
-      <div className="navigation">
+      <div
+        className="navigation"  >
         <nav
           className="navbar navbar-expand-lg navbar-dark"
           style={
             this.state.route === "/"
               ? { background: "rgb(224, 107, 18)" }
               : {
-                  background: "rgb(237, 219, 187)",
-                  border: "none",
-                  width: "100%"
+                  background: "rgb(184, 165, 127)",
+                  borderColor: "white",
+                  width: "100%",
+                  padding: "0 13%"
                 }
           }
         >

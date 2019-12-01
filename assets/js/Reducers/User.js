@@ -6,7 +6,8 @@ const initialState = {
   formId: null,
   professionId: null,
   roles: [],
-  logged: false
+  logged: false,
+  teams: []
 };
 
 export const user = (state = initialState, action) => {
@@ -46,11 +47,16 @@ export const user = (state = initialState, action) => {
         ...state,
         roles: action.roles
       };
-      case "setLogged":
-        return{
-          ...state,
-          logged: action.logged
-        }
+    case "setLogged":
+      return {
+        ...state,
+        logged: action.logged
+      };
+    case "setTeams":
+      return {
+        ...state,
+        teams: action.teams
+      };
 
     default:
       return state;

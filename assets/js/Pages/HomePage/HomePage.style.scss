@@ -43,5 +43,20 @@
         transition: all 0.3s;
         padding: 5px 60px;
     }
+
+    @media screen and (max-width: 600px){
+        .content{
+            display: block;
+            text-align: center;
+        }
+
+        button{
+            margin-bottom: 20px;
+        }
+
+        img{
+            width: 250px;
+        }
+    }
 }
 
