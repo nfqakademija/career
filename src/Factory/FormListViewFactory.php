@@ -3,7 +3,6 @@
 
 namespace App\Factory;
 
-
 use App\View\FormListView;
 
 class FormListViewFactory
@@ -27,5 +26,4 @@ class FormListViewFactory
 
         return $formListView;
     }
-
 }

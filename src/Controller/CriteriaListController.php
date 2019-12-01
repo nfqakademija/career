@@ -39,8 +39,7 @@ class CriteriaListController extends AbstractFOSRestController
         CriteriaRepository $criteriaRepository,
         CompetenceRepository $competenceRepository,
         CompetenceListViewFactory $competenceListViewFactory
-    )
-    {
+    ) {
         $this->viewHandler = $viewHandler;
         $this->competenceListViewFactory = $competenceListViewFactory;
         $this->criteriaRepository = $criteriaRepository;
@@ -123,5 +122,4 @@ class CriteriaListController extends AbstractFOSRestController
 
         return $this->viewHandler->handle(View::create($this->competenceListViewFactory->create($competenceList)));
     }
-
 }

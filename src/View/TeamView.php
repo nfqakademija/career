@@ -16,5 +16,4 @@ class TeamView
      * @var string
      */
     public $title;
-
 }

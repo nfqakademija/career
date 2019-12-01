@@ -3,11 +3,11 @@
 
 namespace App\View;
 
-
 class FormListView
 {
 
-    /** @var Array */
+    /**
+     * @var Array
+     */
     public $list;
-
 }

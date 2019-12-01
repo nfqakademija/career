@@ -44,8 +44,7 @@ class CareerProfileController extends AbstractFOSRestController
         ProfessionRepository $professionRepository,
         CareerProfileRepository $careerProfileRepository,
         ProfileListViewFactory $profileListViewFactory
-    )
-    {
+    ) {
         $this->viewHandler = $viewHandler;
         $this->profileListViewFactory = $profileListViewFactory;
         $this->professionRepository = $professionRepository;
@@ -157,5 +156,4 @@ class CareerProfileController extends AbstractFOSRestController
         $profileList = $this->careerProfileRepository->findBy(['isArchived' => 0]);
         return $this->viewHandler->handle(View::create($this->profileListViewFactory->create($profileList)));
     }
-
 }

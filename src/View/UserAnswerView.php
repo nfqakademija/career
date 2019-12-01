@@ -3,7 +3,6 @@
 
 namespace App\View;
 
-
 class UserAnswerView
 {
     /** @var int */
@@ -14,5 +13,4 @@ class UserAnswerView
 
     /** @var ChoiceView */
     public $choice;
-
 }

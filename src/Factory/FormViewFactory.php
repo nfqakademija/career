@@ -5,7 +5,6 @@ namespace App\Factory;
 
 use App\Entity\CareerForm;
 use App\View\FormView;
-use App\View\ProfileView;
 
 class FormViewFactory
 {
@@ -25,8 +24,7 @@ class FormViewFactory
         CriteriaViewFactory $criteriaViewFactory,
         UserAnswerViewFactory $userAnswerViewFactory,
         ProfileViewFactory $profileViewFactory
-    )
-    {
+    ) {
         $this->profileViewFactory = $profileViewFactory;
         $this->userAnswerViewFactory = $userAnswerViewFactory;
         $this->criteriaViewFactory = $criteriaViewFactory;
@@ -48,6 +46,4 @@ class FormViewFactory
 
         return $formView;
     }
-
-
 }

@@ -3,7 +3,6 @@
 
 namespace App\View;
 
-
 use App\Entity\CareerForm;
 use Doctrine\Common\Collections\Collection;
 

@@ -3,7 +3,6 @@
 
 namespace App\View;
 
-
 class ChoiceView
 {
 
@@ -16,5 +15,4 @@ class ChoiceView
      * @var string
      */
     public $title;
-
 }

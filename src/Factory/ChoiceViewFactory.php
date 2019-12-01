@@ -18,5 +18,4 @@ class ChoiceViewFactory
 
         return $choiceView;
     }
-
 }

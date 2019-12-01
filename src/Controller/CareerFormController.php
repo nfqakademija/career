@@ -58,8 +58,7 @@ class CareerFormController extends AbstractFOSRestController
         CriteriaRepository $criteriaRepository,
         CriteriaChoiceRepository $criteriaChoiceRepository,
         UserAnswerViewFactory $userAnswerViewFactory
-    )
-    {
+    ) {
         $this->formListViewFactory = $formListViewFactory;
         $this->formViewFactory = $formViewFactory;
         $this->viewHandler = $viewHandler;
@@ -144,6 +143,5 @@ class CareerFormController extends AbstractFOSRestController
         };
 
         return $this->viewHandler->handle(View::create($this->formViewFactory->create($form)));
-
     }
 }

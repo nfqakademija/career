@@ -3,7 +3,6 @@
 
 namespace App\Factory;
 
-
 use App\View\ProfileListView;
 
 class ProfileListViewFactory
@@ -28,6 +27,4 @@ class ProfileListViewFactory
 
         return $profileListView;
     }
-
-
 }

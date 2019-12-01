@@ -3,7 +3,6 @@
 
 namespace App\View;
 
-
 use Doctrine\Common\Collections\Collection;
 
 class FormView
@@ -28,5 +27,4 @@ class FormView
 
     /** @var Collection|UserAnswerView[] */
     public $userAnswerList;
-
 }

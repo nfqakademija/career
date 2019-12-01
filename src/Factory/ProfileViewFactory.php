@@ -3,7 +3,6 @@
 
 namespace App\Factory;
 
-
 use App\Entity\CareerProfile;
 use App\View\ProfileView;
 
@@ -27,17 +26,17 @@ class ProfileViewFactory
         $profileView->id = $profile->getId();
         $profileView->professionTitle = $profile->getProfession()->getTitle();
         $prevCompetenceTitle = '';
-        $competenceTitle = '';
+
         foreach ($profile->getFkCriteria() as $criteria) {
             $nextCompetenceTitle = $criteria->getFkCompetence()->getTitle();
             if ($nextCompetenceTitle !== $prevCompetenceTitle) {
                 $competenceTitle = $nextCompetenceTitle;
+                $profileView->criteriaList['competence'] = $competenceTitle;
             }
-            $profileView->criteriaList[$competenceTitle][] = $this->criteriaViewFactory->create($criteria);
+            $profileView->criteriaList['criterias'] = $this->criteriaViewFactory->create($criteria);
             $prevCompetenceTitle = $nextCompetenceTitle;
         }
 
         return $profileView;
     }
-
 }

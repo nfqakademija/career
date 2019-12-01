@@ -3,7 +3,6 @@
 
 namespace App\View;
 
-
 use App\Entity\Criteria;
 use Doctrine\Common\Collections\Collection;
 
@@ -14,10 +13,13 @@ class ProfileView
      */
     public $id;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     public $professionTitle;
 
-    /** @var Collection|Criteria[] */
+    /**
+     * @var Collection|Criteria[]
+     */
     public $criteriaList;
-
 }

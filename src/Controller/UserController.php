@@ -15,7 +15,6 @@ use Symfony\Component\Serializer\Serializer;
 use FOS\RestBundle\View\ViewHandlerInterface;
 use FOS\RestBundle\View\View;
 
-
 /**
  * Class UserController
  *
@@ -44,8 +43,7 @@ class UserController extends AbstractFOSRestController
         UserPasswordEncoderInterface $passwordEncoder,
         ViewHandlerInterface $viewHandler,
         UserViewFactory $userViewFactory
-    )
-    {
+    ) {
         $this->userRepository = $userRepository;
         $this->normalizers[] = new ObjectNormalizer();
         $this->encoders[] = new JsonEncoder();
@@ -132,5 +130,4 @@ class UserController extends AbstractFOSRestController
 
         return $this->viewHandler->handle(View::create($this->userViewFactory->create($users)));
     }
-
 }

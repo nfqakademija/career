@@ -14,7 +14,6 @@ use Symfony\Component\Serializer\Serializer;
 use FOS\RestBundle\View\ViewHandlerInterface;
 use FOS\RestBundle\View\View;
 
-
 /**
  * Class TeamController
  *
@@ -36,8 +35,7 @@ class TeamController extends AbstractFOSRestController
         TeamRepository $teamRepository,
         ViewHandlerInterface $viewHandler,
         TeamViewFactory $teamViewFactory
-    )
-    {
+    ) {
         $this->teamRepository = $teamRepository;
         $this->normalizers[] = new ObjectNormalizer();
         $this->encoders[] = new JsonEncoder();

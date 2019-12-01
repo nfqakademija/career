@@ -3,7 +3,6 @@
 
 namespace App\Factory;
 
-
 use App\Entity\UserAnswer;
 use App\View\UserAnswerView;
 
@@ -23,8 +22,8 @@ class UserAnswerViewFactory
 
     public function __construct(
         CriteriaViewFactory $criteriaViewFactory,
-        ChoiceViewFactory $choiceViewFactory)
-    {
+        ChoiceViewFactory $choiceViewFactory
+    ) {
         $this->criteriaViewFactory = $criteriaViewFactory;
         $this->choiceViewFactory = $choiceViewFactory;
     }
@@ -39,6 +38,4 @@ class UserAnswerViewFactory
 
         return $userAnswerView;
     }
-
-
 }
