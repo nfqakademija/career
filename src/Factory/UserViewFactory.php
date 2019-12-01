@@ -17,9 +17,11 @@ class UserViewFactory
         $userView->firstName = $user->getFirstName();
         $userView->lastName = $user->getLastName();
         $userView->professionTitle = $user->getProfession()->getTitle();
+        $userView->professionId = $user->getProfession()->getId();
         $userView->roles = $user->getRoles();
+        // patikrinti ar ne null.
         $userView->careerFormId = $user->getCareerForm()->getId();
 
-        return  $userView;
+        return $userView;
     }
 }
