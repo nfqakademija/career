@@ -33,7 +33,7 @@ class ProfileViewFactory
                 $competenceTitle = $nextCompetenceTitle;
                 $profileView->criteriaList['competence'] = $competenceTitle;
             }
-            $profileView->criteriaList['criterias'] = $this->criteriaViewFactory->create($criteria);
+            $profileView->criteriaList['criterias'][] = $this->criteriaViewFactory->create($criteria);
             $prevCompetenceTitle = $nextCompetenceTitle;
         }
 
