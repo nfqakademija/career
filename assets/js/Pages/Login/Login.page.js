@@ -8,7 +8,8 @@ import {
   setTitle,
   setCareerFormId,
   setProfessionId,
-  setRoles
+  setRoles,
+  setLogged
 } from "../../Actions/action";
 import Axios from "axios";
 import { Redirect } from 'react-router-dom';
@@ -19,7 +20,6 @@ class Login extends React.Component {
 
     this.state = {
       password: "",
-      islogged: false
     };
   }
 
@@ -58,7 +58,7 @@ class Login extends React.Component {
           onSetProfessionId(response.data.professionId);
           onSetRoles(response.data.roles);
           onSetTitle(response.data.professionTitle);
-          this.setState({islogged: true})
+          this.props.onSetLogged(!this.props.logged);
           console.log("Success");
         } else {
           console.log("Fail");
@@ -96,7 +96,6 @@ class Login extends React.Component {
               placeholder="Password"
               required
               name="password"
-              value={this.state.password}
               onChange={this.change}
             />
           </div>
@@ -104,14 +103,14 @@ class Login extends React.Component {
             Submit
           </button>
         </form>
-        {console.log(this.props.email)}
+        {/* {console.log(this.props.email)}
         {console.log(this.props.name)}
         {console.log(this.props.userId)}
         {console.log(this.props.title)}
         {console.log(this.props.formId)}
         {console.log(this.props.professionId)}
-        {console.log(this.props.roles)}
-        {this.state.islogged?<Redirect to="/" />: null}
+        {console.log(this.props.roles)} */}
+        {this.props.logged?<Redirect to="/" />: null}
       </div>
     );
   }
@@ -124,7 +123,8 @@ const mapStateToProps = state => ({
   title: state.user.title,
   formId: state.user.formId,
   professionId: state.user.professionId,
-  roles: state.user.roles
+  roles: state.user.roles,
+  logged:state.user.logged
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -134,7 +134,8 @@ const mapDispatchToProps = dispatch => ({
   onSetTitle: title => dispatch(setTitle(title)),
   onSetCareerFormId: formId => dispatch(setCareerFormId(formId)),
   onSetProfessionId: professionId => dispatch(setProfessionId(professionId)),
-  onSetRoles: roles => dispatch(setRoles(roles))
+  onSetRoles: roles => dispatch(setRoles(roles)),
+  onSetLogged: logged => dispatch(setLogged(logged))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

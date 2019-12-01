@@ -5,7 +5,8 @@ const initialState = {
   title: null,
   formId: null,
   professionId: null,
-  roles: []
+  roles: [],
+  logged: false
 };
 
 export const user = (state = initialState, action) => {
@@ -45,6 +46,11 @@ export const user = (state = initialState, action) => {
         ...state,
         roles: action.roles
       };
+      case "setLogged":
+        return{
+          ...state,
+          logged: action.logged
+        }
 
     default:
       return state;

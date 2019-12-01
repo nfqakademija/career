@@ -44,3 +44,8 @@ export const setRoles = roles => ({
     type: 'setRoles',
     roles
 })
+
+export const setLogged = logged => ({
+    type: 'setLogged',
+    logged
+})
