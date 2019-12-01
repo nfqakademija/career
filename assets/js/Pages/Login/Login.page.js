@@ -9,7 +9,8 @@ import {
   setCareerFormId,
   setProfessionId,
   setRoles,
-  setLogged
+  setLogged,
+  setTeams
 } from "../../Actions/action";
 import Axios from "axios";
 import { Redirect } from 'react-router-dom';
@@ -42,7 +43,9 @@ class Login extends React.Component {
       onSetFullName,
       onSetUserId,
       onSetProfessionId,
-      onSetTitle
+      onSetTitle,
+      onSetLogged,
+      onSetTeams
     } = this.props;
 
     Axios.post("/api/users/logins", {
@@ -58,7 +61,8 @@ class Login extends React.Component {
           onSetProfessionId(response.data.professionId);
           onSetRoles(response.data.roles);
           onSetTitle(response.data.professionTitle);
-          this.props.onSetLogged(!this.props.logged);
+          onSetLogged(!this.props.logged);
+          onSetTeams(response.data.teams)
           console.log("Success");
         } else {
           console.log("Fail");
@@ -109,7 +113,8 @@ class Login extends React.Component {
         {console.log(this.props.title)}
         {console.log(this.props.formId)}
         {console.log(this.props.professionId)}
-        {console.log(this.props.roles)} */}
+        {console.log(this.props.roles)}
+        {console.log(this.props.teams)} */}
         {this.props.logged?<Redirect to="/" />: null}
       </div>
     );
@@ -124,7 +129,8 @@ const mapStateToProps = state => ({
   formId: state.user.formId,
   professionId: state.user.professionId,
   roles: state.user.roles,
-  logged:state.user.logged
+  logged:state.user.logged,
+  teams: state.user.teams
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -135,7 +141,8 @@ const mapDispatchToProps = dispatch => ({
   onSetCareerFormId: formId => dispatch(setCareerFormId(formId)),
   onSetProfessionId: professionId => dispatch(setProfessionId(professionId)),
   onSetRoles: roles => dispatch(setRoles(roles)),
-  onSetLogged: logged => dispatch(setLogged(logged))
+  onSetLogged: logged => dispatch(setLogged(logged)),
+  onSetTeams: teams => dispatch(setTeams(teams))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

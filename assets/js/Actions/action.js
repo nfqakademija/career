@@ -49,3 +49,8 @@ export const setLogged = logged => ({
     type: 'setLogged',
     logged
 })
+
+export const setTeams = teams => ({
+    type: 'setTeams',
+    teams
+})
