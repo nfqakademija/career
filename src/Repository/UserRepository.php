@@ -61,7 +61,7 @@ class UserRepository extends ServiceEntityRepository
             . 'WHERE u.roles LIKE :role '
             . 'AND t.id = :teamId '
         )
-            ->setParameters(['teamId' => $teamId, 'role' => $role]);
+            ->setParameters(['teamId' => $teamId, 'role' => '%"'.$role.'"%']);
         return $query->getResult();
 
     }
