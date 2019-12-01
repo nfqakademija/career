@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import "./NavBar.scss";
 import logo from "../../../pics/logo6.png";
 import { withRouter } from "react-router";
-
+import { connect } from "react-redux";
+import { setLogged } from "../../Actions/action";
 
 class NavBar extends React.Component {
   constructor(props) {
@@ -16,30 +17,35 @@ class NavBar extends React.Component {
 
   componentDidMount() {
     if (this.props.location.pathname === "/") {
-      this.setState({ route: '/' });
+      this.setState({ route: "/" });
     } else {
       this.setState({ route: false });
     }
   }
 
-  componentDidUpdate(prevProps){
-    if(this.props.location.pathname === '/' && prevProps.location.pathname !== '/'){
-      this.setState({route: '/'})
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.location.pathname === "/" &&
+      prevProps.location.pathname !== "/"
+    ) {
+      this.setState({ route: "/" });
     }
 
-    if(this.props.location.pathname !== '/' && prevProps.location.pathname === '/'){
-      this.setState({route: 'false'})
+    if (
+      this.props.location.pathname !== "/" &&
+      prevProps.location.pathname === "/"
+    ) {
+      this.setState({ route: "false" });
     }
   }
 
   render() {
     return (
-      <div
-        className="navigation">
+      <div className="navigation">
         <nav
           className="navbar navbar-expand-lg navbar-dark"
           style={
-            this.state.route === '/'
+            this.state.route === "/"
               ? { background: "rgb(224, 107, 18)" }
               : {
                   background: "rgb(237, 219, 187)",
@@ -50,10 +56,7 @@ class NavBar extends React.Component {
         >
           <div className="d-flex flex-grow-1">
             <span className="w-100 d-lg-none d-block"></span>
-            <Link
-              className="navbar-brand"
-              to="/"
-            >
+            <Link className="navbar-brand" to="/">
               <img src={logo} className="my-logo" />
             </Link>
             <div className="w-100 text-right">
@@ -72,27 +75,53 @@ class NavBar extends React.Component {
             id="myNavbar7"
           >
             <ul className="navbar-nav ml-auto flex-nowrap">
-              <li
-                className="nav-item"
-              >
+              <li className="nav-item">
                 <Link className="nav-link" to="/">
                   <span className="my-color">Home</span>
                 </Link>
               </li>
-              <li
-                className="nav-item"
-              >
-                <Link className="nav-link" to="/profiles">
-                  <span className="my-color">Profiles</span>
-                </Link>
-              </li>
-              <li
-                className="nav-item"
-              >
-                <Link className="nav-link" to="/hrprofiles">
-                  <span className="my-color">HR Page</span>
-                </Link>
-              </li>
+              {this.props.logged ? null : (
+                <li className="nav-item">
+                  <Link className="nav-link" to="/login">
+                    <span className="my-color">Login</span>
+                  </Link>
+                </li>
+              )}
+              {this.props.roles.includes("ROLE_HEAD") &&
+              this.props.logged === true ? (
+                <li className="nav-item">
+                  <Link className="nav-link" to="/profiles">
+                    <span className="my-color">Profiles</span>
+                  </Link>
+                </li>
+              ) : null}
+              {this.props.roles.includes("ROLE_ADMIN") &&
+              this.props.logged === true ? (
+                <li className="nav-item">
+                  <Link className="nav-link" to="/hrprofiles">
+                    <span className="my-color">Create Profiles</span>
+                  </Link>
+                </li>
+              ) : null}
+              {this.props.logged ? (
+                <li className="nav-item">
+                  <div className="nav-link">
+                    <span className="my-color">
+                      Logged as: {this.props.email}
+                    </span>
+                  </div>
+                </li>
+              ) : null}
+              {this.props.logged ? (
+                <li className="nav-item">
+                  <div
+                    className="nav-link"
+                    onClick={() => this.props.onSetLogged(!this.props.logged)}
+                  >
+                    <span className="logout my-color">Logout</span>
+                  </div>
+                </li>
+              ) : null}
             </ul>
           </div>
         </nav>
@@ -101,4 +130,14 @@ class NavBar extends React.Component {
   }
 }
 
-export default withRouter(NavBar);
+const mapStateToProps = state => ({
+  roles: state.user.roles,
+  email: state.user.email,
+  logged: state.user.logged
+});
+
+const mapDispatchToProps = dispatch => ({
+  onSetLogged: logged => dispatch(setLogged(logged))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(NavBar));

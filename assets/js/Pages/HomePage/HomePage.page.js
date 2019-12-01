@@ -2,6 +2,7 @@ import React from "react";
 import "./HomePage.style.scss";
 import picture from "../../../pics/office2.png";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
 class HomePage extends React.Component {
   render() {
@@ -11,9 +12,13 @@ class HomePage extends React.Component {
           <div className="u-flexCenter">
             <h1>Career Criteria Assessment</h1>
             <br />
-            <Link to="login">
-              <button>Login</button>
-            </Link>
+            {this.props.logged ? (
+              <h5>Have a great day!</h5>
+            ) : (
+              <Link to="login">
+                <button>Login</button>
+              </Link>
+            )}
           </div>
           <img src={picture} />
         </div>
@@ -29,4 +34,8 @@ class HomePage extends React.Component {
   }
 }
 
-export default HomePage;
+const mapStateToProps = state => ({
+  logged: state.user.logged
+});
+
+export default connect(mapStateToProps, null)(HomePage);
