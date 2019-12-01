@@ -5,6 +5,7 @@ namespace App\View;
 
 
 use App\Entity\CareerForm;
+use Doctrine\Common\Collections\Collection;
 
 class UserView
 {
@@ -40,8 +41,7 @@ class UserView
     public $roles;
 
     /**
-     * @var string
+     * @var array
      */
-    public $careerFormId;
+    public $teams;
 }
-

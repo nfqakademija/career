@@ -9,6 +9,15 @@ use App\View\UserView;
 
 class UserViewFactory
 {
+    /**
+     * @var TeamViewFactory
+     */
+    private $teamViewFactory;
+
+    public function __construct(TeamViewFactory $teamViewFactory)
+    {
+        $this->teamViewFactory = $teamViewFactory;
+    }
 
     public function create(User $user): UserView
     {
@@ -19,8 +28,10 @@ class UserViewFactory
         $userView->professionTitle = $user->getProfession()->getTitle();
         $userView->professionId = $user->getProfession()->getId();
         $userView->roles = $user->getRoles();
-        // return if career form is set.
-        $userView->careerFormId = ($user->getCareerForm())? $user->getCareerForm()->getId() : 'not set';
+
+        foreach ($user->getTeam() as $team) {
+            $userView->teams[] = $this->teamViewFactory->create($team);
+        }
 
         return $userView;
     }

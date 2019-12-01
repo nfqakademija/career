@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -61,6 +63,16 @@ class User implements UserInterface
      * @ORM\Column(type="boolean")
      */
     private $isActive;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Team", mappedBy="fkUser")
+     */
+    private $team;
+
+    public function __construct()
+    {
+        $this->team = new ArrayCollection();
+    }
 
 
     public function getId(): ?int
@@ -215,6 +227,34 @@ class User implements UserInterface
     public function setIsActive($isActive = true): self
     {
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Team[]
+     */
+    public function getTeam(): Collection
+    {
+        return $this->team;
+    }
+
+    public function addTeam(Team $team): self
+    {
+        if (!$this->team->contains($team)) {
+            $this->team[] = $team;
+            $team->addFkUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTeam(Team $team): self
+    {
+        if ($this->team->contains($team)) {
+            $this->team->removeElement($team);
+            $team->removeFkUser($this);
+        }
 
         return $this;
     }

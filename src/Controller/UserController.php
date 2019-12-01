@@ -23,6 +23,9 @@ use FOS\RestBundle\View\View;
  * /api/users/logins/ - get user from login; TODO: get user by Email and Password;
  * /api/users/{id} - get user information by id; TODO: get user by Id;
  * /api/user/all - get all active registered users; TODO: get all active registered users;
+ * /api/teams/{id}/manager - get team manager; TODO: get team manager by TeamId;
+ * /api/teams/{id}/user - get team members; TODO: get team users by TeamId;
+ *
  * @package App\Controller
  */
 class UserController extends AbstractFOSRestController
@@ -86,6 +89,11 @@ class UserController extends AbstractFOSRestController
     {
         $user = $this->userRepository->findOneBy(['id' => $id]);
 
+        if (!$user) {
+            // user not found
+            return new Response(Response::HTTP_NOT_FOUND);
+        }
+
         return $this->viewHandler->handle(View::create($this->userViewFactory->create($user)));
     }
 
@@ -93,6 +101,36 @@ class UserController extends AbstractFOSRestController
     {
         $user = $this->userRepository->findBy(['isActive' => 1]);
 
+        if (!$user) {
+            // users not found
+            return new Response(Response::HTTP_NOT_FOUND);
+        }
+
         return $this->viewHandler->handle(View::create($this->userViewFactory->create($user)));
     }
+
+    public function getTeamManagerAction($teamId)
+    {
+        $manager = $this->userRepository->findTeamManager($teamId);
+
+        if (!$manager) {
+            // fail to found team manager
+            return new Response(Response::HTTP_NOT_FOUND);
+        }
+
+        return $this->viewHandler->handle(View::create($this->userViewFactory->create($manager)));
+    }
+
+    public function getTeamUsersAction($teamId)
+    {
+        $users = $this->userRepository->findTeamUsers($teamId);
+
+        if (!$users) {
+            // fail to found team users
+            return new Response(Response::HTTP_NOT_FOUND);
+        }
+
+        return $this->viewHandler->handle(View::create($this->userViewFactory->create($users)));
+    }
+
 }
