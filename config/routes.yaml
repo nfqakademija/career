@@ -26,3 +26,7 @@ user:
   type: rest
   resource: App\Controller\UserController
   prefix: api
+team:
+  type: rest
+  resource: App\Controller\TeamController
+  prefix: api
