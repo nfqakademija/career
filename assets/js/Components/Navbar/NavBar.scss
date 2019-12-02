@@ -1,18 +1,84 @@
-.u-padding0x30{
-    padding: 0 30px;
-}
+// @import "~bootstrap/scss/bootstrap";
 
-.navLogo{
-    font-size: 1.7em;
-}
+@import url("https://fonts.googleapis.com/css?family=Prompt&display=swap");
 
+.navigation{
+    width: 100%;
+    // margin:auto;
+    display: flex;
+    justify-content: center;
+    
+}
 .navbar{
-    border-bottom: solid 4px #ff9824;
-    width: 90%;
-    margin:auto;
-    border-radius: 30px;
-}
+   padding: 0px 10%;
+   font-family: 'Prompt', sans-serif;
+    // background-color: transparent;
+    position: fixed;
+    height: 90px;
+    width: 80%;
+    padding: 0 50px;
+    border-bottom: solid 1px black;
+    //     border-width: 80%;
+    // transition: all 1s;
 
-a{
-    color:#423a31;
+    .my-logo{
+        // color:black;
+        // font-size: 2em;
+        width: 80px;
+    }
+
+    .my-color{
+        // color:white;
+        color:white;
+        letter-spacing: 1px;
+    }
+
+    .nav-item{
+        // border: solid 2px rgba(4, 89, 26, 0.3);
+        // border:solid 2px black;
+        // border-radius: 10px;
+        margin: 0 1vw;
+    
+        // min-width: 9vw;
+        text-align: center;
+        // padding: auto 0;
+        border-bottom:solid 2px black ;
+    }
+
+    .nav-link{
+        padding: 0;
+    }
+
+    .nav-item:hover{
+        transition: all 0.3s;
+        border-bottom:solid 2px white ;
+        
+        .my-color{
+            color:white;
+        }
+    }
+
+    .logout{
+        cursor: pointer;
+    }
+
+    @media only screen and (max-width: 990px){
+        .ml-auto{
+            background-color: grey;
+        }
+    }
+
+    @media only screen and (max-width: 700px){
+        width: 100%;
+    }
+    
+
+    @media only screen and (max-width: 990px) {
+        // width: 100%;
+        // padding: 10px 0;
+
+        button{
+            margin-top: 25px;
+        }
+    }
 }

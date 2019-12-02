@@ -3,23 +3,54 @@ export const setProfilesList = profiles =>({
     profiles
 })
 //////////////////////////////////////
-export const setSelectedProfileButton = profileId =>({
-    type: 'setSelectedProfileButton',
-    profileId
-})
-////////////////////////////////////////
-export const setUsername = (username) =>({
-    type: 'setUsername',
-    username
+
+export const setSelectedProfile = profile => ({
+    type: 'setSelectedProfile',
+    profile
 })
 
-export const setPassword = (password) =>({
-    type: 'setPassword',
-    password
+/////////////////////////////////////////////////////
+export const setEmail = email => ({
+    type: 'setEmail',
+    email
 })
 
-export const isLoggedIn = (logged) =>({
-    type: 'isLoggedIn',
+export const setFullName = name => ({
+    type: 'setFullName',
+    name
+})
+
+export const setUserId = userId => ({
+    type: 'setUserId',
+    userId
+})
+
+export const setTitle = title => ({
+    type: 'setTitle',
+    title
+})
+
+export const setCareerFormId = formId => ({
+    type: 'setCareerFormId',
+    formId
+})
+
+export const setProfessionId = professionId => ({
+    type: 'setProfessionId',
+    professionId
+})
+
+export const setRoles = roles => ({
+    type: 'setRoles',
+    roles
+})
+
+export const setLogged = logged => ({
+    type: 'setLogged',
     logged
 })
-/////////////////////////////////////////
+
+export const setTeams = teams => ({
+    type: 'setTeams',
+    teams
+})

@@ -1,83 +1,200 @@
 [
   {
-    "position": "Any",
-    "experience": [
+    "position": "Any"
+  },
+  {
+    "competence": [
       {
+        "id": 1,
+        "title": "experience",
         "criteria": [
           {
-            "1": "Released a product"
+            "id": 1,
+            "title": "Released a product"
           }
         ]
-      }
-    ],
-    "technical-skills": [
+      },
       {
+        "id": 2,
+        "title": "technical skills",
         "criteria": [
           {
-            "2": "Can use PHP, OOP",
-            "3": "Can use relational database",
-            "4": "Can use PDO or other database abstraction",
-            "5": "Can use a modern PHP framework (Symfony)",
-            "6": "Can use UNIX",
-            "7": "Can use version control system (GIT)",
-            "8": "Can use NoSQL database",
-            "9": "Can use JavaScript",
-            "10": "Can refactor code",
-            "11": "Can automate development process (CI/CD)",
-            "12": "Can write tests",
-            "13": "Has knowledge of security",
-            "14": "Has knowledge of API standards",
-            "15": "Has knowledge of design patterns, SOLID",
-            "16": "Has knowledge of server infrastructure",
-            "17": "Has knowledge of frontend"
+            "id": 2,
+            "title": "Can use PHP, OOP"
+          },
+          {
+            "id": 3,
+            "title": "Can use relational database"
+          },
+          {
+            "id": 4,
+            "title": "Can use PDO or other database abstraction"
+          },
+          {
+            "id": 5,
+            "title": "Can use a modern PHP framework (Symfony)"
+          },
+          {
+            "id": 6,
+            "title": "Can use UNIX"
+          },
+          {
+            "id": 7,
+            "title": "Can use version control system (GIT)"
+          },
+          {
+            "id": 8,
+            "title": "Can use NoSQL database"
+          },
+          {
+            "id": 9,
+            "title": "Can use JavaScript"
+          },
+          {
+            "id": 10,
+            "title": "Can refactor code"
+          },
+          {
+            "id": 11,
+            "title": "Can automate development process (CI/CD)"
+          },
+          {
+            "id": 12,
+            "title": "Can write tests"
+          },
+          {
+            "id": 13,
+            "title": "Has knowledge of security"
+          },
+          {
+            "id": 14,
+            "title": "Has knowledge of API standards"
+          },
+          {
+            "id": 15,
+            "title": "Has knowledge of design patterns, SOLID"
+          },
+          {
+            "id": 16,
+            "title": "Has knowledge of server infrastructure"
+          },
+          {
+            "id": 17,
+            "title": "Has knowledge of frontend"
           }
         ]
-      }
-    ],
-    "responsibilities": [
+      },
       {
+        "id": 3,
+        "title": "responsabilites",
         "criteria": [
           {
-            "18": "Can build features",
-            "19": "Can fix bugs",
-            "20": "Can demonstrate ownership",
-            "21": "Features testing",
-            "22": "Reviewing code",
-            "23": "Asking and giving help",
-            "24": "Receiving and giving feedback",
-            "25": "Presenting technologies/case studies",
-            "26": "Mentoring",
-            "27": "Following internal processes",
-            "28": "Showing positive attitude towards others",
-            "29": "Writing unit, integration and acceptance tests"
+            "id": 18,
+            "title": "Can build features"
+          },
+          {
+            "id": 19,
+            "title": "Can fix bugs"
+          },
+          {
+            "id": 20,
+            "title": "Can demonstrate ownership"
+          },
+          {
+            "id": 21,
+            "title": "Features testing"
+          },
+          {
+            "id": 22,
+            "title": "Reviewing code"
+          },
+          {
+            "id": 23,
+            "title": "Asking and giving help"
+          },
+          {
+            "id": 24,
+            "title": "Receiving and giving feedback"
+          },
+          {
+            "id": 25,
+            "title": "Presenting technologies/case studies"
+          },
+          {
+            "id": 26,
+            "title": "Mentoring"
+          },
+          {
+            "id": 27,
+            "title": "Following internal processes"
+          },
+          {
+            "id": 28,
+            "title": "Showing positive attitude towards others"
+          },
+          {
+            "id": 29,
+            "title": "Writing unit, integration and acceptance tests"
           }
         ]
-      }
-    ],
-    "english": [
+      },
       {
+        "id": 4,
+        "title": "english",
         "criteria": [
           {
-            "30": "Can communicate in writing",
-            "31": "Is able to understand others",
-            "32": "Speaks in full sentences",
-            "33": "Is able to discuss and argue his results",
-            "34": "Can present his/her ideas and defend them",
-            "35": "Can manage discussions and/or conflicts"
+            "id": "30",
+            "title": "Can communicate in writing"
+          },
+          {
+            "id": "31",
+            "title": "Is able to understand others"
+          },
+          {
+            "id": "32",
+            "title": "Speaks in full sentences"
+          },
+          {
+            "id": "33",
+            "title": "Is able to discuss and argue his results"
+          },
+          {
+            "id": "34",
+            "title": "Can present his/her ideas and defend them"
+          },
+          {
+            "id": "35",
+            "title": "Can manage discussions and/or conflicts"
           }
         ]
-      }
-    ],
-    "Other competences": [
+      },
       {
+        "id": 5,
+        "title": "Other competences",
         "criteria": [
           {
-            "36": "Dealing with Ambiguity",
-            "37": "Customer Focus",
-            "38": "Planning",
-            "39": "Problem Solving",
-            "40": "Drive for Results",
-            "41": "Timely Decision Making"
+            "id": "36",
+            "title": "Dealing with Ambiguity"
+          },
+          {
+            "id": "37",
+            "title": "Customer Focus"
+          },
+          {
+            "id": "38",
+            "title": "Planning"
+          },
+          {
+            "id": "39",
+            "title": "Problem Solving"
+          },
+          {
+            "id": "40",
+            "title": "Drive for Results"
+          },
+          {
+            "id": "41",
+            "title": "Timely Decision Making"
           }
         ]
       }

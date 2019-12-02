@@ -10,3 +10,23 @@ competence_list:
   type: rest
   resource: App\Controller\CriteriaListController
   prefix: api
+career_form:
+  type: rest
+  resource: App\Controller\CareerFormController
+  prefix: api
+career_profile:
+  type: rest
+  resource: App\Controller\CareerProfileController
+  prefix: api
+profession:
+  type: rest
+  resource: App\Controller\ProfessionController
+  prefix: api
+user:
+  type: rest
+  resource: App\Controller\UserController
+  prefix: api
+team:
+  type: rest
+  resource: App\Controller\TeamController
+  prefix: api

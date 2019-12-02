@@ -8,15 +8,16 @@ import { applyMiddleware, createStore } from "redux";
 import { logger } from "redux-logger";
 import { allReducer } from "./Reducers/index";
 //reactrouter
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 
-const store = createStore(allReducer, applyMiddleware(logger));
+const store = createStore(allReducer);
+// , applyMiddleware(logger)
 
 ReactDOM.render(
-  <BrowserRouter>
+  <Router>
     <Provider store={store}>
       <App />
     </Provider>
-  </BrowserRouter>,
+  </Router>,
   document.getElementById("root")
 );

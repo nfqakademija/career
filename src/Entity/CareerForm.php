@@ -34,6 +34,17 @@ class CareerForm
      */
     private $userAnswers;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="careerForm", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $fkUser;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isArchived;
+
     public function __construct()
     {
         $this->userAnswers = new ArrayCollection();
@@ -95,6 +106,30 @@ class CareerForm
                 $userAnswer->setFkCareerForm(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFkUser(): ?User
+    {
+        return $this->fkUser;
+    }
+
+    public function setFkUser(User $fkUser): self
+    {
+        $this->fkUser = $fkUser;
+
+        return $this;
+    }
+
+    public function getIsArchived(): ?bool
+    {
+        return $this->isArchived;
+    }
+
+    public function setIsArchived(bool $isArchived): self
+    {
+        $this->isArchived = $isArchived;
 
         return $this;
     }

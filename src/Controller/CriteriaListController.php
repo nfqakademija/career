@@ -2,76 +2,124 @@
 
 namespace App\Controller;
 
-use App\Entity\Criteria;
+use App\Factory\CompetenceListViewFactory;
 use App\Repository\CompetenceRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
-use App\Repository\CriteriaRepository;
+use FOS\RestBundle\View\ViewHandlerInterface;
 use FOS\RestBundle\View\View;
+use App\Repository\CriteriaRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
+/**
+ * Class CriteriaListController
+ *
+ * endpoints:
+ * /api/criterias - All criteria list with competence name
+ * /api/competences - competence list with their criteria list and criteria choice list
+ * /api/criterias/{slug} - Criteria list fetched by competence title
+ * /api/choices/{slug} - Criteria Choice list fetched by criteria id
+ *
+ * @package App\Controller
+ */
 class CriteriaListController extends AbstractFOSRestController
 {
     private $criteriaRepository = null;
     private $competenceRepository = null;
+    private $normalizers = [];
+    private $encoders = [];
+    private $serializer = null;
+    private $viewHandler;
+    private $competenceListViewFactory;
 
-    public function __construct(CriteriaRepository $criteriaRepository, CompetenceRepository $competenceRepository)
-    {
+    public function __construct(
+        ViewHandlerInterface $viewHandler,
+        CriteriaRepository $criteriaRepository,
+        CompetenceRepository $competenceRepository,
+        CompetenceListViewFactory $competenceListViewFactory
+    ) {
+        $this->viewHandler = $viewHandler;
+        $this->competenceListViewFactory = $competenceListViewFactory;
         $this->criteriaRepository = $criteriaRepository;
         $this->competenceRepository = $competenceRepository;
+        $this->normalizers[] = new ObjectNormalizer();
+        $this->encoders[] = new JsonEncoder();
+        $this->serializer = new Serializer($this->normalizers, $this->encoders);
     }
 
     /**
      * @return Response
      */
-    public function getCriteriaListAction()
+    public function getCriteriasAction()
     {
-        $criteriaList = $this->criteriaRepository->findBy([
-            'isApplicable' => 1
-        ]);
-        // Tip : Inject SerializerInterface $serializer in the controller method
-// and avoid these 3 lines of instanciation/configuration
-        $encoders = [new JsonEncoder()]; // If no need for XmlEncoder
-        $normalizers = [new ObjectNormalizer()];
-        $serializer = new Serializer($normalizers, $encoders);
-// Serialize your object in Json
-        $jsonObject = $serializer->serialize($criteriaList, 'json', [
+        $criteriaList = $this->competenceRepository->fetchApplicable();
+        $jsonObject = $this->serializer->serialize($criteriaList, 'json', [
             'circular_reference_handler' => function ($object) {
                 return $object->getId();
             }
         ]);
-// For instance, return a Response with encoded Json
         return new Response($jsonObject, Response::HTTP_OK, ['Content-Type' => 'application/json']);
     }
 
     /**
-     * @param string $title
-     * @return Criteria[]
+     * @param string $slug
+     * @return Response
      */
-    public function getCriteriaAction(string $title)
+    public function getCriteriaAction(string $slug)
     {
-        return $this->criteriaRepository->fetchByCompetence($title);
-    }
+        $criteriaList = $this->competenceRepository->fetchApplicableByCompetence($slug);
 
-    public function getCompetenceListAction()
-    {
-        $competenceList = $this->competenceRepository->findBy([
-            'isApplicable' => 1
-        ]);
-        // Tip : Inject SerializerInterface $serializer in the controller method
-// and avoid these 3 lines of instanciation/configuration
-        $encoders = [new JsonEncoder()]; // If no need for XmlEncoder
-        $normalizers = [new ObjectNormalizer()];
-        $serializer = new Serializer($normalizers, $encoders);
-// Serialize your object in Json
-        $jsonObject = $serializer->serialize($competenceList, 'json', [
+        $jsonObject = $this->serializer->serialize($criteriaList, 'json', [
             'circular_reference_handler' => function ($object) {
                 return $object->getId();
             }
         ]);
-// For instance, return a Response with encoded Json
         return new Response($jsonObject, Response::HTTP_OK, ['Content-Type' => 'application/json']);
+    }
+
+
+    /**
+     * @return Response
+     */
+    public function getCompetencesAction()
+    {
+        $competenceList = $this->competenceRepository->findBy([
+            'isApplicable' => 1
+        ]);
+
+        $jsonObject = $this->serializer->serialize($competenceList, 'json', [
+            'circular_reference_handler' => function ($object) {
+                return $object->getId();
+            }
+        ]);
+        return new Response($jsonObject, Response::HTTP_OK, ['Content-Type' => 'application/json']);
+    }
+
+    /**
+     * @param string $slug
+     * @return Response
+     */
+    public function getChoiceAction(string $slug)
+    {
+        $choiceList = $this->criteriaRepository->fetchChoicesByCriteria($slug);
+
+        $jsonObject = $this->serializer->serialize($choiceList, 'json', [
+            'circular_reference_handler' => function ($object) {
+                return $object->getId();
+            }
+        ]);
+        return new Response($jsonObject, Response::HTTP_OK, ['Content-Type' => 'application/json']);
+    }
+
+
+    public function getCompviewAction()
+    {
+        $competenceList = $this->competenceRepository->findBy([
+            'isApplicable' => 1
+        ]);
+
+        return $this->viewHandler->handle(View::create($this->competenceListViewFactory->create($competenceList)));
     }
 }
