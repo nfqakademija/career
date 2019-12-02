@@ -184,7 +184,7 @@ class Profile extends React.Component {
             </div>
           </div>
         ) : null}
-        {console.log(this.props.all)}
+        {/* {console.log(this.props.all)} */}
       </div>
     );
   }
