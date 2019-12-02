@@ -3,7 +3,6 @@
 
 namespace App\View;
 
-
 class TeamView
 {
 

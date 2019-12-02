@@ -3,7 +3,6 @@
 
 namespace App\Factory;
 
-
 use App\Entity\User;
 use App\View\UserView;
 
