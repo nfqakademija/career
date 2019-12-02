@@ -28,14 +28,14 @@ class HrPage extends React.Component {
       .then(res => {
         // const copy = res.data.list;
         this.setState({ profiles: res.data.list });
-        console.log(res);
+        // console.log(res);
       })
       .catch(err => console.log(err));
 
     Axios.get("/api/profession/list")
       .then(res => {
         this.setState({ positions: res.data });
-        console.log(res);
+        // console.log(res.data);
       })
       .catch(err => console.log(err));
   }
@@ -117,7 +117,7 @@ class HrPage extends React.Component {
         competences: copy
       }
     ];
-    console.log(obj);
+    // console.log(obj);
     if (this.state.position === null || copy.length === 0) {
       alert("Select position or criterias");
     } else {
@@ -130,7 +130,7 @@ class HrPage extends React.Component {
       data: obj
     })
       .then(function(response) {
-        console.log(response.statusText);
+        // console.log(response.statusText);
         alert("Created successfully");
       })
       .catch(function(error) {
@@ -140,7 +140,7 @@ class HrPage extends React.Component {
   };
 
   positonInput = e => {
-    console.log("ee");
+    // console.log("ee");
     this.setState({ position: e.target.value });
   };
 

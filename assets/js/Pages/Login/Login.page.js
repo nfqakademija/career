@@ -53,7 +53,7 @@ class Login extends React.Component {
       password: this.state.password
     })
       .then(response => {
-        console.log(response);
+        // console.log(response);
         if (response.data !== 401 && response.data !== 404) {
           onSetCareerFormId(response.data.careerFormId);
           onSetFullName(response.data.firstName + " " + response.data.lastName);
