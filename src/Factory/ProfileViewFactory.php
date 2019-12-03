@@ -26,16 +26,29 @@ class ProfileViewFactory
         $profileView->id = $profile->getId();
         $profileView->professionTitle = $profile->getProfession()->getTitle();
         $prevCompetenceTitle = '';
-        $competenceTitle = '';
+        $list = array();
+        $i = 0;
+        $j = 0;
+        $k = 0;
 
         foreach ($profile->getFkCriteria() as $criteria) {
             $nextCompetenceTitle = $criteria->getFkCompetence()->getTitle();
             if ($nextCompetenceTitle !== $prevCompetenceTitle) {
+                $k = 0;
                 $competenceTitle = $nextCompetenceTitle;
+                $list[$i] = array(
+                    'competence' => $competenceTitle,
+                    'criteria' => array($k => $this->criteriaViewFactory->create($criteria)));
+                $prevCompetenceTitle = $competenceTitle;
+                $j = $i;
+                $i++;
+                continue;
+            } else {
+                $k++;
+                $list[$j]['criteria'][$k] = $this->criteriaViewFactory->create($criteria);
             }
-            $profileView->criteriaList[$competenceTitle][] = $this->criteriaViewFactory->create($criteria);
-            $prevCompetenceTitle = $nextCompetenceTitle;
         }
+        $profileView->criteriaList = $list;
 
         return $profileView;
     }
