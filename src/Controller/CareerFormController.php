@@ -119,13 +119,13 @@ class CareerFormController extends AbstractFOSRestController
     {
 
         $data = ((array)json_decode(((string)$request->getContent()), true))['data'];
-        $formId = (array_key_exists('formId', $data[0])) ? (int)$data[0]['formId'] : null;
-        $answers = (array_key_exists('answers', $data[1])) ? (array)$data[1]['answers'] : null;
+        $formId = (array_key_exists('formId', $data)) ? (int)$data['formId'] : null;
+        $answers = (array_key_exists('answers', $data)) ? (array)$data['answers'] : null;
 
         $choiceIds = array();
         foreach ($answers as $answerId => $answerBody) {
             foreach ($answerBody as $key => $value) {
-                if ($key === 'choice') {
+                if ($key === 'choiceId') {
                     $choiceIds[] = (int)$value;
                 }
             }
