@@ -58,7 +58,8 @@ class CareerFormController extends AbstractFOSRestController
         CriteriaRepository $criteriaRepository,
         CriteriaChoiceRepository $criteriaChoiceRepository,
         UserAnswerViewFactory $userAnswerViewFactory
-    ) {
+    )
+    {
         $this->formListViewFactory = $formListViewFactory;
         $this->formViewFactory = $formViewFactory;
         $this->viewHandler = $viewHandler;
@@ -117,7 +118,7 @@ class CareerFormController extends AbstractFOSRestController
     public function postAnswerAction(Request $request)
     {
 
-        $data = ((array)json_decode(((string)$request->getContent()), true));
+        $data = ((array)json_decode(((string)$request->getContent()), true))['data'];
         $formId = (array_key_exists('formId', $data[0])) ? (int)$data[0]['formId'] : null;
         $answers = (array_key_exists('answers', $data[1])) ? (array)$data[1]['answers'] : null;
 
