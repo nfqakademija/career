@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import Profile from "../Profile.v2/profile.comp";
 import "./mountProfile.style.scss";
-import Axios from 'axios';
+import Axios from "axios";
 
 class MountProfile extends React.Component {
   constructor() {
@@ -25,16 +25,12 @@ class MountProfile extends React.Component {
   };
 
   submit = () => {
-    let obj = [
-      {
-        formId: this.props.formId
-      },
-      {
-        answers: this.props.answers
-      }
-    ];
-    console.log("i post this: ")
-    console.log(obj)
+    let obj = {
+      formId: this.props.formId,
+      answers: this.props.answers
+    };
+    console.log("i post this: ");
+    console.log(obj);
 
     Axios.post("/api/answers", {
       data: obj
