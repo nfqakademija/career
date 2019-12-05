@@ -1,11 +1,18 @@
 .hrPage{
     min-height: 100vh;
-    // padding-top:80px;
     padding-top:100px;
+    width: 70%;
+    margin:auto;
+    font-family: 'Prompt', sans-serif;
+   
     .competence{
-        border:none;
-        border: solid 2px orange;
-        background-color: #f5ebda;
-        border-top: none;
+        margin: 15px 0;
+        padding: 20px;
+        cursor: pointer;
+        border: solid 2px black;
+    }
+
+    @media screen and (max-width: 800px){
+        width: 100%;
     }
 }

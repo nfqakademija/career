@@ -64,7 +64,7 @@ class Login extends React.Component {
           onSetTeams(response.data.teams)
           console.log("Success");
         } else {
-          console.log("Fail");
+         alert("Login Failed");
         }
       })
       .catch(function(error) {

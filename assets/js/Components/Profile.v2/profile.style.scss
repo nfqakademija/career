@@ -1,4 +1,4 @@
-.tablev2{
+.tablev2, .hrPage{
 
     tr,td{
         border: solid 2px black;
@@ -42,7 +42,7 @@
         padding:0;
       }
       
-      @media screen and (max-width: 600px) {
+      @media screen and (max-width: 800px) {
         table {
           border: 0;
           width: 100%;
@@ -96,4 +96,9 @@
         color:red;
         font-size: 20px;
       }
+}
+
+select{
+  width: 100%;
+  text-overflow: ellipsis;
 }
