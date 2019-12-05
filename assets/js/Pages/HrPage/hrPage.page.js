@@ -117,7 +117,7 @@ class HrPage extends React.Component {
         competences: copy
       }
     ];
-    // console.log(obj);
+    
     if (this.state.position === null || copy.length === 0) {
       alert("Select position or criterias");
     } else {
@@ -126,11 +126,12 @@ class HrPage extends React.Component {
   };
 
   sendData = obj => {
+    // console.log(obj);
+    
     Axios.post("/api/profiles", {
       data: obj
     })
       .then(function(response) {
-        // console.log(response.statusText);
         alert("Created successfully");
       })
       .catch(function(error) {
@@ -140,7 +141,6 @@ class HrPage extends React.Component {
   };
 
   positonInput = e => {
-    // console.log("ee");
     this.setState({ position: e.target.value });
   };
 
@@ -169,7 +169,42 @@ class HrPage extends React.Component {
             </option>
           ))}
         </select>
-        <table className="Profile">
+
+        {this.state.profiles.map((competences, i) => {
+          return (
+            <React.Fragment key={competences.id}>
+              <h4 className="competence" onClick={() => this.toogle(i)}>{competences.title}</h4>
+              {this.state.show.includes(i) ? (
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Criteria</th>
+                      <th>Check to include</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {competences.criteriaList.map(criterias => (
+                      <tr key={criterias.id}>
+                        <td data-label="Criteria">{criterias.title}</td>
+                        <td data-label="Check to include">
+                          <CheckBox
+                            add={this.add}
+                            remove={this.remove}
+                            competenceId={competences.id}
+                            criteriaId={criterias.id}
+                            criteriaList={competences.criteriaList}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : null}
+            </React.Fragment>
+          );
+        })}
+
+        {/* <table className="Profile">
           <tbody>
             <tr className="u-textCenter">
               <th></th>
@@ -220,7 +255,7 @@ class HrPage extends React.Component {
               );
             })}
           </tbody>
-        </table>
+        </table> */}
         <button onClick={this.submit}>Save</button>
       </div>
     );

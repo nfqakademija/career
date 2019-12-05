@@ -47,6 +47,7 @@ class ProfilePage extends React.Component {
   render() {
     return (
       <div className="profilePage">
+        <h1>THIS PAGE IS STILL IN DEVELOPMENT</h1>
         {this.state.profileNames.map(profileNames => (
           <ProfileButtons
             key={profileNames.id}

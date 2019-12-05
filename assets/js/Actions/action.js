@@ -54,3 +54,15 @@ export const setTeams = teams => ({
     type: 'setTeams',
     teams
 })
+
+//////////////////////
+
+export const setAnswers = answer =>({
+    type: 'setAnswers',
+    answer
+})
+
+// export const removeAnswer = answer => ({
+//     type: 'removeAnswer',
+//     answer
+// })

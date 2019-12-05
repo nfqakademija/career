@@ -1,24 +1,24 @@
 import React from "react";
 
-class ChangeComment extends React.Component {
+class Comments extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       changeComment: false,
-      inputValue: props.name
+      inputValue: props.comment
     };
   }
 
   handle = () => {
     const { id, rowId, criteriaId, criteriaName, change } = this.props;
-    change(id, rowId, criteriaId, criteriaName, this.state.inputValue);
+    // change(id, rowId, criteriaId, criteriaName, this.state.inputValue);  cia sius kuri change
     this.setState({ changeComment: !this.state.changeComment });
   };
 
   render() {
     return (
-      <td data-label={this.props.criteriaName}>
+      <div data-label={this.props.criteriaName}>
         {this.state.changeComment ? (
           <React.Fragment>
             <input
@@ -42,9 +42,9 @@ class ChangeComment extends React.Component {
             />
           </React.Fragment>
         )}
-      </td>
+      </div>
     );
   }
 }
 
-export default ChangeComment;
+export default Comments;

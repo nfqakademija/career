@@ -12,6 +12,7 @@ use App\Repository\CareerFormRepository;
 use App\Repository\CareerProfileRepository;
 use App\Repository\CriteriaChoiceRepository;
 use App\Repository\CriteriaRepository;
+use App\Repository\UserAnswerRepository;
 use App\Repository\UserRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -42,6 +43,7 @@ class CareerFormController extends AbstractFOSRestController
     private $formViewFactory;
     private $profileViewFactory;
     private $userRepository;
+    private $userAnswerRepository;
     private $criteriaRepository;
     private $criteriaChoiceRepository;
     private $userAnswerViewFactory;
@@ -52,6 +54,7 @@ class CareerFormController extends AbstractFOSRestController
         CareerProfileRepository $careerProfileRepository,
         ProfileViewFactory $profileViewFactory,
         UserRepository $userRepository,
+        UserAnswerRepository $userAnswerRepository,
         ViewHandlerInterface $viewHandler,
         FormListViewFactory $formListViewFactory,
         FormViewFactory $formViewFactory,
@@ -66,6 +69,7 @@ class CareerFormController extends AbstractFOSRestController
         $this->careerProfileRepository = $careerProfileRepository;
         $this->profileViewFactory = $profileViewFactory;
         $this->userRepository = $userRepository;
+        $this->userAnswerRepository = $userAnswerRepository;
         $this->criteriaRepository = $criteriaRepository;
         $this->criteriaChoiceRepository = $criteriaChoiceRepository;
         $this->userAnswerViewFactory = $userAnswerViewFactory;
@@ -117,14 +121,14 @@ class CareerFormController extends AbstractFOSRestController
     public function postAnswerAction(Request $request)
     {
 
-        $data = ((array)json_decode(((string)$request->getContent()), true));
-        $formId = (array_key_exists('formId', $data[0])) ? (int)$data[0]['formId'] : null;
-        $answers = (array_key_exists('answers', $data[1])) ? (array)$data[1]['answers'] : null;
+        $data = ((array)json_decode(((string)$request->getContent()), true))['data'];
+        $formId = (array_key_exists('formId', $data)) ? (int)$data['formId'] : null;
+        $answers = (array_key_exists('answers', $data)) ? (array)$data['answers'] : null;
 
         $choiceIds = array();
         foreach ($answers as $answerId => $answerBody) {
             foreach ($answerBody as $key => $value) {
-                if ($key === 'choice') {
+                if ($key === 'choiceId') {
                     $choiceIds[] = (int)$value;
                 }
             }
@@ -135,12 +139,16 @@ class CareerFormController extends AbstractFOSRestController
         $form = $this->careerFormRepository->findOneBy(['id' => $formId]);
 
         foreach ($choices as $choice) {
-            $userAnswer = new UserAnswer();
+            $answered = $this->userAnswerRepository->findOneBy(['fkChoice' => $choice]);
+            $userAnswer = ($answered) ? $answered : new UserAnswer();
             $userAnswer->setFkChoice($choice);
             $userAnswer->setFkCriteria($choice->getFkCriteria());
+            $this->userAnswerRepository->save($userAnswer);
             $userAnswer->setFkCareerForm($form);
             $form->addUserAnswer($userAnswer);
         };
+
+        $this->careerFormRepository->save($form);
 
         return $this->viewHandler->handle(View::create($this->formViewFactory->create($form)));
     }

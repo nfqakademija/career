@@ -1,0 +1,33 @@
+.mountProfile{
+    font-family: 'Prompt', sans-serif;
+    text-transform: capitalize;
+
+    .u-flexCenter{
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        h4{
+            padding: 10px;
+        }
+    }
+
+    .profile{
+        width: 70%;
+        margin:auto;
+        
+        .competence{
+            margin: 15px 0;
+            padding: 20px;
+            cursor: pointer;
+            border: solid 2px black;
+        }
+    }
+
+    @media screen and (max-width: 800px){
+        .profile{
+            width: 100%;
+        }
+    }
+}

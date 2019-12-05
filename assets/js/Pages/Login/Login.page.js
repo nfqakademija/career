@@ -6,7 +6,6 @@ import {
   setFullName,
   setUserId,
   setTitle,
-  setCareerFormId,
   setProfessionId,
   setRoles,
   setLogged,
@@ -53,9 +52,7 @@ class Login extends React.Component {
       password: this.state.password
     })
       .then(response => {
-        // console.log(response);
         if (response.data !== 401 && response.data !== 404) {
-          onSetCareerFormId(response.data.careerFormId);
           onSetFullName(response.data.firstName + " " + response.data.lastName);
           onSetUserId(response.data.id);
           onSetProfessionId(response.data.professionId);
@@ -63,9 +60,9 @@ class Login extends React.Component {
           onSetTitle(response.data.professionTitle);
           onSetLogged(!this.props.logged);
           onSetTeams(response.data.teams)
-          console.log("Success");
+          // console.log("Success");
         } else {
-          console.log("Fail");
+         alert("Login Failed");
         }
       })
       .catch(function(error) {
@@ -107,14 +104,6 @@ class Login extends React.Component {
             Submit
           </button>
         </form>
-        {/* {console.log(this.props.email)}
-        {console.log(this.props.name)}
-        {console.log(this.props.userId)}
-        {console.log(this.props.title)}
-        {console.log(this.props.formId)}
-        {console.log(this.props.professionId)}
-        {console.log(this.props.roles)}
-        {console.log(this.props.teams)} */}
         {this.props.logged?<Redirect to="/" />: null}
       </div>
     );
@@ -123,14 +112,7 @@ class Login extends React.Component {
 
 const mapStateToProps = state => ({
   email: state.user.email,
-  name: state.user.name,
-  userId: state.user.userId,
-  title: state.user.title,
-  formId: state.user.formId,
-  professionId: state.user.professionId,
-  roles: state.user.roles,
-  logged:state.user.logged,
-  teams: state.user.teams
+  logged: state.user.logged
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -138,7 +120,7 @@ const mapDispatchToProps = dispatch => ({
   onSetFullName: name => dispatch(setFullName(name)),
   onSetUserId: userId => dispatch(setUserId(userId)),
   onSetTitle: title => dispatch(setTitle(title)),
-  onSetCareerFormId: formId => dispatch(setCareerFormId(formId)),
+  // onSetCareerFormId: formId => dispatch(setCareerFormId(formId)),
   onSetProfessionId: professionId => dispatch(setProfessionId(professionId)),
   onSetRoles: roles => dispatch(setRoles(roles)),
   onSetLogged: logged => dispatch(setLogged(logged)),
