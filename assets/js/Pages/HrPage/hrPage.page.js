@@ -117,7 +117,7 @@ class HrPage extends React.Component {
         competences: copy
       }
     ];
-    // console.log(obj);
+    
     if (this.state.position === null || copy.length === 0) {
       alert("Select position or criterias");
     } else {
@@ -126,13 +126,12 @@ class HrPage extends React.Component {
   };
 
   sendData = obj => {
-    console.log(obj);
+    // console.log(obj);
     
     Axios.post("/api/profiles", {
       data: obj
     })
       .then(function(response) {
-        // console.log(response.statusText);
         alert("Created successfully");
       })
       .catch(function(error) {

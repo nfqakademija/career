@@ -6,7 +6,6 @@ import {
   setFullName,
   setUserId,
   setTitle,
-  setCareerFormId,
   setProfessionId,
   setRoles,
   setLogged,
@@ -54,7 +53,6 @@ class Login extends React.Component {
     })
       .then(response => {
         if (response.data !== 401 && response.data !== 404) {
-          // onSetCareerFormId(response.data.careerFormId);
           onSetFullName(response.data.firstName + " " + response.data.lastName);
           onSetUserId(response.data.id);
           onSetProfessionId(response.data.professionId);
@@ -62,7 +60,7 @@ class Login extends React.Component {
           onSetTitle(response.data.professionTitle);
           onSetLogged(!this.props.logged);
           onSetTeams(response.data.teams)
-          console.log("Success");
+          // console.log("Success");
         } else {
          alert("Login Failed");
         }

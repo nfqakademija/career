@@ -16,7 +16,7 @@ class User extends React.Component {
   componentDidMount() {
     Axios.get(`/api/forms/${this.props.userId}`)
       .then(res => {
-        console.log(res.data);
+        // console.log(res.data);
         this.props.onSetCareerFormId(res.data.id)
         this.setState({ userProfile: res.data });
       })
