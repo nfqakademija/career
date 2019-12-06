@@ -61,7 +61,7 @@ class NavBar extends React.Component {
               : {
                   background: "rgb(184, 165, 127)",
                   borderColor: "white",
-                  width: this.state.width
+                  width: "100%"
                 }
           }
           // onScroll={{width: "100%"}}
