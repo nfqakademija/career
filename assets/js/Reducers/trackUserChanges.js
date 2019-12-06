@@ -5,17 +5,24 @@ const initialState = {
 export const trackUserChanges = (state = initialState, action) => {
   switch (action.type) {
     case "setAnswers":
+      let obj = {
+        criteriaId: action.criteriaId,
+        choiceId: action.choiceId
+      };
+      let answer = state.choiceAnswers;
+      for (let i = 0; i < answer.length; i++) {
+        if (answer[i].criteriaId === obj.criteriaId) {
+          answer.splice(i, 1);
+        }
+      }
+      if (Number(action.criteriaId)) {
+        answer.push(obj);
+      }
+
       return {
         ...state,
-        choiceAnswers: state.choiceAnswers.concat(action.answer)
+        choiceAnswers: answer
       };
-    // case "removeAnswer":
-    //   const index = state.choiceAnswers.indexOf(action.answer);
-    //   const newArray = state.choiceAnswers.splice(index, 1);
-    //   return {
-    //     ...state,
-    //     choiceAnswers: newArray
-    //   };
     default:
       return state;
   }

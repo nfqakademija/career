@@ -36,7 +36,7 @@ class MountProfile extends React.Component {
       data: obj
     })
       .then(function(response) {
-        console.log(response.statusText);
+        // console.log(response.statusText);
         alert("Created successfully");
       })
       .catch(function(error) {
@@ -69,6 +69,7 @@ class MountProfile extends React.Component {
           })}
           <button onClick={this.submit}>Save</button>
         </div>
+        {console.log(this.props.answers)}
       </div>
     );
   }
@@ -82,19 +83,3 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, null)(MountProfile);
-
-// [
-//   {
-//     formId: "1"
-//   },
-//   {
-//     answers: [
-//       {
-//         choice: "39"
-//       },
-//       {
-//         choice: "43"
-//       }
-//     ]
-//   }
-// ];

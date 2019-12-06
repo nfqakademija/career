@@ -57,12 +57,14 @@ export const setTeams = teams => ({
 
 //////////////////////
 
-export const setAnswers = answer =>({
+export const setAnswers = (criteriaId, choiceId) =>({
     type: 'setAnswers',
-    answer
+    criteriaId,
+    choiceId
 })
 
-// export const removeAnswer = answer => ({
+// export const removeAnswer = (criteriaId, choiceId) => ({
 //     type: 'removeAnswer',
-//     answer
+//     criteriaId,
+//     choiceId
 // })
