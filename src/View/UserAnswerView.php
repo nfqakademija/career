@@ -13,4 +13,7 @@ class UserAnswerView
 
     /** @var ChoiceView */
     public $choice;
+
+    /** @var string */
+    public $comment;
 }

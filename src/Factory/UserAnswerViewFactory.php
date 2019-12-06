@@ -14,7 +14,6 @@ class UserAnswerViewFactory
      */
     private $criteriaViewFactory;
 
-
     /**
      * @var ChoiceViewFactory
      */
@@ -33,6 +32,7 @@ class UserAnswerViewFactory
     {
         $userAnswerView = new UserAnswerView();
         $userAnswerView->id = $userAnswer->getId();
+        $userAnswerView->comment = $userAnswer->getComment();
         $userAnswerView->criteria = $this->criteriaViewFactory->create($userAnswer->getFkCriteria());
         $userAnswerView->choice = $this->choiceViewFactory->create($userAnswer->getFkChoice());
 

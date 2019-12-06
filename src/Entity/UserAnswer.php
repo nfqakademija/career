@@ -33,6 +33,11 @@ class UserAnswer
      */
     private $fkCareerForm;
 
+    /**
+     * @ORM\Column(type="string", length=500, nullable=true)
+     */
+    private $comment;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -70,6 +75,18 @@ class UserAnswer
     public function setFkCareerForm(?CareerForm $fkCareerForm): self
     {
         $this->fkCareerForm = $fkCareerForm;
+
+        return $this;
+    }
+
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    public function setComment(?string $comment): self
+    {
+        $this->comment = $comment;
 
         return $this;
     }
