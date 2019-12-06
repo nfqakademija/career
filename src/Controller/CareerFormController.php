@@ -30,6 +30,7 @@ use FOS\RestBundle\View\View;
  * If User does not have a career form assigned, create one by career profile;
  * /api/form/list - get career form list; TODO: get career form list by team;
  * /api/answers - post answer
+ * /api/answers/{slug} - get answers by form id
  *
  * @package App\Controller
  */
