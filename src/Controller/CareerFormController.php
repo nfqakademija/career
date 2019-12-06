@@ -7,6 +7,7 @@ use App\Entity\UserAnswer;
 use App\Factory\FormListViewFactory;
 use App\Factory\FormViewFactory;
 use App\Factory\ProfileViewFactory;
+use App\Factory\UserAnswerListViewFactory;
 use App\Factory\UserAnswerViewFactory;
 use App\Repository\CareerFormRepository;
 use App\Repository\CareerProfileRepository;
@@ -29,6 +30,7 @@ use FOS\RestBundle\View\View;
  * If User does not have a career form assigned, create one by career profile;
  * /api/form/list - get career form list; TODO: get career form list by team;
  * /api/answers - post answer
+ * /api/answers/{slug} - get answers by form id
  *
  * @package App\Controller
  */
@@ -46,6 +48,7 @@ class CareerFormController extends AbstractFOSRestController
     private $criteriaRepository;
     private $criteriaChoiceRepository;
     private $userAnswerViewFactory;
+    private $userAnswerListViewFactory;
 
 
     public function __construct(
@@ -59,7 +62,8 @@ class CareerFormController extends AbstractFOSRestController
         FormViewFactory $formViewFactory,
         CriteriaRepository $criteriaRepository,
         CriteriaChoiceRepository $criteriaChoiceRepository,
-        UserAnswerViewFactory $userAnswerViewFactory
+        UserAnswerViewFactory $userAnswerViewFactory,
+        UserAnswerListViewFactory $userAnswerListViewFactory
     ) {
         $this->formListViewFactory = $formListViewFactory;
         $this->formViewFactory = $formViewFactory;
@@ -72,6 +76,7 @@ class CareerFormController extends AbstractFOSRestController
         $this->criteriaRepository = $criteriaRepository;
         $this->criteriaChoiceRepository = $criteriaChoiceRepository;
         $this->userAnswerViewFactory = $userAnswerViewFactory;
+        $this->userAnswerListViewFactory = $userAnswerListViewFactory;
     }
 
     /**
@@ -92,9 +97,8 @@ class CareerFormController extends AbstractFOSRestController
      * @return Response
      * @throws \Exception
      */
-    public function getFormAction($slug)
+    public function getFormAction(int $slug)
     {
-
         $user = $this->userRepository->findOneBy(['id' => $slug]);
         $careerProfile = $this->careerProfileRepository->findOneBy(['profession' => $user->getProfession()->getId()]);
 
@@ -111,6 +115,24 @@ class CareerFormController extends AbstractFOSRestController
         return $this->viewHandler->handle(View::create($this->formViewFactory->create($careerForm)));
     }
 
+
+    /**
+     *
+     * @param $slug
+     * @return Response
+     * @throws \Exception
+     */
+    public function getAnswerAction(int $slug)
+    {
+        $answers = $this->userAnswerRepository->findBy(['fkCareerForm' => $slug]);
+
+        if (!$answers) {
+            return new Response(Response::HTTP_NOT_FOUND);
+        }
+
+        return $this->viewHandler->handle(View::create($this->userAnswerListViewFactory->create($answers)));
+    }
+
     /**
      *
      * @param Request $request
@@ -119,7 +141,6 @@ class CareerFormController extends AbstractFOSRestController
      */
     public function postAnswerAction(Request $request)
     {
-
         $data = ((array)json_decode(((string)$request->getContent()), true))['data'];
         $formId = (array_key_exists('formId', $data)) ? (int)$data['formId'] : null;
         $answers = (array_key_exists('answers', $data)) ? (array)$data['answers'] : null;
