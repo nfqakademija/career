@@ -23,6 +23,13 @@ export const trackUserChanges = (state = initialState, action) => {
         ...state,
         choiceAnswers: answer
       };
+
+    case "restartAnswers":
+      return {
+        ...state,
+        choiceAnswers: []
+      };
+
     default:
       return state;
   }

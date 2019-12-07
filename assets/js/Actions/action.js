@@ -68,6 +68,10 @@ export const setAnswers = (criteriaId, choiceId) =>({
     choiceId
 })
 
+export const restartAnswers = () => ({
+    type: 'restartAnswers'
+})
+
 // export const removeAnswer = (criteriaId, choiceId) => ({
 //     type: 'removeAnswer',
 //     criteriaId,
