@@ -21,8 +21,7 @@ class User extends React.Component {
         this.setState({ userProfile: res.data });
       })
       .catch(err => console.log(err));
-
-      this.props.onSetAnswers([])
+      // this.props.onSetAnswers([])
   }
 
   render() {
