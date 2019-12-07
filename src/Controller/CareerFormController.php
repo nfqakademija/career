@@ -154,13 +154,20 @@ class CareerFormController extends AbstractFOSRestController
             }
         }
 
-        $choices = $this->criteriaChoiceRepository->findBy(array('id' => $choiceIds));
-
+        $choices = $this->criteriaChoiceRepository->findBy(['id' => $choiceIds]);
         $form = $this->careerFormRepository->findOneBy(['id' => $formId]);
 
         foreach ($choices as $choice) {
-            $answered = $this->userAnswerRepository->findOneBy(['fkChoice' => $choice]);
+            $answered = $this->userAnswerRepository->findOneBy([
+                'fkCareerForm' => $form,
+                'fkCriteria' => $choice->getFkCriteria()]);
+
+            if ($answered) {
+                var_dump('is answered');
+                $answered->setFkChoice($choice);
+            }
             $userAnswer = ($answered) ? $answered : new UserAnswer();
+
             $userAnswer->setFkChoice($choice);
             $userAnswer->setFkCriteria($choice->getFkCriteria());
             $this->userAnswerRepository->save($userAnswer);
