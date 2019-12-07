@@ -17,9 +17,13 @@ class MountProfile extends React.Component {
   componentDidMount() {
     Axios.get(`/api/answers/${this.props.formId}`)
       .then(res => {
-        if (!res.data === 404) {
-          this.props.onSetChoiceList(res.data.list);
-        }
+          if(res.data === 404){
+            this.props.onRestartAnswers();
+            console.log(res)
+          }else{
+            this.props.onSetChoiceList(res.data.list);
+            console.log(res)
+          }
       })
       .catch(err => console.log(err));
   }

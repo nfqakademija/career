@@ -5,7 +5,7 @@ import { setAnswers, removeAnswer } from "../../Actions/action";
 class ChoiceList extends React.Component {
   render() {
     const { choices } = this.props;
-    let answer;
+    let answer = "Not answered";
 
     choices.forEach(element => {
       if (this.props.choiceList.includes(element.id)) {
@@ -15,6 +15,7 @@ class ChoiceList extends React.Component {
 
     return (
       <select defaultValue={answer}>
+        {answer === "Not answered"? <option value="Not answered">--Not answered--</option>:null}
         {choices.map(choice => (
           <option
             onClick={() =>

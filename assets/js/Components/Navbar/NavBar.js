@@ -4,7 +4,7 @@ import "./NavBar.scss";
 import logo from "../../../pics/logo6.png";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
-import { setLogged } from "../../Actions/action";
+import { setLogged, resetApp } from "../../Actions/action";
 
 class NavBar extends React.Component {
   constructor(props) {
@@ -48,6 +48,11 @@ class NavBar extends React.Component {
     ) {
       this.setState({ route: "false" });
     }
+  }
+
+  logout = () => {
+    this.props.onSetLogged(!this.props.logged);
+    this.props.onResetApp();
   }
 
   render() {
@@ -136,7 +141,7 @@ class NavBar extends React.Component {
                 <li className="nav-item">
                   <div
                     className="nav-link"
-                    onClick={() => this.props.onSetLogged(!this.props.logged)}
+                    onClick={this.logout}
                   >
                     <span className="logout my-color">Logout</span>
                   </div>
@@ -157,7 +162,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onSetLogged: logged => dispatch(setLogged(logged))
+  onSetLogged: logged => dispatch(setLogged(logged)),
+  onResetApp: () => dispatch(resetApp())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(NavBar));

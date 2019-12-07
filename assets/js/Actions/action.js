@@ -77,3 +77,7 @@ export const restartAnswers = () => ({
 //     criteriaId,
 //     choiceId
 // })
+
+export const resetApp = () =>({
+    type: "RESET_APP"
+})
