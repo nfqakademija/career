@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import Profile from "../Profile.v2/profile.comp";
 import "./mountProfile.style.scss";
 import Axios from "axios";
+import { setChoiceList } from "../../Actions/action";
 
 class MountProfile extends React.Component {
   constructor() {
@@ -11,6 +12,15 @@ class MountProfile extends React.Component {
     this.state = {
       showProfile: []
     };
+  }
+
+  componentDidMount(){
+    Axios.get(`/api/answers/${this.props.formId}`)
+    .then(res => {
+      console.log(res.data);
+      this.props.onSetChoiceList(res.data.list);
+    })
+    .catch(err => console.log(err));
   }
 
   toogle = i => {
@@ -69,7 +79,6 @@ class MountProfile extends React.Component {
           })}
           <button onClick={this.submit}>Save</button>
         </div>
-        {console.log(this.props.answers)}
       </div>
     );
   }
@@ -79,7 +88,11 @@ const mapStateToProps = state => ({
   userId: state.user.userId,
   name: state.user.name,
   formId: state.user.formId,
-  answers: state.trackUserChanges.choiceAnswers
+  // answers: state.trackUserChanges.choiceAnswers,
 });
 
-export default connect(mapStateToProps, null)(MountProfile);
+const mapDispatchToProps = dispatch => ({
+  onSetChoiceList: choiceList => dispatch(setChoiceList(choiceList))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(MountProfile);

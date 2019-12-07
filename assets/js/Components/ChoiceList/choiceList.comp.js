@@ -5,29 +5,40 @@ import { setAnswers, removeAnswer } from "../../Actions/action";
 class ChoiceList extends React.Component {
   render() {
     const { choices } = this.props;
+    let answer;
+
+    choices.forEach(element => {
+      if (this.props.choiceList.includes(element.id)) {
+        answer = element.title;
+      }
+    });
+
     return (
-      <select>
+      <select defaultValue={answer}>
         {choices.map(choice => (
           <option
-            onClick={() => this.props.onSetAnswers(this.props.criteriaId,choice.id)}
+            onClick={() =>
+              this.props.onSetAnswers(this.props.criteriaId, choice.id)
+            }
             key={choice.id}
             value={choice.title}
           >
             {choice.title}
           </option>
         ))}
-        {console.log(this.props.answers)}
       </select>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  answers: state.trackUserChanges.choiceAnswers
+  answers: state.trackUserChanges.choiceAnswers,
+  choiceList: state.user.choiceList
 });
 
 const mapDispatchToProps = dispatch => ({
-  onSetAnswers: (criteriaId, choiceId) => dispatch(setAnswers(criteriaId, choiceId))
+  onSetAnswers: (criteriaId, choiceId) =>
+    dispatch(setAnswers(criteriaId, choiceId))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChoiceList);

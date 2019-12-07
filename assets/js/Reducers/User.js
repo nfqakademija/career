@@ -7,7 +7,8 @@ const initialState = {
   professionId: null,
   roles: [],
   logged: false,
-  teams: []
+  teams: [],
+  choiceList: []
 };
 
 export const user = (state = initialState, action) => {
@@ -56,6 +57,11 @@ export const user = (state = initialState, action) => {
       return {
         ...state,
         teams: action.teams
+      };
+    case "setChoiceList":
+      return {
+        ...state,
+        choiceList: action.choiceList
       };
 
     default:

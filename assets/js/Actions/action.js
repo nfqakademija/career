@@ -55,6 +55,11 @@ export const setTeams = teams => ({
     teams
 })
 
+export const setChoiceList = choiceList => ({
+    type: 'setChoiceList',
+    choiceList
+})
+
 //////////////////////
 
 export const setAnswers = (criteriaId, choiceId) =>({

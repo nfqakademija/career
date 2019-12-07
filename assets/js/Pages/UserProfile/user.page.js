@@ -3,7 +3,7 @@ import "./user.style.scss";
 import Axios from "axios";
 import MountProfile from "../../Components/MountProfile/mountProfile.comp";
 import { connect } from "react-redux";
-import { setCareerFormId, setAnswers } from "../../Actions/action";
+import { setCareerFormId, setAnswers, setChoiceList } from "../../Actions/action";
 
 class User extends React.Component {
   constructor() {
@@ -21,7 +21,6 @@ class User extends React.Component {
         this.setState({ userProfile: res.data });
       })
       .catch(err => console.log(err));
-      // this.props.onSetAnswers([])
   }
 
   render() {
@@ -37,7 +36,7 @@ class User extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  userId: state.user.userId,
+  userId: state.user.userId
 });
 
 const mapDispatchToProps = dispatch =>({
