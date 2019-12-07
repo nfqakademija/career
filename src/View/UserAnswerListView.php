@@ -6,6 +6,6 @@ namespace App\View;
 class UserAnswerListView
 {
 
-    /** @var Collection|UserAnswerView[] */
+    /** @var Array */
     public $list;
 }
