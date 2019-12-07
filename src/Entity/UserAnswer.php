@@ -3,9 +3,12 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Index;
+use Doctrine\ORM\Mapping\Table;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserAnswerRepository")
+ * @Table(name="user_answer",indexes={@Index(name="answer_idx", columns={"fk_career_form_id", "fk_criteria_id"})})
  */
 class UserAnswer
 {
@@ -17,13 +20,13 @@ class UserAnswer
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Criteria", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Criteria", inversedBy="userAnswers")
      * @ORM\JoinColumn(nullable=false)
      */
     private $fkCriteria;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\CriteriaChoice", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\CriteriaChoice", inversedBy="userAnswers")
      */
     private $fkChoice;
 

@@ -53,8 +53,7 @@ class CriteriaListController extends AbstractFOSRestController
         CompetenceListViewFactory $competenceListViewFactory,
         EntityManagerInterface $entityManager,
         CriteriaChoiceRepository $criteriaChoiceRepository
-    )
-    {
+    ) {
         $this->viewHandler = $viewHandler;
         $this->competenceListViewFactory = $competenceListViewFactory;
         $this->criteriaRepository = $criteriaRepository;
