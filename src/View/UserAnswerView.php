@@ -8,10 +8,10 @@ class UserAnswerView
     /** @var int */
     public $id;
 
-    /** @var CriteriaView */
+    /** @var int */
     public $criteria;
 
-    /** @var ChoiceView */
+    /** @var int */
     public $choice;
 
     /** @var string */
