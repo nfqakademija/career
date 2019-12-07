@@ -163,7 +163,6 @@ class CareerFormController extends AbstractFOSRestController
                 'fkCriteria' => $choice->getFkCriteria()]);
 
             if ($answered) {
-                var_dump('is answered');
                 $answered->setFkChoice($choice);
             }
             $userAnswer = ($answered) ? $answered : new UserAnswer();
