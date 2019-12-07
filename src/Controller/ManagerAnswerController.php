@@ -3,17 +3,10 @@
 namespace App\Controller;
 
 use App\Factory\FormListViewFactory;
-use App\Factory\ProfileListViewFactory;
-use App\Repository\CareerProfileRepository;
-use App\Repository\CriteriaRepository;
-use App\Repository\ProfessionRepository;
+use App\Repository\CareerFormRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\ViewHandlerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\HttpFoundation\Request;
 
 class ManagerAnswerController extends AbstractFOSRestController
 {
@@ -32,7 +25,17 @@ class ManagerAnswerController extends AbstractFOSRestController
         $this->careerFormRepository = $careerFormRepository;
     }
 
+    /**
+     * @param Request $request
+     */
+    public function postFeedbackAction(Request $request)
+    {
+    }
 
-
-
+    /**
+     * @param $slug
+     */
+    public function getFeedbackAction($slug)
+    {
+    }
 }
