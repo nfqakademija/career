@@ -24,7 +24,4 @@ class FormView
      * @var UserView
      */
     public $userView;
-
-    /** @var Collection|UserAnswerView[] */
-    public $userAnswerList;
 }

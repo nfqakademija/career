@@ -14,19 +14,19 @@ class FormViewFactory
      */
     private $criteriaViewFactory;
 
-    /** @var UserAnswerViewFactory */
-    private $userAnswerViewFactory;
+    /** @var UseriewFactory */
+    private $userViewFactory;
 
     /** @var ProfileViewFactory */
     private $profileViewFactory;
 
     public function __construct(
         CriteriaViewFactory $criteriaViewFactory,
-        UserAnswerViewFactory $userAnswerViewFactory,
+        UserViewFactory $userViewFactory,
         ProfileViewFactory $profileViewFactory
     ) {
         $this->profileViewFactory = $profileViewFactory;
-        $this->userAnswerViewFactory = $userAnswerViewFactory;
+        $this->userViewFactory = $userViewFactory;
         $this->criteriaViewFactory = $criteriaViewFactory;
     }
 
@@ -37,12 +37,7 @@ class FormViewFactory
         $formView->id = $form->getId();
         $formView->createdAt = $form->getCreatedAt();
         $formView->profile = $this->profileViewFactory->create($form->getFkCareerProfile());
-        $formView->userFirstName = $form->getFkUser()->getFirstName();
-        $formView->userLastName = $form->getFkUser()->getLastName();
-
-        foreach ($form->getUserAnswers() as $userAnswer) {
-            $formView->userAnswerList[] = $this->userAnswerViewFactory->create($userAnswer);
-        }
+        $formView->userView = $this->userViewFactory->create($form->getFkUser());
 
         return $formView;
     }
