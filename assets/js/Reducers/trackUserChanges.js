@@ -19,6 +19,8 @@ export const trackUserChanges = (state = initialState, action) => {
         answer.push(obj);
       }
 
+      console.log(answer)
+
       return {
         ...state,
         choiceAnswers: answer

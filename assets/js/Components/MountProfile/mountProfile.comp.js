@@ -20,9 +20,12 @@ class MountProfile extends React.Component {
           if(res.data === 404){
             this.props.onRestartAnswers();
             console.log(res)
+            console.log("BAD response")
           }else{
-            this.props.onSetChoiceList(res.data.list);
+            const data = res.data;
+            this.props.onSetChoiceList(data.list);
             console.log(res)
+            console.log("GOoooood response")
           }
       })
       .catch(err => console.log(err));
