@@ -60,5 +60,58 @@
             }
         }
     }
+
+    .contentHeader{
+        // display: flex;
+        // border-bottom: solid 2px black;
+        text-align: center;
+    }
+
+    .content{
+        img{
+            width: 400px;
+        }
+
+        .u-reverseRow{
+            flex-direction: row-reverse;
+        }
+
+        .content-Box{
+            // letter-spacing: 1px;
+            line-height: 40px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 20px 0;
+            font-size: 20px;
+            margin: 50px 0;
+
+            .content-Box-width{
+                width: 40%;
+            }
+        }
+
+        
+
+        @media screen and (max-width: 960px){
+            
+            .content-Box{
+                display: block;
+                text-align: center;
+                
+                p{
+                    text-align: justify;
+                }
+                .content-Box-width{
+                    width: 80%;
+                    margin: 0 auto;
+                }
+            }
+        }
+    }
+
+    .u-textCenter{
+        text-align: center;
+    }
 }
 

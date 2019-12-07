@@ -17,8 +17,9 @@ class MountProfile extends React.Component {
   componentDidMount() {
     Axios.get(`/api/answers/${this.props.formId}`)
       .then(res => {
-        console.log(res.data);
-        this.props.onSetChoiceList(res.data.list);
+        if (!res.data === 404) {
+          this.props.onSetChoiceList(res.data.list);
+        }
       })
       .catch(err => console.log(err));
   }
@@ -39,10 +40,9 @@ class MountProfile extends React.Component {
       formId: this.props.formId,
       answers: this.props.answers
     };
-    
+
     console.log("i post this: ");
     console.log(obj);
-    // this.props.onRestartAnswers();
 
     if (this.props.answers.length === 0) {
       alert("You haven't changed anything.");
