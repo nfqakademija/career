@@ -8,18 +8,12 @@ use Doctrine\Common\Collections\Collection;
 
 class CriteriaView
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     public $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $title;
 
-    /**
-     * @var Collection|CriteriaChoice[]
-     */
+    /** @var Collection|CriteriaChoice[] */
     public $choiceList;
 }

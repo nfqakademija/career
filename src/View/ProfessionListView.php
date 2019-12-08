@@ -8,8 +8,6 @@ use Doctrine\Common\Collections\Collection;
 
 class ProfessionListView
 {
-    /**
-     * @var Collection|Profession[]
-     */
+    /** @var Collection|Profession[] */
     public $list;
 }

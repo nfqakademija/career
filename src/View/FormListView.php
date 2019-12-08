@@ -7,9 +7,6 @@ use Doctrine\Common\Collections\Collection;
 
 class FormListView
 {
-
-    /**
-     * @var Collection|FormView[]
-     */
+    /** @var Collection|FormView[] */
     public $list;
 }

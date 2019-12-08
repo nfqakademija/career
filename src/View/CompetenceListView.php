@@ -7,8 +7,6 @@ use Doctrine\Common\Collections\Collection;
 
 class CompetenceListView
 {
-    /**
-     * @var Collection|CompetenceView[]
-     */
+    /** @var Collection|CompetenceView[] */
     public $list;
 }

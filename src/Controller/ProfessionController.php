@@ -25,7 +25,8 @@ class ProfessionController extends AbstractFOSRestController
 
     /** @var ViewHandlerInterface */
     private $viewHandler;
-    /** @var */
+
+    /** @var ProfessionListViewFactory*/
     private $professionListViewFactory;
 
     public function __construct(

@@ -7,6 +7,7 @@ use App\Entity\CareerProfile;
 use App\Entity\Criteria;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManager;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -17,6 +18,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class CareerFormRepository extends ServiceEntityRepository
 {
+    /** @var EntityManager  */
     private $entityManager;
 
     public function __construct(RegistryInterface $registry)

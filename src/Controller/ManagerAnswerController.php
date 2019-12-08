@@ -9,7 +9,6 @@ use App\Repository\UserAnswerRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\View\ViewHandlerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ManagerAnswerController extends AbstractFOSRestController
@@ -44,21 +43,6 @@ class ManagerAnswerController extends AbstractFOSRestController
         $this->managerAnswerRepository = $managerAnswerRepository;
     }
 
-    /**
-     * @param Request $request
-     * @return void
-     */
-    public function postFeedbackAction(Request $request)
-    {
-
-        $data = ((array)json_decode(((string)$request->getContent()), true))['data'];
-        $formId = (array_key_exists('formId', $data)) ? (int)$data['formId'] : null;
-        $feedback = (array_key_exists('formId', $data)) ? $data['feedback'] : null;
-
-        var_dump($feedback);
-
-        //return $this->viewHandler->handle(View::create($this->managerAnswerListViewFactory->create($managerAnswers)));
-    }
 
     /**
      * @param $slug

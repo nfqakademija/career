@@ -3,7 +3,6 @@
 
 namespace App\Factory;
 
-
 use App\Entity\Profession;
 use App\View\ProfessionView;
 
