@@ -67,7 +67,8 @@ class CareerFormController extends AbstractFOSRestController
         UserAnswerViewFactory $userAnswerViewFactory,
         UserAnswerListViewFactory $userAnswerListViewFactory,
         UserCommentListViewFactory $userCommentListViewFactory
-    ) {
+    )
+    {
         $this->formListViewFactory = $formListViewFactory;
         $this->formViewFactory = $formViewFactory;
         $this->viewHandler = $viewHandler;
@@ -205,11 +206,22 @@ class CareerFormController extends AbstractFOSRestController
         if ($comments) {
             foreach ($comments as $key => $comment) {
                 $criteriaId = (array_key_exists('criteriaId', $comment)) ? (int)$comment['criteriaId'] : null;
+                $criteria = $this->criteriaRepository->findOneBy(['id' => $criteriaId]);
                 $text = (array_key_exists('comment', $comment)) ? (string)$comment['comment'] : null;
-                $answer = $this->userAnswerRepository->findOneBy(['fkCriteria' => $criteriaId, 'fkCareerForm' => $form]);
-                $answer->setComment($text);
-                $this->userAnswerRepository->save($answer);
-                $form->addUserAnswer($answer);
+                $answered = $this->userAnswerRepository->findOneBy(['fkCriteria' => $criteriaId, 'fkCareerForm' => $form]);
+                if ($answered) {
+                    $answered->setComment($text);
+                    $answered->setUpdatedAt(new \DateTime("now"));
+                }
+                $userAnswer = ($answered) ? $answered : new UserAnswer();
+
+                if (!$userAnswer->getId()) {
+                    $userAnswer->setCreatedAt(new \DateTime("now"));
+                }
+                $userAnswer->setComment($text);
+                $userAnswer->setFkCriteria($criteria);
+                $this->userAnswerRepository->save($userAnswer);
+                $form->addUserAnswer($userAnswer);
             }
         }
 
