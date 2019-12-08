@@ -3,7 +3,6 @@
 
 namespace App\Factory;
 
-
 use App\View\UserCommentListView;
 
 class UserCommentListViewFactory
@@ -23,9 +22,10 @@ class UserCommentListViewFactory
     {
         /** @var UserCommentListView $userCommentListView */
         $userCommentListView = new UserCommentListView();
-        foreach ($userAnswers as $userAnswer) {
+        foreach ($userAnswers as $key => $userAnswer) {
             $userAnswerView = $this->userAnswerViewFactory->create($userAnswer);
-            $userCommentListView->list[] = $userAnswerView->comment;
+            $userCommentListView->list[$key]['criteriaId'] = $userAnswerView->criteria;
+            $userCommentListView->list[$key]['comment'] = $userAnswerView->comment;
         }
 
         return $userCommentListView;
