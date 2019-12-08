@@ -9,6 +9,7 @@ use App\Factory\FormViewFactory;
 use App\Factory\ProfileViewFactory;
 use App\Factory\UserAnswerListViewFactory;
 use App\Factory\UserAnswerViewFactory;
+use App\Factory\UserCommentListViewFactory;
 use App\Repository\CareerFormRepository;
 use App\Repository\CareerProfileRepository;
 use App\Repository\CriteriaChoiceRepository;
@@ -49,6 +50,7 @@ class CareerFormController extends AbstractFOSRestController
     private $criteriaChoiceRepository;
     private $userAnswerViewFactory;
     private $userAnswerListViewFactory;
+    private $userCommentListViewFactory;
 
 
     public function __construct(
@@ -63,7 +65,8 @@ class CareerFormController extends AbstractFOSRestController
         CriteriaRepository $criteriaRepository,
         CriteriaChoiceRepository $criteriaChoiceRepository,
         UserAnswerViewFactory $userAnswerViewFactory,
-        UserAnswerListViewFactory $userAnswerListViewFactory
+        UserAnswerListViewFactory $userAnswerListViewFactory,
+        UserCommentListViewFactory $userCommentListViewFactory
     ) {
         $this->formListViewFactory = $formListViewFactory;
         $this->formViewFactory = $formViewFactory;
@@ -77,6 +80,7 @@ class CareerFormController extends AbstractFOSRestController
         $this->criteriaChoiceRepository = $criteriaChoiceRepository;
         $this->userAnswerViewFactory = $userAnswerViewFactory;
         $this->userAnswerListViewFactory = $userAnswerListViewFactory;
+        $this->userCommentListViewFactory = $userCommentListViewFactory;
     }
 
     /**
@@ -135,6 +139,24 @@ class CareerFormController extends AbstractFOSRestController
 
     /**
      *
+     * @param $slug
+     * @return Response
+     * @throws \Exception
+     */
+    public function getCommentAction(int $slug)
+    {
+        $answers = $this->userAnswerRepository->findBy(['fkCareerForm' => $slug]);
+
+        if (!$answers) {
+            return new Response(Response::HTTP_NOT_FOUND);
+        }
+
+        return $this->viewHandler->handle(View::create($this->userCommentListViewFactory->create($answers)));
+    }
+
+
+    /**
+     *
      * @param Request $request
      * @return JsonResponse|Response
      * @throws \Exception
@@ -143,7 +165,8 @@ class CareerFormController extends AbstractFOSRestController
     {
         $data = ((array)json_decode(((string)$request->getContent()), true))['data'];
         $formId = (array_key_exists('formId', $data)) ? (int)$data['formId'] : null;
-        $answers = (array_key_exists('answers', $data)) ? (array)$data['answers'] : null;
+        $answers = (array_key_exists('choiceAnswers', $data)) ? (array)$data['choiceAnswers'] : null;
+        $comments = (array_key_exists('commentAnswers', $data)) ? (array)$data['commentAnswers'] : null;
 
         $choiceIds = array();
         foreach ($answers as $answerId => $answerBody) {
@@ -171,7 +194,6 @@ class CareerFormController extends AbstractFOSRestController
             if (!$userAnswer->getId()) {
                 $userAnswer->setCreatedAt(new \DateTime("now"));
             }
-
             $userAnswer->setFkChoice($choice);
             $userAnswer->setFkCriteria($choice->getFkCriteria());
 
@@ -179,6 +201,17 @@ class CareerFormController extends AbstractFOSRestController
             $userAnswer->setFkCareerForm($form);
             $form->addUserAnswer($userAnswer);
         };
+
+        if ($comments) {
+            foreach ($comments as $key => $comment) {
+                $criteriaId = (array_key_exists('criteriaId', $comment)) ? (int)$comment['criteriaId'] : null;
+                $text = (array_key_exists('comment', $comment)) ? (string)$comment['comment'] : null;
+                $answer = $this->userAnswerRepository->findOneBy(['fkCriteria' => $criteriaId, 'fkCareerForm' => $form]);
+                $answer->setComment($text);
+                $this->userAnswerRepository->save($answer);
+                $form->addUserAnswer($answer);
+            }
+        }
 
         $this->careerFormRepository->save($form);
 
