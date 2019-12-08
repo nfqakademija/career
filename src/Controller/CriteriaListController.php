@@ -20,11 +20,6 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * endpoints:
  * /api/criteria/list - All criteria list with competence name
- * /api/criterias/creates - Creates new criteria for competence (need to post competence id and criteria title)
- * /api/criterias - All criteria list with competence name
- * /api/competences - competence list with their criteria list and criteria choice list
- * /api/criterias/{slug} - Criteria list fetched by competence title
- * /api/choices/{slug} - Criteria Choice list fetched by criteria id
  * /api/criterias/choices/creates - Creates new criteria with choices (need to post competence id, criteria and array with minimum 2 choices)
  * /api/criterias/edits - Edits criteria title (need to post criteria id and criteria title)
  * /api/criterias/removes - Sets criteria non applicable (need to post criteria id)
