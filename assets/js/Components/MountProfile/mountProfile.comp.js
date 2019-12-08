@@ -19,23 +19,16 @@ class MountProfile extends React.Component {
       .then(res => {
         if (res.data === 404) {
           this.props.onRestartAnswers();
-          console.log(res);
-          console.log("BAD response");
+          // console.log(res);
+          // console.log("BAD response");
         } else {
           const data = res.data;
           this.props.onSetChoiceList(data.list);
-          console.log(res);
-          console.log("GOoooood response");
+          // console.log(res);
+          // console.log("GOoooood response");
         }
       })
       .catch(err => console.log(err));
-
-      // Axios.get(`/api/comments/${this.props.formId}`)
-      // .then(res => {
-      //     this.props.onSetCommentList(res.data.list)
-      //     console.log(res);
-      // })
-      // .catch(err => console.log(err));
   }
 
   toogle = i => {
@@ -56,8 +49,8 @@ class MountProfile extends React.Component {
       commentAnswers: this.props.comments
     };
 
-    console.log("i post this: ");
-    console.log(obj);
+    // console.log("i post this: ");
+    // console.log(obj);
 
     if (this.props.answers.length === 0 && this.props.comments.length === 0) {
       alert("You haven't changed anything.");
