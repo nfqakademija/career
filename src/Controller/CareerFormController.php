@@ -143,7 +143,8 @@ class CareerFormController extends AbstractFOSRestController
     {
         $data = ((array)json_decode(((string)$request->getContent()), true))['data'];
         $formId = (array_key_exists('formId', $data)) ? (int)$data['formId'] : null;
-        $answers = (array_key_exists('answers', $data)) ? (array)$data['answers'] : null;
+        $answers = (array_key_exists('choiceAnswers', $data)) ? (array)$data['choiceAnswers'] : null;
+        $comments = (array_key_exists('commentAnswers', $data)) ? (array)$data['commentAnswers'] : null;
 
         $choiceIds = array();
         foreach ($answers as $answerId => $answerBody) {
@@ -171,7 +172,6 @@ class CareerFormController extends AbstractFOSRestController
             if (!$userAnswer->getId()) {
                 $userAnswer->setCreatedAt(new \DateTime("now"));
             }
-
             $userAnswer->setFkChoice($choice);
             $userAnswer->setFkCriteria($choice->getFkCriteria());
 
@@ -179,6 +179,17 @@ class CareerFormController extends AbstractFOSRestController
             $userAnswer->setFkCareerForm($form);
             $form->addUserAnswer($userAnswer);
         };
+
+        if ($comments) {
+            foreach ($comments as $key => $comment) {
+                $criteriaId = (array_key_exists('criteriaId', $comment)) ? (int)$comment['criteriaId'] : null;
+                $text = (array_key_exists('comment', $comment)) ? (string)$comment['comment'] : null;
+                $answer = $this->userAnswerRepository->findOneBy(['fkCriteria' => $criteriaId, 'fkCareerForm' => $form]);
+                $answer->setComment($text);
+                $this->userAnswerRepository->save($answer);
+                $form->addUserAnswer($answer);
+            }
+        }
 
         $this->careerFormRepository->save($form);
 
