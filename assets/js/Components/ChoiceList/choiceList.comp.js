@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { setAnswers} from "../../Actions/action";
+import { setAnswers } from "../../Actions/action";
 
 class ChoiceList extends React.Component {
   onSelect = event => {
@@ -14,12 +14,13 @@ class ChoiceList extends React.Component {
   render() {
     const { choices } = this.props;
     let answer = "Not answered";
-
-    choices.forEach(element => {
-      if (this.props.choiceList.includes(element.id)) {
-        answer = element.title;
+    for(let i = 0; i < this.props.choiceList.length; i++){
+      for(let j = 0; j < choices.length; j++){
+        if(this.props.choiceList[i].choiceId === choices[j].id){
+          answer = choices[j].title;
+        }
       }
-    });
+    }
 
     return (
       <select defaultValue={answer} onChange={this.onSelect}>

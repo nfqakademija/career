@@ -60,6 +60,11 @@ export const setChoiceList = choiceList => ({
     choiceList
 })
 
+// export const setCommentList = commentList => ({
+//     type: 'setCommentList',
+//     commentList
+// })
+
 //////////////////////
 
 export const setAnswers = (criteriaId, choiceId) =>({

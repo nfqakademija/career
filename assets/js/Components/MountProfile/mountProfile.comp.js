@@ -29,6 +29,13 @@ class MountProfile extends React.Component {
         }
       })
       .catch(err => console.log(err));
+
+      // Axios.get(`/api/comments/${this.props.formId}`)
+      // .then(res => {
+      //     this.props.onSetCommentList(res.data.list)
+      //     console.log(res);
+      // })
+      // .catch(err => console.log(err));
   }
 
   toogle = i => {
@@ -59,7 +66,6 @@ class MountProfile extends React.Component {
         data: obj
       })
         .then(function(response) {
-          // console.log(response.statusText);
           alert("Created successfully");
         })
         .catch(function(error) {
@@ -110,7 +116,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onSetChoiceList: choiceList => dispatch(setChoiceList(choiceList)),
-  onRestartAnswers: () => dispatch(restartAnswers())
+  // onSetCommentList: commentList => dispatch(setCommentList(commentList)),
+  onRestartAnswers: () => dispatch(restartAnswers()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MountProfile);

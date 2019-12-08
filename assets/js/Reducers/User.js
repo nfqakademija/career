@@ -63,6 +63,11 @@ export const user = (state = initialState, action) => {
         ...state,
         choiceList: action.choiceList
       };
+      // case 'setCommentList':
+      //   return{
+      //     ...state,
+      //     commentList: action.commentList
+      //   }
 
     default:
       return state;
