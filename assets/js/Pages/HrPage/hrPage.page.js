@@ -34,8 +34,8 @@ class HrPage extends React.Component {
 
     Axios.get("/api/profession/list")
       .then(res => {
-        this.setState({ positions: res.data });
-        console.log(res);
+        this.setState({ positions: res.data.list });
+        // console.log(res);
       })
       .catch(err => console.log(err));
   }
