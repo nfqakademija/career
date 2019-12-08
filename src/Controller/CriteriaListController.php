@@ -26,10 +26,9 @@ use Symfony\Component\Serializer\Serializer;
  * /api/competences - competence list with their criteria list and criteria choice list
  * /api/criterias/{slug} - Criteria list fetched by competence title
  * /api/choices/{slug} - Criteria Choice list fetched by criteria id
- * /api/criterias/creates - Creates new criteria for competence (need to post competence id and criteria title)
+ * /api/criterias/choices/creates - Creates new criteria with choices (need to post competence id, criteria and array with minimum 2 choices)
  * /api/criterias/edits - Edits criteria title (need to post criteria id and criteria title)
  * /api/criterias/removes - Sets criteria non applicable (need to post criteria id)
- * /api/criterias/choices/creates - Creates new choice for criteria (need to post criteria id and choice title)
  * /api/criterias/choices/edits - Edits choice title (need to post choice id and choice title)
  * /api/criterias/choices/removes - Sets choice non applicable (need to post choice id)
  * @package App\Controller
@@ -53,7 +52,8 @@ class CriteriaListController extends AbstractFOSRestController
         CompetenceListViewFactory $competenceListViewFactory,
         EntityManagerInterface $entityManager,
         CriteriaChoiceRepository $criteriaChoiceRepository
-    ) {
+    )
+    {
         $this->viewHandler = $viewHandler;
         $this->competenceListViewFactory = $competenceListViewFactory;
         $this->criteriaRepository = $criteriaRepository;
@@ -143,15 +143,33 @@ class CriteriaListController extends AbstractFOSRestController
      * @param Request $request
      * @return Response
      */
-    public function postCriteriaCreateAction(Request $request)
+    public function postCriteriaChoiceCreateAction(Request $request)
     {
         // Fetch data from JSON
         $data = json_decode($request->getContent(), true);
-        $criteriaEntity = new Criteria();
-        $criteriaEntity->setFkCompetence($data['id']);
-        $criteriaEntity->setTitle($data['title']);
-        $criteriaEntity->setIsApplicable(1);
-        $this->entityManager->persist($criteriaEntity);
+
+        $choices = (array_key_exists('choice', $data)) ? (array)$data : null;
+
+        if (count($choices) < 2) {
+            return new Response(Response::HTTP_NO_CONTENT);
+        }
+
+        $criteria = new Criteria();
+        $criteriaChoice = new CriteriaChoice();
+        $criteria->setFkCompetence($data['id']);
+        $criteria->setTitle($data['title']);
+        $criteria->setIsApplicable(1);
+        $this->entityManager->persist($criteria);
+
+
+        foreach ($choices as $key => $choice) {
+            foreach ($choice as $item => $value) {
+                $criteriaChoice->setFkCriteria($criteria);
+                $criteriaChoice->setTitle($value['title']);
+                $criteriaChoice->setIsApplicable(1);
+                $this->entityManager->persist($criteriaChoice);
+            }
+        }
         $this->entityManager->flush();
         return new Response(Response::HTTP_CREATED);
     }
@@ -162,16 +180,10 @@ class CriteriaListController extends AbstractFOSRestController
      */
     public function postCriteriaEditAction(Request $request)
     {
-        // Fetch data from JSON
-        $data = json_decode($request->getContent(), true);
-        $criteria = $this->criteriaRepository->findOneBy(['id' => $data['id']]);
-
-        if (!$criteria) {
-            // fail to find criteria
+        if (!$this->renameRow($request, $this->criteriaRepository)) {
             return new Response(Response::HTTP_NOT_FOUND);
         }
-        $criteria->setTitle($data['title']);
-        $this->entityManager->flush();
+
         return new Response(Response::HTTP_OK);
     }
 
@@ -181,34 +193,11 @@ class CriteriaListController extends AbstractFOSRestController
      */
     public function postCriteriaRemoveAction(Request $request)
     {
-        // Fetch data from JSON
-        $data = json_decode($request->getContent(), true);
-        $criteria = $this->criteriaRepository->findOneBy(['id' => $data['id']]);
-
-        if (!$criteria) {
-            // fail to find criteria
+        if (!$this->setRowNotApplicable($request, $this->criteriaRepository)) {
             return new Response(Response::HTTP_NOT_FOUND);
         }
-        $criteria->setIsApplicable(0);
-        $this->entityManager->flush();
-        return new Response(Response::HTTP_OK);
-    }
 
-    /**
-     * @param Request $request
-     * @return Response
-     */
-    public function postCriteriaChoiceCreateAction(Request $request)
-    {
-        // Fetch data from JSON
-        $data = json_decode($request->getContent(), true);
-        $criteriaChoiceEntity = new CriteriaChoice();
-        $criteriaChoiceEntity->setFkCompetence($data['id']);
-        $criteriaChoiceEntity->setTitle($data['title']);
-        $criteriaChoiceEntity->setIsApplicable(1);
-        $this->entityManager->persist($criteriaChoiceEntity);
-        $this->entityManager->flush();
-        return new Response(Response::HTTP_CREATED);
+        return new Response(Response::HTTP_OK);
     }
 
     /**
@@ -217,16 +206,10 @@ class CriteriaListController extends AbstractFOSRestController
      */
     public function postCriteriaChoiceEditAction(Request $request)
     {
-        // Fetch data from JSON
-        $data = json_decode($request->getContent(), true);
-        $criteriaChoice = $this->criteriaRepository->findOneBy(['id' => $data['id']]);
-
-        if (!$criteriaChoice) {
-            // fail to find criteriaChoice
+        if (!$this->renameRow($request, $this->criteriaChoiceRepository)) {
             return new Response(Response::HTTP_NOT_FOUND);
         }
-        $criteriaChoice->setTitle($data['title']);
-        $this->entityManager->flush();
+
         return new Response(Response::HTTP_OK);
     }
 
@@ -236,16 +219,38 @@ class CriteriaListController extends AbstractFOSRestController
      */
     public function postCriteriaChoiceRemoveAction(Request $request)
     {
-        // Fetch data from JSON
-        $data = json_decode($request->getContent(), true);
-        $criteriaChoice = $this->criteriaRepository->findOneBy(['id' => $data['id']]);
 
-        if (!$criteriaChoice) {
-            // fail to find criteriaChoice
+        if (!$this->setRowNotApplicable($request, $this->criteriaChoiceRepository)) {
             return new Response(Response::HTTP_NOT_FOUND);
         }
-        $criteriaChoice->setIsApplicable(0);
-        $this->entityManager->flush();
+
         return new Response(Response::HTTP_OK);
+    }
+
+    private function renameRow($request, $repository)
+    {
+        $data = json_decode($request->getContent(), true);
+        $entity = $repository->findOneBy(['id' => $data['id']]);
+
+        if (!$entity) {
+            return false;
+        }
+        $entity->setTitle($data['title']);
+        $this->entityManager->flush();
+        return true;
+    }
+
+    private function setRowNotApplicable($request, $repository)
+    {
+        $data = json_decode($request->getContent(), true);
+        $row = $repository->findOneBy(['id' => $data['id']]);
+
+        if (!$row) {
+            return false;
+        }
+
+        $row->setIsApplicable(0);
+        $this->entityManager->flush();
+        return true;
     }
 }
