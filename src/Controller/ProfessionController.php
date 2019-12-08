@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Factory\ProfessionListViewFactory;
 use App\Repository\ProfessionRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
@@ -19,18 +20,22 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ProfessionController extends AbstractFOSRestController
 {
-    /** @var ProfessionRepository  */
+    /** @var ProfessionRepository */
     private $professionRepository;
 
-    /** @var ViewHandlerInterface  */
+    /** @var ViewHandlerInterface */
     private $viewHandler;
+    /** @var */
+    private $professionListViewFactory;
 
     public function __construct(
         ProfessionRepository $professionRepository,
-        ViewHandlerInterface $viewHandler
+        ViewHandlerInterface $viewHandler,
+        ProfessionListViewFactory $professionListViewFactory
     ) {
         $this->viewHandler = $viewHandler;
         $this->professionRepository = $professionRepository;
+        $this->professionListViewFactory = $professionListViewFactory;
     }
 
     /**
