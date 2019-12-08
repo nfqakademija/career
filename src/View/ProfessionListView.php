@@ -3,13 +3,13 @@
 
 namespace App\View;
 
+use App\Entity\Profession;
 use Doctrine\Common\Collections\Collection;
 
-class FormListView
+class ProfessionListView
 {
-
     /**
-     * @var Collection|FormView[]
+     * @var Collection|Profession[]
      */
     public $list;
 }

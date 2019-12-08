@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Factory\FormListViewFactory;
 use App\Factory\ManagerAnswerViewFactory;
-use App\Repository\CareerFormRepository;
 use App\Repository\ManagerAnswerRepository;
 use App\Repository\UserAnswerRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -15,10 +14,19 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ManagerAnswerController extends AbstractFOSRestController
 {
+    /** @var UserAnswerRepository  */
     private $userAnswerRepository;
+
+    /** @var ManagerAnswerRepository  */
     private $managerAnswerRepository;
+
+    /** @var ViewHandlerInterface  */
     private $viewHandler;
+
+    /** @var FormListViewFactory  */
     private $formListViewFactory;
+
+    /** @var ManagerAnswerViewFactory  */
     private $managerAnswerListViewFactory;
 
 
