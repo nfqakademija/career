@@ -1,18 +1,24 @@
-.hrPage{
-    min-height: 100vh;
-    padding-top:100px;
-    width: 70%;
-    margin:auto;
-    font-family: 'Prompt', sans-serif;
-   
-    .competence{
-        margin: 15px 0;
-        padding: 20px;
-        cursor: pointer;
-        border: solid 2px black;
-    }
+.hrPage {
+  min-height: 100vh;
+  padding-top: 100px;
+  width: 70%;
+  margin: auto;
+  font-family: "Prompt", sans-serif;
 
-    @media screen and (max-width: 800px){
-        width: 100%;
+  .competence {
+    margin: 15px 0;
+    transition: all 0.3s;
+    h4 {
+      cursor: pointer;
+      padding: 20px;
+      display: flex;
+      margin: auto 0;
+      background-color: rgb(209, 209, 209);
+      transition: all 0.5s;
     }
+  }
+
+  @media screen and (max-width: 800px) {
+    width: 100%;
+  }
 }

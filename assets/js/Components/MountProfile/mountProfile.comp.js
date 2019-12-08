@@ -19,13 +19,9 @@ class MountProfile extends React.Component {
       .then(res => {
         if (res.data === 404) {
           this.props.onRestartAnswers();
-          // console.log(res);
-          // console.log("BAD response");
         } else {
           const data = res.data;
           this.props.onSetChoiceList(data.list);
-          // console.log(res);
-          // console.log("GOoooood response");
         }
       })
       .catch(err => console.log(err));
@@ -48,9 +44,6 @@ class MountProfile extends React.Component {
       choiceAnswers: this.props.answers,
       commentAnswers: this.props.comments
     };
-
-    // console.log("i post this: ");
-    // console.log(obj);
 
     if (this.props.answers.length === 0 && this.props.comments.length === 0) {
       alert("You haven't changed anything.");
@@ -79,20 +72,34 @@ class MountProfile extends React.Component {
         </div>
 
         <div className="profile">
-          <h4 className="careerProfile">Career Profile</h4>
+          <h4 className="careerProfile">Competences:</h4>
           {this.props.data.profile.criteriaList.map((data, index) => {
             return (
               <React.Fragment key={index}>
-                <h4 className="competence" onClick={() => this.toogle(index)}>
-                  {data.competence}
-                </h4>
-                {this.state.showProfile.includes(index) ? (
-                  <Profile criteriaList={data.criteria} />
-                ) : null}
+                <div className="competence">
+                  <h4
+                    onClick={() => this.toogle(index)}
+                    style={
+                      this.state.showProfile.includes(index)
+                        ? {
+                            borderBottom: "none",
+                            borderRadius: "30px 30px 0px 0px"
+                          }
+                        : { borderRadius: "30px 30px 30px 30px" }
+                    }
+                  >
+                    {data.competence}
+                  </h4>
+                  {this.state.showProfile.includes(index) ? (
+                    <Profile criteriaList={data.criteria} />
+                  ) : null}
+                </div>
               </React.Fragment>
             );
           })}
-          <button onClick={this.submit}>Save</button>
+          <button className="submitButton" onClick={this.submit}>
+            Save
+          </button>
         </div>
       </div>
     );
@@ -109,8 +116,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onSetChoiceList: choiceList => dispatch(setChoiceList(choiceList)),
-  // onSetCommentList: commentList => dispatch(setCommentList(commentList)),
-  onRestartAnswers: () => dispatch(restartAnswers()),
+  onRestartAnswers: () => dispatch(restartAnswers())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MountProfile);
