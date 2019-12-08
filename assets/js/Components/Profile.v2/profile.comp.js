@@ -29,10 +29,7 @@ class Profile extends React.Component {
                     />
                   </td>
                   <td data-label="Comments">
-                    <Comments
-                      criteriaId={criteria.id}
-                      comment="Everything is awesome"
-                    />
+                    <Comments criteriaId={criteria.id} />
                   </td>
                   <td data-label="Team lead evaluation">Test Test Test</td>
                   <td data-label="Overall">Test Test Test</td>

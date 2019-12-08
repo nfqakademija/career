@@ -98,7 +98,19 @@
       }
 }
 
-select{
+// .comment-Box{
+//  margin: auto;
+// }
+
+.comment{
+word-wrap: break-word;
+}
+
+.commentButton{
+  margin: 5px;
+}
+
+select, input, .comment-Box{
   width: 100%;
   text-overflow: ellipsis;
 }
