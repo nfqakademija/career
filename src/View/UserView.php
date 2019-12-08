@@ -8,39 +8,24 @@ use Doctrine\Common\Collections\Collection;
 
 class UserView
 {
-
-    /**
-     * @var int
-     */
+    /** @var int */
     public $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $firstName;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $lastName;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $professionTitle;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $professionId;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     public $roles;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     public $teams;
 }

@@ -14,6 +14,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class CompetenceRepository extends ServiceEntityRepository
 {
+    /** @var EntityManager  */
     private $entityManager;
 
     public function __construct(RegistryInterface $registry)

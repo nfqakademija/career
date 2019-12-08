@@ -9,7 +9,6 @@ use App\Factory\FormViewFactory;
 use App\Factory\ProfileViewFactory;
 use App\Factory\UserAnswerListViewFactory;
 use App\Factory\UserAnswerViewFactory;
-use App\Factory\UserCommentListViewFactory;
 use App\Repository\CareerFormRepository;
 use App\Repository\CareerProfileRepository;
 use App\Repository\CriteriaChoiceRepository;
@@ -37,20 +36,41 @@ use FOS\RestBundle\View\View;
  */
 class CareerFormController extends AbstractFOSRestController
 {
+    /** @var CareerFormRepository */
+    private $careerFormRepository;
 
-    private $careerFormRepository = null;
+    /** @var CareerProfileRepository */
     private $careerProfileRepository;
+
+    /** @var ViewHandlerInterface */
     private $viewHandler;
+
+    /** @var FormListViewFactory */
     private $formListViewFactory;
+
+    /** @var FormViewFactory */
     private $formViewFactory;
+
+    /** @var ProfileViewFactory */
     private $profileViewFactory;
+
+    /** @var UserRepository */
     private $userRepository;
+
+    /** @var UserAnswerRepository */
     private $userAnswerRepository;
+
+    /** @var CriteriaRepository */
     private $criteriaRepository;
+
+    /** @var CriteriaChoiceRepository */
     private $criteriaChoiceRepository;
+
+    /** @var UserAnswerViewFactory */
     private $userAnswerViewFactory;
+
+    /** @var UserAnswerListViewFactory */
     private $userAnswerListViewFactory;
-    private $userCommentListViewFactory;
 
 
     public function __construct(
@@ -65,10 +85,8 @@ class CareerFormController extends AbstractFOSRestController
         CriteriaRepository $criteriaRepository,
         CriteriaChoiceRepository $criteriaChoiceRepository,
         UserAnswerViewFactory $userAnswerViewFactory,
-        UserAnswerListViewFactory $userAnswerListViewFactory,
-        UserCommentListViewFactory $userCommentListViewFactory
-    )
-    {
+        UserAnswerListViewFactory $userAnswerListViewFactory
+    ) {
         $this->formListViewFactory = $formListViewFactory;
         $this->formViewFactory = $formViewFactory;
         $this->viewHandler = $viewHandler;
@@ -81,7 +99,6 @@ class CareerFormController extends AbstractFOSRestController
         $this->criteriaChoiceRepository = $criteriaChoiceRepository;
         $this->userAnswerViewFactory = $userAnswerViewFactory;
         $this->userAnswerListViewFactory = $userAnswerListViewFactory;
-        $this->userCommentListViewFactory = $userCommentListViewFactory;
     }
 
     /**
@@ -208,7 +225,9 @@ class CareerFormController extends AbstractFOSRestController
                 $criteriaId = (array_key_exists('criteriaId', $comment)) ? (int)$comment['criteriaId'] : null;
                 $criteria = $this->criteriaRepository->findOneBy(['id' => $criteriaId]);
                 $text = (array_key_exists('comment', $comment)) ? (string)$comment['comment'] : null;
-                $answered = $this->userAnswerRepository->findOneBy(['fkCriteria' => $criteriaId, 'fkCareerForm' => $form]);
+                $answered = $this->userAnswerRepository->findOneBy([
+                    'fkCriteria' => $criteriaId,
+                    'fkCareerForm' => $form]);
                 if ($answered) {
                     $answered->setComment($text);
                     $answered->setUpdatedAt(new \DateTime("now"));

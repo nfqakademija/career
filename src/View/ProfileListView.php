@@ -8,8 +8,6 @@ use Doctrine\Common\Collections\Collection;
 
 class ProfileListView
 {
-    /**
-     * @var Collection|CareerProfile[]
-     */
+    /** @var Collection|CareerProfile[] */
     public $profiles;
 }

@@ -2,15 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\Team;
 use App\Factory\TeamViewFactory;
 use App\Repository\TeamRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 use FOS\RestBundle\View\ViewHandlerInterface;
 use FOS\RestBundle\View\View;
 
@@ -18,17 +13,18 @@ use FOS\RestBundle\View\View;
  * Class TeamController
  *
  * endpoints:
- * /api/teams/list - get all teams list; TODO: get all teams;
+ * /api/teams/list - get all teams list;
  * @package App\Controller
  */
 class TeamController extends AbstractFOSRestController
 {
+    /** @var TeamRepository */
+    private $teamRepository;
 
-    private $teamRepository = null;
-    private $normalizers = [];
-    private $encoders = [];
-    private $serializer = null;
+    /** @var ViewHandlerInterface */
     private $viewHandler;
+
+    /** @var TeamViewFactory */
     private $teamViewFactory;
 
     public function __construct(
@@ -37,9 +33,6 @@ class TeamController extends AbstractFOSRestController
         TeamViewFactory $teamViewFactory
     ) {
         $this->teamRepository = $teamRepository;
-        $this->normalizers[] = new ObjectNormalizer();
-        $this->encoders[] = new JsonEncoder();
-        $this->serializer = new Serializer($this->normalizers, $this->encoders);
         $this->viewHandler = $viewHandler;
         $this->teamViewFactory = $teamViewFactory;
     }

@@ -5,7 +5,6 @@ namespace App\View;
 
 class ManagerAnswerView
 {
-
     /** @var int */
     public $employAnswerId;
 

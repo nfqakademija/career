@@ -13,9 +13,6 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 
 /**
  * Class CareerProfileController
@@ -29,11 +26,22 @@ use Symfony\Component\Serializer\Serializer;
  */
 class CareerProfileController extends AbstractFOSRestController
 {
-    private $criteriaRepository = null;
-    private $careerProfileRepository = null;
-    private $professionRepository = null;
+    /** @var CriteriaRepository  */
+    private $criteriaRepository;
+
+    /** @var CareerProfileRepository  */
+    private $careerProfileRepository;
+
+    /** @var ProfessionRepository  */
+    private $professionRepository;
+
+    /** @var ViewHandlerInterface  */
     private $viewHandler;
+
+    /** @var ProfileListViewFactory  */
     private $profileListViewFactory;
+
+    /** @var ProfileViewFactory  */
     private $profileViewFactory;
 
 

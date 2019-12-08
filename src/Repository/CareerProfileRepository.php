@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\CareerProfile;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManager;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -14,6 +15,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class CareerProfileRepository extends ServiceEntityRepository
 {
+    /** @var EntityManager  */
     private $entityManager;
 
     public function __construct(RegistryInterface $registry)

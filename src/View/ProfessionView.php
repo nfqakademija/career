@@ -3,9 +3,8 @@
 
 namespace App\View;
 
-class TeamView
+class ProfessionView
 {
-
     /** @var int */
     public $id;
 

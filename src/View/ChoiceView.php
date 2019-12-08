@@ -5,14 +5,9 @@ namespace App\View;
 
 class ChoiceView
 {
-
-    /**
-     * @var int
-     */
+    /** @var int */
     public $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $title;
 }

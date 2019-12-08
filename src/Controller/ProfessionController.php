@@ -2,34 +2,41 @@
 
 namespace App\Controller;
 
+use App\Factory\ProfessionListViewFactory;
 use App\Repository\ProfessionRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
+use FOS\RestBundle\View\View;
+use FOS\RestBundle\View\ViewHandlerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 
 /**
  * Class ProfessionController
- * @package App\Controller
- * routes:
+ *
+ * endpoints:
  * /api/profession/list - get all profession registered
+ *
+ * @package App\Controller
  *
  */
 class ProfessionController extends AbstractFOSRestController
 {
-    private $professionRepository = null;
-    private $normalizers = [];
-    private $encoders = [];
-    private $serializer = null;
+    /** @var ProfessionRepository */
+    private $professionRepository;
 
+    /** @var ViewHandlerInterface */
+    private $viewHandler;
 
-    public function __construct(ProfessionRepository $professionRepository)
-    {
+    /** @var ProfessionListViewFactory*/
+    private $professionListViewFactory;
+
+    public function __construct(
+        ProfessionRepository $professionRepository,
+        ViewHandlerInterface $viewHandler,
+        ProfessionListViewFactory $professionListViewFactory
+    ) {
+        $this->viewHandler = $viewHandler;
         $this->professionRepository = $professionRepository;
-        $this->normalizers[] = new ObjectNormalizer();
-        $this->encoders[] = new JsonEncoder();
-        $this->serializer = new Serializer($this->normalizers, $this->encoders);
+        $this->professionListViewFactory = $professionListViewFactory;
     }
 
     /**
@@ -38,19 +45,8 @@ class ProfessionController extends AbstractFOSRestController
      */
     public function getProfessionListAction()
     {
-        $professionList = $this->professionRepository->fetchTitlesAndIds();
+        $professionList = $this->professionRepository->findAll();
 
-        $jsonObject = null;
-        if (empty($professionList)) {
-            $jsonObject = json_encode(['message' => 'empty']);
-        } else {
-            $jsonObject = $this->serializer->serialize($professionList, 'json', [
-                'circular_reference_handler' => function ($object) {
-                    return $object->getId();
-                }
-            ]);
-        }
-
-        return new Response($jsonObject, Response::HTTP_OK, ['Content-Type' => 'application/json']);
+        return $this->viewHandler->handle(View::create($this->professionListViewFactory->create($professionList)));
     }
 }

@@ -24,7 +24,7 @@ class HrPage extends React.Component {
   }
 
   componentDidMount() {
-    Axios.get("/api/compview")
+    Axios.get("/api/criteria/list")
       .then(res => {
         // const copy = res.data.list;
         this.setState({ profiles: res.data.list });
@@ -34,8 +34,8 @@ class HrPage extends React.Component {
 
     Axios.get("/api/profession/list")
       .then(res => {
-        this.setState({ positions: res.data });
-        // console.log(res.data);
+        this.setState({ positions: res.data.list });
+        // console.log(res);
       })
       .catch(err => console.log(err));
   }

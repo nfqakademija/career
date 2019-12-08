@@ -8,18 +8,12 @@ use Doctrine\Common\Collections\Collection;
 
 class CompetenceView
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     public $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $title;
 
-    /**
-     * @var Collection|Criteria[]
-     */
+    /** @var Collection|Criteria[] */
     public $criteriaList;
 }
