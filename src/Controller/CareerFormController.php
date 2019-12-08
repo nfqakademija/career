@@ -164,11 +164,17 @@ class CareerFormController extends AbstractFOSRestController
 
             if ($answered) {
                 $answered->setFkChoice($choice);
+                $answered->setUpdatedAt(new \DateTime("now"));
             }
             $userAnswer = ($answered) ? $answered : new UserAnswer();
 
+            if (!$userAnswer->getId()) {
+                $userAnswer->setCreatedAt(new \DateTime("now"));
+            }
+
             $userAnswer->setFkChoice($choice);
             $userAnswer->setFkCriteria($choice->getFkCriteria());
+
             $this->userAnswerRepository->save($userAnswer);
             $userAnswer->setFkCareerForm($form);
             $form->addUserAnswer($userAnswer);
