@@ -17,16 +17,16 @@ class MountProfile extends React.Component {
   componentDidMount() {
     Axios.get(`/api/answers/${this.props.formId}`)
       .then(res => {
-          if(res.data === 404){
-            this.props.onRestartAnswers();
-            console.log(res)
-            console.log("BAD response")
-          }else{
-            const data = res.data;
-            this.props.onSetChoiceList(data.list);
-            console.log(res)
-            console.log("GOoooood response")
-          }
+        if (res.data === 404) {
+          this.props.onRestartAnswers();
+          console.log(res);
+          console.log("BAD response");
+        } else {
+          const data = res.data;
+          this.props.onSetChoiceList(data.list);
+          console.log(res);
+          console.log("GOoooood response");
+        }
       })
       .catch(err => console.log(err));
   }
@@ -45,13 +45,14 @@ class MountProfile extends React.Component {
   submit = () => {
     let obj = {
       formId: this.props.formId,
-      answers: this.props.answers
+      choiceAnswers: this.props.answers,
+      commentAnswers: this.props.comments
     };
 
     console.log("i post this: ");
     console.log(obj);
 
-    if (this.props.answers.length === 0) {
+    if (this.props.answers.length === 0 && this.props.comments.length === 0) {
       alert("You haven't changed anything.");
     } else {
       Axios.post("/api/answers", {
@@ -103,7 +104,8 @@ const mapStateToProps = state => ({
   userId: state.user.userId,
   name: state.user.name,
   formId: state.user.formId,
-  answers: state.trackUserChanges.choiceAnswers
+  answers: state.trackUserChanges.choiceAnswers,
+  comments: state.trackUserChanges.comment
 });
 
 const mapDispatchToProps = dispatch => ({

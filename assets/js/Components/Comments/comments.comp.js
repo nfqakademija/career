@@ -1,4 +1,6 @@
 import React from "react";
+import { setComment } from "../../Actions/action";
+import { connect } from 'react-redux';
 
 class Comments extends React.Component {
   constructor(props) {
@@ -11,14 +13,13 @@ class Comments extends React.Component {
   }
 
   handle = () => {
-    const { id, rowId, criteriaId, criteriaName, change } = this.props;
-    // change(id, rowId, criteriaId, criteriaName, this.state.inputValue);  cia sius kuri change
     this.setState({ changeComment: !this.state.changeComment });
+    this.props.onSetComment(this.props.criteriaId, this.state.inputValue)
   };
 
   render() {
     return (
-      <div data-label={this.props.criteriaName}>
+      <div>
         {this.state.changeComment ? (
           <React.Fragment>
             <input
@@ -28,7 +29,6 @@ class Comments extends React.Component {
                 this.setState({ inputValue: value.target.value })
               }
             />
-            {/* <button onClick={this.handle}>Save</button> */}
             <i className="fas fa-plus" onClick={this.handle} />
           </React.Fragment>
         ) : (
@@ -47,4 +47,8 @@ class Comments extends React.Component {
   }
 }
 
-export default Comments;
+const mapDispatchToProps = dispatch => ({
+  onSetComment: (criteriaId, comment) => dispatch(setComment(criteriaId, comment))
+})
+
+export default connect(null, mapDispatchToProps)(Comments);

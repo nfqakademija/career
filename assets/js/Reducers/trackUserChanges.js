@@ -1,5 +1,6 @@
 const initialState = {
-  choiceAnswers: []
+  choiceAnswers: [],
+  comment: []
 };
 
 export const trackUserChanges = (state = initialState, action) => {
@@ -7,7 +8,7 @@ export const trackUserChanges = (state = initialState, action) => {
     case "setAnswers":
       let obj = {
         criteriaId: action.criteriaId,
-        choiceId: action.choiceId
+        choiceId: action.choiceId,
       };
       let answer = state.choiceAnswers;
       for (let i = 0; i < answer.length; i++) {
@@ -18,18 +19,34 @@ export const trackUserChanges = (state = initialState, action) => {
       if (Number(action.criteriaId)) {
         answer.push(obj);
       }
-
-      console.log(answer)
-
       return {
         ...state,
         choiceAnswers: answer
+      };
+    case "setComment":
+      obj = {
+        criteriaId: action.criteriaId,
+        comment: action.comment
+      };
+      answer = state.comment;
+      for (let i = 0; i < answer.length; i++) {
+        if (answer[i].criteriaId === obj.criteriaId) {
+          answer.splice(i, 1);
+        }
+      }
+      if (Number(action.criteriaId)) {
+        answer.push(obj);
+      }
+      return {
+        ...state,
+        comment: answer
       };
 
     case "restartAnswers":
       return {
         ...state,
-        choiceAnswers: []
+        choiceAnswers: [],
+        comment: []
       };
 
     default:

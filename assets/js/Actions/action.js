@@ -68,6 +68,12 @@ export const setAnswers = (criteriaId, choiceId) =>({
     choiceId
 })
 
+export const setComment = (criteriaId, comment) => ({
+    type: 'setComment',
+    criteriaId,
+    comment
+})
+
 export const restartAnswers = () => ({
     type: 'restartAnswers'
 })
