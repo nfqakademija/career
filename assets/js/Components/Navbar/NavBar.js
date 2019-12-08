@@ -4,16 +4,25 @@ import "./NavBar.scss";
 import logo from "../../../pics/logo6.png";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
-import { setLogged } from "../../Actions/action";
+import { setLogged, resetApp } from "../../Actions/action";
 
 class NavBar extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      route: props.location.pathname
+      route: props.location.pathname,
+      width: "80%"
     };
   }
+
+  listenScrollEvent = e => {
+    if (window.scrollY > 100) {
+      this.setState({ width: "100%" });
+    } else {
+      this.setState({ width: "80%" });
+    }
+  };
 
   componentDidMount() {
     if (this.props.location.pathname === "/") {
@@ -21,6 +30,8 @@ class NavBar extends React.Component {
     } else {
       this.setState({ route: false });
     }
+
+    window.addEventListener("scroll", this.listenScrollEvent);
   }
 
   componentDidUpdate(prevProps) {
@@ -39,6 +50,11 @@ class NavBar extends React.Component {
     }
   }
 
+  logout = () => {
+    this.props.onSetLogged(!this.props.logged);
+    this.props.onResetApp();
+  }
+
   render() {
     return (
       <div className="navigation">
@@ -46,13 +62,14 @@ class NavBar extends React.Component {
           className="navbar navbar-expand-lg navbar-dark"
           style={
             this.state.route === "/"
-              ? { background: "rgb(224, 107, 18)" }
+              ? { background: "rgb(224, 107, 18)", width: this.state.width }
               : {
                   background: "rgb(184, 165, 127)",
                   borderColor: "white",
                   width: "100%"
                 }
           }
+          // onScroll={{width: "100%"}}
         >
           <div className="d-flex flex-grow-1">
             <span className="w-100 d-lg-none d-block"></span>
@@ -124,7 +141,7 @@ class NavBar extends React.Component {
                 <li className="nav-item">
                   <div
                     className="nav-link"
-                    onClick={() => this.props.onSetLogged(!this.props.logged)}
+                    onClick={this.logout}
                   >
                     <span className="logout my-color">Logout</span>
                   </div>
@@ -145,7 +162,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onSetLogged: logged => dispatch(setLogged(logged))
+  onSetLogged: logged => dispatch(setLogged(logged)),
+  onResetApp: () => dispatch(resetApp())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(NavBar));

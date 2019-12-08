@@ -2,20 +2,21 @@
 
 .homePage{
     
+    min-height: 100vh;
     font-family: 'Overpass', sans-serif;
 
-    img{
-        width: 400px;
-    }
-
-    .content{
+    header{
         color:white;
-        min-height: 70vh;
+        min-height: 60vh;
         background-color: #e06b12;
         padding-top:100px;
         display: flex;
         justify-content: space-around;
         align-items: center;
+
+        img{
+            width: 400px;
+        }
     }
 
     .u-flexCenter{
@@ -45,7 +46,7 @@
     }
 
     @media screen and (max-width: 600px){
-        .content{
+        header{
             display: block;
             text-align: center;
         }
@@ -53,10 +54,64 @@
         button{
             margin-bottom: 20px;
         }
-
-        img{
-            width: 250px;
+        header{
+            img{
+                width: 250px;
+            }
         }
+    }
+
+    .contentHeader{
+        // display: flex;
+        // border-bottom: solid 2px black;
+        text-align: center;
+    }
+
+    .content{
+        img{
+            width: 400px;
+        }
+
+        .u-reverseRow{
+            flex-direction: row-reverse;
+        }
+
+        .content-Box{
+            // letter-spacing: 1px;
+            line-height: 40px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 20px 0;
+            font-size: 20px;
+            margin: 50px 0;
+
+            .content-Box-width{
+                width: 40%;
+            }
+        }
+
+        
+
+        @media screen and (max-width: 960px){
+            
+            .content-Box{
+                display: block;
+                text-align: center;
+                
+                p{
+                    text-align: justify;
+                }
+                .content-Box-width{
+                    width: 80%;
+                    margin: 0 auto;
+                }
+            }
+        }
+    }
+
+    .u-textCenter{
+        text-align: center;
     }
 }
 

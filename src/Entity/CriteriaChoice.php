@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,6 +32,11 @@ class CriteriaChoice
      * @ORM\Column(type="boolean")
      */
     private $isApplicable;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\UserAnswer", mappedBy="fkCareerForm")
+     */
+    private $userAnswers;
 
     public function getId(): ?int
     {
@@ -69,6 +75,37 @@ class CriteriaChoice
     public function setIsApplicable(bool $isApplicable): self
     {
         $this->isApplicable = $isApplicable;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UserAnswer[]
+     */
+    public function getUserAnswers(): Collection
+    {
+        return $this->userAnswers;
+    }
+
+    public function addUserAnswer(UserAnswer $userAnswer): self
+    {
+        if (!$this->userAnswers->contains($userAnswer)) {
+            $this->userAnswers[] = $userAnswer;
+            $userAnswer->setFkCareerForm($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserAnswer(UserAnswer $userAnswer): self
+    {
+        if ($this->userAnswers->contains($userAnswer)) {
+            $this->userAnswers->removeElement($userAnswer);
+            // set the owning side to null (unless already changed)
+            if ($userAnswer->getFkCareerForm() === $this) {
+                $userAnswer->setFkCareerForm(null);
+            }
+        }
 
         return $this;
     }

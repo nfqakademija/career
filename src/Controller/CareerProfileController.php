@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\CareerProfile;
+use App\Factory\ProfileViewFactory;
 use FOS\RestBundle\View\ViewHandlerInterface;
 use App\Factory\ProfileListViewFactory;
 use App\Repository\CareerProfileRepository;
@@ -31,11 +32,9 @@ class CareerProfileController extends AbstractFOSRestController
     private $criteriaRepository = null;
     private $careerProfileRepository = null;
     private $professionRepository = null;
-    private $normalizers = [];
-    private $encoders = [];
-    private $serializer = null;
     private $viewHandler;
     private $profileListViewFactory;
+    private $profileViewFactory;
 
 
     public function __construct(
@@ -43,16 +42,15 @@ class CareerProfileController extends AbstractFOSRestController
         CriteriaRepository $criteriaRepository,
         ProfessionRepository $professionRepository,
         CareerProfileRepository $careerProfileRepository,
-        ProfileListViewFactory $profileListViewFactory
+        ProfileListViewFactory $profileListViewFactory,
+        ProfileViewFactory $profileViewFactory
     ) {
         $this->viewHandler = $viewHandler;
         $this->profileListViewFactory = $profileListViewFactory;
+        $this->profileViewFactory = $profileViewFactory;
         $this->professionRepository = $professionRepository;
         $this->careerProfileRepository = $careerProfileRepository;
         $this->criteriaRepository = $criteriaRepository;
-        $this->normalizers[] = new ObjectNormalizer();
-        $this->encoders[] = new JsonEncoder();
-        $this->serializer = new Serializer($this->normalizers, $this->encoders);
     }
 
     /**
@@ -109,19 +107,8 @@ class CareerProfileController extends AbstractFOSRestController
      */
     public function getProfileListAction()
     {
-        $profileList = $this->careerProfileRepository->findAll();
-        $jsonObject = null;
-        if (empty($profileList)) {
-            $jsonObject = json_encode(['message' => 'empty']);
-        } else {
-            $jsonObject = $this->serializer->serialize($profileList, 'json', [
-                'circular_reference_handler' => function ($object) {
-                    return $object->getId();
-                }
-            ]);
-        }
-
-        return new Response($jsonObject, Response::HTTP_OK, ['Content-Type' => 'application/json']);
+        $profileList = $this->careerProfileRepository->findBy(['isArchived' => 0]);
+        return $this->viewHandler->handle(View::create($this->profileListViewFactory->create($profileList)));
     }
 
     /**
@@ -131,29 +118,10 @@ class CareerProfileController extends AbstractFOSRestController
      */
     public function getProfileAction($slug)
     {
-        $careerProfile = $this->careerProfileRepository->fetchProfileByProfession($slug);
-
-        $jsonObject = null;
-        if (empty($careerProfile)) {
-            $jsonObject = json_encode(['message' => 'empty']);
-        } else {
-            $jsonObject = $this->serializer->serialize($careerProfile, 'json', [
-                'circular_reference_handler' => function ($object) {
-                    return $object->getId();
-                }
-            ]);
+        $careerProfile = $this->careerProfileRepository->findOneBy(['profession' => $slug]);
+        if (!$careerProfile) {
+            return new Response(Response::HTTP_NOT_FOUND);
         }
-
-        return new Response($jsonObject, Response::HTTP_OK, ['Content-Type' => 'application/json']);
-    }
-
-    /**
-     *
-     * @return Response
-     */
-    public function getProfviewAction()
-    {
-        $profileList = $this->careerProfileRepository->findBy(['isArchived' => 0]);
-        return $this->viewHandler->handle(View::create($this->profileListViewFactory->create($profileList)));
+        return $this->viewHandler->handle(View::create($this->profileViewFactory->create($careerProfile)));
     }
 }

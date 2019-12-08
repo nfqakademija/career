@@ -3,7 +3,7 @@ import "./user.style.scss";
 import Axios from "axios";
 import MountProfile from "../../Components/MountProfile/mountProfile.comp";
 import { connect } from "react-redux";
-import { setCareerFormId } from "../../Actions/action";
+import { setCareerFormId, setAnswers, setChoiceList } from "../../Actions/action";
 
 class User extends React.Component {
   constructor() {
@@ -16,7 +16,7 @@ class User extends React.Component {
   componentDidMount() {
     Axios.get(`/api/forms/${this.props.userId}`)
       .then(res => {
-        // console.log(res.data);
+        console.log(res.data);
         this.props.onSetCareerFormId(res.data.id)
         this.setState({ userProfile: res.data });
       })
@@ -36,11 +36,12 @@ class User extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  userId: state.user.userId,
+  userId: state.user.userId
 });
 
 const mapDispatchToProps = dispatch =>({
   onSetCareerFormId: formId => dispatch(setCareerFormId(formId)),
+  onSetAnswers: answers => dispatch(setAnswers(answers))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(User);

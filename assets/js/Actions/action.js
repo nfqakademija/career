@@ -55,14 +55,40 @@ export const setTeams = teams => ({
     teams
 })
 
-//////////////////////
-
-export const setAnswers = answer =>({
-    type: 'setAnswers',
-    answer
+export const setChoiceList = choiceList => ({
+    type: 'setChoiceList',
+    choiceList
 })
 
-// export const removeAnswer = answer => ({
-//     type: 'removeAnswer',
-//     answer
+// export const setCommentList = commentList => ({
+//     type: 'setCommentList',
+//     commentList
 // })
+
+//////////////////////
+
+export const setAnswers = (criteriaId, choiceId) =>({
+    type: 'setAnswers',
+    criteriaId,
+    choiceId
+})
+
+export const setComment = (criteriaId, comment) => ({
+    type: 'setComment',
+    criteriaId,
+    comment
+})
+
+export const restartAnswers = () => ({
+    type: 'restartAnswers'
+})
+
+// export const removeAnswer = (criteriaId, choiceId) => ({
+//     type: 'removeAnswer',
+//     criteriaId,
+//     choiceId
+// })
+
+export const resetApp = () =>({
+    type: "RESET_APP"
+})

@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import Profile from "../Profile.v2/profile.comp";
 import "./mountProfile.style.scss";
 import Axios from "axios";
+import { setChoiceList, restartAnswers } from "../../Actions/action";
 
 class MountProfile extends React.Component {
   constructor() {
@@ -11,6 +12,30 @@ class MountProfile extends React.Component {
     this.state = {
       showProfile: []
     };
+  }
+
+  componentDidMount() {
+    Axios.get(`/api/answers/${this.props.formId}`)
+      .then(res => {
+        if (res.data === 404) {
+          this.props.onRestartAnswers();
+          console.log(res);
+          console.log("BAD response");
+        } else {
+          const data = res.data;
+          this.props.onSetChoiceList(data.list);
+          console.log(res);
+          console.log("GOoooood response");
+        }
+      })
+      .catch(err => console.log(err));
+
+      // Axios.get(`/api/comments/${this.props.formId}`)
+      // .then(res => {
+      //     this.props.onSetCommentList(res.data.list)
+      //     console.log(res);
+      // })
+      // .catch(err => console.log(err));
   }
 
   toogle = i => {
@@ -27,22 +52,29 @@ class MountProfile extends React.Component {
   submit = () => {
     let obj = {
       formId: this.props.formId,
-      answers: this.props.answers
+      choiceAnswers: this.props.answers,
+      commentAnswers: this.props.comments
     };
+
     console.log("i post this: ");
     console.log(obj);
 
-    Axios.post("/api/answers", {
-      data: obj
-    })
-      .then(function(response) {
-        console.log(response.statusText);
-        alert("Created successfully");
+    if (this.props.answers.length === 0 && this.props.comments.length === 0) {
+      alert("You haven't changed anything.");
+    } else {
+      Axios.post("/api/answers", {
+        data: obj
       })
-      .catch(function(error) {
-        console.log(error);
-        alert("Something went wrong... Try again later");
-      });
+        .then(function(response) {
+          alert("Created successfully");
+        })
+        .catch(function(error) {
+          console.log(error);
+          alert("Something went wrong... Try again later");
+        });
+
+      this.props.onRestartAnswers();
+    }
   };
 
   render() {
@@ -78,23 +110,14 @@ const mapStateToProps = state => ({
   userId: state.user.userId,
   name: state.user.name,
   formId: state.user.formId,
-  answers: state.trackUserChanges.choiceAnswers
+  answers: state.trackUserChanges.choiceAnswers,
+  comments: state.trackUserChanges.comment
 });
 
-export default connect(mapStateToProps, null)(MountProfile);
+const mapDispatchToProps = dispatch => ({
+  onSetChoiceList: choiceList => dispatch(setChoiceList(choiceList)),
+  // onSetCommentList: commentList => dispatch(setCommentList(commentList)),
+  onRestartAnswers: () => dispatch(restartAnswers()),
+});
 
-// [
-//   {
-//     formId: "1"
-//   },
-//   {
-//     answers: [
-//       {
-//         choice: "39"
-//       },
-//       {
-//         choice: "43"
-//       }
-//     ]
-//   }
-// ];
+export default connect(mapStateToProps, mapDispatchToProps)(MountProfile);

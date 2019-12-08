@@ -1,7 +1,7 @@
 import React from "react";
 import "./profile.style.scss";
 import ChoiceList from "../ChoiceList/choiceList.comp";
-import Comments from '../Comments/comments.comp';
+import Comments from "../Comments/comments.comp";
 
 class Profile extends React.Component {
   render() {
@@ -21,13 +21,18 @@ class Profile extends React.Component {
             {this.props.criteriaList.map(criteria => {
               return (
                 <tr key={criteria.id}>
-                  <td data-label='Criteria'>{criteria.title}</td>
-                  <td data-label='Self Evaluation'>
-                    <ChoiceList criteriaId={criteria.id} choices={criteria.choiceList} />
+                  <td data-label="Criteria">{criteria.title}</td>
+                  <td data-label="Self Evaluation">
+                    <ChoiceList
+                      criteriaId={criteria.id}
+                      choices={criteria.choiceList}
+                    />
                   </td>
-                  <td data-label='Comments'><Comments comment="Everything is awesome" /></td>
-                  <td data-label='Team lead evaluation'>Test Test Test</td>
-                  <td data-label='Overall'>Test Test Test</td>
+                  <td data-label="Comments">
+                    <Comments criteriaId={criteria.id} />
+                  </td>
+                  <td data-label="Team lead evaluation">Test Test Test</td>
+                  <td data-label="Overall">Test Test Test</td>
                 </tr>
               );
             })}

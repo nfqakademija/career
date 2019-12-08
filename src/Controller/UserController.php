@@ -18,12 +18,12 @@ use FOS\RestBundle\View\View;
 /**
  * Class UserController
  *
- *  * endpoints:
- * /api/users/logins/ - get user from login; TODO: get user by Email and Password;
- * /api/users/{id} - get user information by id; TODO: get user by Id;
- * /api/user/all - get all active registered users; TODO: get all active registered users;
- * /api/teams/{id}/manager - get team manager; TODO: get team manager by TeamId;
- * /api/teams/{id}/user - get team members; TODO: get team users by TeamId;
+ *endpoints:
+ * /api/users/logins/ - get user from login;
+ * /api/users/{id} - get user information by id;
+ * /api/user/all - get all active registered users;
+ * /api/teams/{id}/manager - get team manager;
+ * /api/teams/{id}/user - get team members;
  *
  * @package App\Controller
  */

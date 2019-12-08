@@ -1,24 +1,34 @@
 import React from "react";
+import { setComment } from "../../Actions/action";
+import { connect } from "react-redux";
+// import picturePress from '../../../pics/press.svg';
 
 class Comments extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
     this.state = {
       changeComment: false,
-      inputValue: props.comment
+      inputValue: "No comments"
     };
   }
 
+  componentDidMount() {
+    for (let i = 0; i < this.props.choiceList.length; i++) {
+      if (this.props.choiceList[i].criteriaId === this.props.criteriaId) {
+        this.setState({ inputValue: this.props.choiceList[i].comment });
+      }
+    }
+  }
+
   handle = () => {
-    const { id, rowId, criteriaId, criteriaName, change } = this.props;
-    // change(id, rowId, criteriaId, criteriaName, this.state.inputValue);  cia sius kuri change
     this.setState({ changeComment: !this.state.changeComment });
+    this.props.onSetComment(this.props.criteriaId, this.state.inputValue);
   };
 
   render() {
     return (
-      <div data-label={this.props.criteriaName}>
+      <div>
         {this.state.changeComment ? (
           <React.Fragment>
             <input
@@ -28,18 +38,21 @@ class Comments extends React.Component {
                 this.setState({ inputValue: value.target.value })
               }
             />
-            {/* <button onClick={this.handle}>Save</button> */}
-            <i className="fas fa-plus" onClick={this.handle} />
+            <button onClick={this.handle}>Save</button>
           </React.Fragment>
         ) : (
           <React.Fragment>
-            {this.state.inputValue}
-            <i
-              className="fas fa-plus"
-              onClick={() =>
-                this.setState({ changeComment: !this.state.changeComment })
-              }
-            />
+            <div className="comment-Box">
+              <span className="comment">{this.state.inputValue}</span>
+              <button
+                className="commentButton"
+                onClick={() =>
+                  this.setState({ changeComment: !this.state.changeComment })
+                }
+              >
+                Change
+              </button>
+            </div>
           </React.Fragment>
         )}
       </div>
@@ -47,4 +60,13 @@ class Comments extends React.Component {
   }
 }
 
-export default Comments;
+const mapStateToProps = state => ({
+  choiceList: state.user.choiceList
+});
+
+const mapDispatchToProps = dispatch => ({
+  onSetComment: (criteriaId, comment) =>
+    dispatch(setComment(criteriaId, comment))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Comments);
