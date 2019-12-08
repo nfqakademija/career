@@ -9,6 +9,7 @@ use App\Factory\FormViewFactory;
 use App\Factory\ProfileViewFactory;
 use App\Factory\UserAnswerListViewFactory;
 use App\Factory\UserAnswerViewFactory;
+use App\Factory\UserCommentListViewFactory;
 use App\Repository\CareerFormRepository;
 use App\Repository\CareerProfileRepository;
 use App\Repository\CriteriaChoiceRepository;
@@ -49,6 +50,7 @@ class CareerFormController extends AbstractFOSRestController
     private $criteriaChoiceRepository;
     private $userAnswerViewFactory;
     private $userAnswerListViewFactory;
+    private $userCommentListViewFactory;
 
 
     public function __construct(
@@ -63,7 +65,8 @@ class CareerFormController extends AbstractFOSRestController
         CriteriaRepository $criteriaRepository,
         CriteriaChoiceRepository $criteriaChoiceRepository,
         UserAnswerViewFactory $userAnswerViewFactory,
-        UserAnswerListViewFactory $userAnswerListViewFactory
+        UserAnswerListViewFactory $userAnswerListViewFactory,
+        UserCommentListViewFactory $userCommentListViewFactory
     ) {
         $this->formListViewFactory = $formListViewFactory;
         $this->formViewFactory = $formViewFactory;
@@ -77,6 +80,7 @@ class CareerFormController extends AbstractFOSRestController
         $this->criteriaChoiceRepository = $criteriaChoiceRepository;
         $this->userAnswerViewFactory = $userAnswerViewFactory;
         $this->userAnswerListViewFactory = $userAnswerListViewFactory;
+        $this->userCommentListViewFactory = $userCommentListViewFactory;
     }
 
     /**
@@ -132,6 +136,24 @@ class CareerFormController extends AbstractFOSRestController
 
         return $this->viewHandler->handle(View::create($this->userAnswerListViewFactory->create($answers)));
     }
+
+    /**
+     *
+     * @param $slug
+     * @return Response
+     * @throws \Exception
+     */
+    public function getCommentAction(int $slug)
+    {
+        $answers = $this->userAnswerRepository->findBy(['fkCareerForm' => $slug]);
+
+        if (!$answers) {
+            return new Response(Response::HTTP_NOT_FOUND);
+        }
+
+        return $this->viewHandler->handle(View::create($this->userCommentListViewFactory->create($answers)));
+    }
+
 
     /**
      *
