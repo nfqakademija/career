@@ -44,6 +44,10 @@ class ManagerAnswerController extends AbstractFOSRestController
     }
 
 
+    public function postFeedbackAction()
+    {
+    }
+
     /**
      * @param $slug
      * @return Response
