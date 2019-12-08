@@ -23,9 +23,11 @@ class UserAnswerListViewFactory
     {
         /** @var UserAnswerListView $userAnswerListView */
         $userAnswerListView = new UserAnswerListView();
-        foreach ($userAnswers as $userAnswer) {
+        foreach ($userAnswers as $key => $userAnswer) {
             $userAnswerView = $this->userAnswerViewFactory->create($userAnswer);
-            $userAnswerListView->list[] = $userAnswerView->choice;
+            $userAnswerListView->list[$key]['criteriaId'] = $userAnswerView->criteria;
+            $userAnswerListView->list[$key]['choiceId'] = ($userAnswerView->choice)? $userAnswerView->choice: 'NULL';
+            $userAnswerListView->list[$key]['comment'] = ($userAnswerView->comment)? $userAnswerView->comment: 'NULL';
         }
 
         return $userAnswerListView;
