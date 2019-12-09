@@ -11,6 +11,7 @@ use App\Repository\CriteriaRepository;
 use App\Repository\ProfessionRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
+use PhpParser\Node\Expr\Array_;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -69,6 +70,7 @@ class CareerProfileController extends AbstractFOSRestController
     public function postProfileAction(Request $request)
     {
         // Fetch data from JSON
+
         $data = ((array)json_decode(((string)$request->getContent()), true))['data'];
 
         // Get position ID from data
@@ -104,9 +106,31 @@ class CareerProfileController extends AbstractFOSRestController
         $profession = $this->professionRepository->findOneBy(['id' => $positionId]);
         $careerProfile->setProfession($profession);
         $careerProfile->setIsArchived(0);
+        $careerProfile->setCriteriaCount(count($checkedCriteriaIdList));
 
         $this->careerProfileRepository->save($careerProfile);
         return new Response(json_encode(['message' => 'Created']), Response::HTTP_CREATED);
+    }
+
+    private function dispatchJson(Request $request)
+    {
+        $values = array();
+        // Fetch data from JSON
+        $json = (array)json_decode(((string)$request->getContent()), true);
+        if (!$json) {
+            return false;
+        }
+        $data = $json['data'] ?? $json;
+
+        $values['positionId'] = $data['position'] ?? null;
+
+        if (!$values['positionId']) {
+            return false;
+        }
+
+        $values['competences'] = (array) $data['competences'] ?? null;
+
+        return $values;
     }
 
     /**

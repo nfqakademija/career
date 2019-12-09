@@ -32,5 +32,9 @@ team:
   prefix: api
 manager_feedback:
   type: rest
-  resource: App\Controller\ManagerAnswerController
+  resource: App\Controller\ManagerFeedbackController
+  prefix: api
+user_answer:
+  type: rest
+  resource: App\Controller\UserAnswerController
   prefix: api
