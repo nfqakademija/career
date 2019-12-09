@@ -61,9 +61,9 @@ class UserAnswerService
     public function saveUserComments(Array $comments, CareerForm $form)
     {
         foreach ($comments as $key => $comment) {
-            $criteriaId = (array_key_exists('criteriaId', $comment)) ? (int)$comment['criteriaId'] : null;
+            $criteriaId = (int)$comment['criteriaId'] ?? null;
             $criteria = $this->criteriaRepository->findOneBy(['id' => $criteriaId]);
-            $text = (array_key_exists('comment', $comment)) ? (string)$comment['comment'] : null;
+            $text = (string)$comment['comment'] ?? null;
             $answered = $this->userAnswerRepository->findOneBy([
                 'fkCriteria' => $criteriaId,
                 'fkCareerForm' => $form]);
@@ -71,7 +71,7 @@ class UserAnswerService
                 $answered->setComment($text);
                 $answered->setUpdatedAt(new \DateTime("now"));
             }
-            $userAnswer = ($answered) ? $answered : new UserAnswer();
+            $userAnswer = ($answered) ?? new UserAnswer();
 
             if (!$userAnswer->getId()) {
                 $userAnswer->setCreatedAt(new \DateTime("now"));
@@ -113,4 +113,20 @@ class UserAnswerService
         }
         return $idArray;
     }
+
+    private function dispatchField($array, $fieldName)
+    {
+        foreach ($array as $key => $value) {
+            if ($key === $fieldName) {
+                return $value;
+            }
+            if (is_array($value)) {
+                if ($result = $this->dispatchField($value, $fieldName)) {
+                    return $result;
+                }
+            }
+        }
+        return false;
+    }
+
 }
