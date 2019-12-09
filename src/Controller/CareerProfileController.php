@@ -104,6 +104,7 @@ class CareerProfileController extends AbstractFOSRestController
         $profession = $this->professionRepository->findOneBy(['id' => $positionId]);
         $careerProfile->setProfession($profession);
         $careerProfile->setIsArchived(0);
+        $careerProfile->setCriteriaCount(count($checkedCriteriaIdList));
 
         $this->careerProfileRepository->save($careerProfile);
         return new Response(json_encode(['message' => 'Created']), Response::HTTP_CREATED);

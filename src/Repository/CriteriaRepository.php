@@ -15,7 +15,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class CriteriaRepository extends ServiceEntityRepository
 {
-    /** @var EntityManager  */
+    /** @var EntityManager */
     private $entityManager;
 
     public function __construct(RegistryInterface $registry)
