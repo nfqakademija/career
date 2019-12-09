@@ -68,10 +68,11 @@ class UserAnswerController extends AbstractFOSRestController
      */
     public function postAnswerAction(Request $request)
     {
-        $data = ((array)json_decode(((string)$request->getContent()), true))['data'];
-        $formId = (array_key_exists('formId', $data)) ? (int)$data['formId'] : null;
-        $answers = (array_key_exists('choiceAnswers', $data)) ? (array)$data['choiceAnswers'] : null;
-        $comments = (array_key_exists('commentAnswers', $data)) ? (array)$data['commentAnswers'] : null;
+        $requestBody = $this->dispatchJson($request);
+
+        $formId = $requestBody['formId'];
+        $answers = $requestBody['choiceAnswers'];
+        $comments = $requestBody['commentAnswers'];
 
         $choiceIds = array();
         foreach ($answers as $answerId => $answerBody) {
@@ -136,6 +137,28 @@ class UserAnswerController extends AbstractFOSRestController
         return $this->viewHandler->handle(View::create($this->formViewFactory->create($form)));
     }
 
+
+    private function dispatchJson(Request $request)
+    {
+        $values = array();
+        // Fetch data from JSON
+        $json = (array)json_decode(((string)$request->getContent()), true);
+        if (!$json) {
+            return false;
+        }
+        $data = $json['data'] ?? $json;
+
+        $values['formId'] = $data['formId'] ?? null;
+
+        if (!$values['formId']) {
+            return false;
+        }
+
+        $values['choiceAnswers'] = (array) $data['choiceAnswers'] ?? null;
+        $values['commentAnswers'] = (array) $data['commentAnswers'] ?? null;
+
+        return $values;
+    }
 
     /**
      *
