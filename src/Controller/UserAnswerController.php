@@ -2,13 +2,13 @@
 
 namespace App\Controller;
 
-use App\Entity\UserAnswer;
 use App\Factory\FormViewFactory;
 use App\Factory\UserAnswerListViewFactory;
 use App\Repository\CareerFormRepository;
 use App\Repository\CriteriaChoiceRepository;
 use App\Repository\CriteriaRepository;
 use App\Repository\UserAnswerRepository;
+use App\Service\UserAnswerService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\View\ViewHandlerInterface;
@@ -18,6 +18,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UserAnswerController extends AbstractFOSRestController
 {
+    /** @var UserAnswerService  */
+    private $userAnswerService;
 
     /** @var CareerFormRepository */
     private $careerFormRepository;
@@ -42,6 +44,7 @@ class UserAnswerController extends AbstractFOSRestController
 
 
     public function __construct(
+        UserAnswerService $answerService,
         CareerFormRepository $careerFormRepository,
         UserAnswerRepository $userAnswerRepository,
         ViewHandlerInterface $viewHandler,
@@ -50,6 +53,7 @@ class UserAnswerController extends AbstractFOSRestController
         CriteriaChoiceRepository $criteriaChoiceRepository,
         UserAnswerListViewFactory $userAnswerListViewFactory
     ) {
+        $this->userAnswerService = $answerService;
         $this->formViewFactory = $formViewFactory;
         $this->viewHandler = $viewHandler;
         $this->careerFormRepository = $careerFormRepository;
@@ -68,96 +72,35 @@ class UserAnswerController extends AbstractFOSRestController
      */
     public function postAnswerAction(Request $request)
     {
-        $requestBody = $this->dispatchJson($request);
+        $requestBody = $this->userAnswerService->dispatchJson($request, [
+            'formId',
+            'choiceAnswers',
+            'commentAnswers'
+        ]);
 
         $formId = $requestBody['formId'];
+
+        if (!$formId) {
+            return new Response(Response::HTTP_NOT_FOUND);
+        }
+
         $answers = $requestBody['choiceAnswers'];
         $comments = $requestBody['commentAnswers'];
 
-        $choiceIds = array();
-        foreach ($answers as $answerId => $answerBody) {
-            foreach ($answerBody as $key => $value) {
-                if ($key === 'choiceId') {
-                    $choiceIds[] = (int)$value;
-                }
-            }
-        }
-
-        $choices = $this->criteriaChoiceRepository->findBy(['id' => $choiceIds]);
         $form = $this->careerFormRepository->findOneBy(['id' => $formId]);
 
-        foreach ($choices as $choice) {
-            $answered = $this->userAnswerRepository->findOneBy([
-                'fkCareerForm' => $form,
-                'fkCriteria' => $choice->getFkCriteria()]);
+        $choices = $this->criteriaChoiceRepository->findBy([
+            'id' => $this->userAnswerService->extractIds($answers, 'choiceId')]);
 
-            if ($answered) {
-                $answered->setFkChoice($choice);
-                $answered->setUpdatedAt(new \DateTime("now"));
-            }
-            $userAnswer = ($answered) ? $answered : new UserAnswer();
-
-            if (!$userAnswer->getId()) {
-                $userAnswer->setCreatedAt(new \DateTime("now"));
-            }
-            $userAnswer->setFkChoice($choice);
-            $userAnswer->setFkCriteria($choice->getFkCriteria());
-
-            $this->userAnswerRepository->save($userAnswer);
-            $userAnswer->setFkCareerForm($form);
-            $form->addUserAnswer($userAnswer);
-        };
+        if ($choices) {
+            $this->userAnswerService->saveUserChoices($choices, $form);
+        }
 
         if ($comments) {
-            foreach ($comments as $key => $comment) {
-                $criteriaId = (array_key_exists('criteriaId', $comment)) ? (int)$comment['criteriaId'] : null;
-                $criteria = $this->criteriaRepository->findOneBy(['id' => $criteriaId]);
-                $text = (array_key_exists('comment', $comment)) ? (string)$comment['comment'] : null;
-                $answered = $this->userAnswerRepository->findOneBy([
-                    'fkCriteria' => $criteriaId,
-                    'fkCareerForm' => $form]);
-                if ($answered) {
-                    $answered->setComment($text);
-                    $answered->setUpdatedAt(new \DateTime("now"));
-                }
-                $userAnswer = ($answered) ? $answered : new UserAnswer();
-
-                if (!$userAnswer->getId()) {
-                    $userAnswer->setCreatedAt(new \DateTime("now"));
-                }
-                $userAnswer->setComment($text);
-                $userAnswer->setFkCriteria($criteria);
-                $this->userAnswerRepository->save($userAnswer);
-                $form->addUserAnswer($userAnswer);
-            }
+            $this->userAnswerService->saveUserComments($comments, $form);
         }
-
-        $this->careerFormRepository->save($form);
 
         return $this->viewHandler->handle(View::create($this->formViewFactory->create($form)));
-    }
-
-
-    private function dispatchJson(Request $request)
-    {
-        $values = array();
-        // Fetch data from JSON
-        $json = (array)json_decode(((string)$request->getContent()), true);
-        if (!$json) {
-            return false;
-        }
-        $data = $json['data'] ?? $json;
-
-        $values['formId'] = $data['formId'] ?? null;
-
-        if (!$values['formId']) {
-            return false;
-        }
-
-        $values['choiceAnswers'] = (array) $data['choiceAnswers'] ?? null;
-        $values['commentAnswers'] = (array) $data['commentAnswers'] ?? null;
-
-        return $values;
     }
 
     /**
