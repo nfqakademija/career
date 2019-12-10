@@ -48,13 +48,13 @@ class CareerProfileService
             return false;
         }
         $data = $json['data'] ?? $json;
-        $values['position'] = $data[0]['position'] ?? null;
+        $values['position'] = $data['position'] ?? null;
 
         if (!$values['position']) {
             return false;
         }
 
-        $values['competences'] = (array)$data[1]['competences'] ?? null;
+        $values['competences'] = (array)$data['competences'] ?? null;
 
         return $values;
     }
