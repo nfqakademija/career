@@ -3,16 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\CareerProfile;
+use App\Factory\ListViewFactory;
 use App\Factory\ProfileViewFactory;
 use App\Service\CareerProfileService;
 use FOS\RestBundle\View\ViewHandlerInterface;
-use App\Factory\ProfileListViewFactory;
 use App\Repository\CareerProfileRepository;
 use App\Repository\CriteriaRepository;
 use App\Repository\ProfessionRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
-use PhpParser\Node\Expr\Array_;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -40,14 +39,14 @@ class CareerProfileController extends AbstractFOSRestController
     /** @var ViewHandlerInterface */
     private $viewHandler;
 
-    /** @var ProfileListViewFactory */
-    private $profileListViewFactory;
-
     /** @var ProfileViewFactory */
     private $profileViewFactory;
 
     /** @var  CareerProfileService */
     private $careerProfileService;
+
+    /** @var ListViewFactory */
+    private $listViewFactory;
 
 
     public function __construct(
@@ -55,17 +54,17 @@ class CareerProfileController extends AbstractFOSRestController
         CriteriaRepository $criteriaRepository,
         ProfessionRepository $professionRepository,
         CareerProfileRepository $careerProfileRepository,
-        ProfileListViewFactory $profileListViewFactory,
         ProfileViewFactory $profileViewFactory,
-        CareerProfileService $careerProfileService
+        CareerProfileService $careerProfileService,
+        ListViewFactory $listViewFactory
     ) {
         $this->viewHandler = $viewHandler;
-        $this->profileListViewFactory = $profileListViewFactory;
         $this->profileViewFactory = $profileViewFactory;
         $this->professionRepository = $professionRepository;
         $this->careerProfileRepository = $careerProfileRepository;
         $this->criteriaRepository = $criteriaRepository;
         $this->careerProfileService = $careerProfileService;
+        $this->listViewFactory = $listViewFactory;
     }
 
     /**
@@ -111,7 +110,8 @@ class CareerProfileController extends AbstractFOSRestController
     public function getProfileListAction()
     {
         $profileList = $this->careerProfileRepository->findBy(['isArchived' => 0]);
-        return $this->viewHandler->handle(View::create($this->profileListViewFactory->create($profileList)));
+        $this->listViewFactory->setViewFactory(ProfileViewFactory::class);
+        return $this->viewHandler->handle(View::create($this->listViewFactory->create($profileList)));
     }
 
     /**
