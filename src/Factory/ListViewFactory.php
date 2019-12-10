@@ -3,21 +3,33 @@
 
 namespace App\Factory;
 
-use ReflectionClass;
+use App\View\ListView;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class ListViewFactory
 {
 
-    public static function create(Array $objects)
+    private $viewFactory;
+    private $container;
+
+    public function __construct(ContainerInterface $container)
     {
-        $list = array();
-        $reflect = new ReflectionClass($objects[0]);
-        $factoryName = $reflect->getShortName() . 'ViewFactory';
-        require_once 'src/Factory/' . $factoryName . '.php';
-        $factory = new $factoryName();
+        $this->container = $container;
+    }
+
+    public function setViewFactory(string $viewFactory)
+    {
+        $this->viewFactory = $viewFactory;
+        return $this;
+    }
+
+    public function create(Array $objects)
+    {
+        $listView = new ListView();
+
         foreach ($objects as $object) {
-            $list[] = $factory->create($object);
+            $listView->list[] = $this->container->get($this->viewFactory)->create($object);
         }
-        return $list;
+        return $listView;
     }
 }
