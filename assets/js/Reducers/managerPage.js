@@ -1,13 +1,13 @@
 const initialState = {
-  id: null
+  selected: false
 };
 
-export const selectedProfile = (state = initialState, action) => {
+export const managerPage = (state = initialState, action) => {
   switch (action.type) {
     case "setSelectedProfile":
       return {
         ...state,
-        id: action.profile
+        selected: action.profile
       };
 
     default:

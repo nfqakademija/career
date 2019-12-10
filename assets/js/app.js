@@ -10,13 +10,19 @@ import { connect } from "react-redux";
 import User from "./Pages/UserProfile/user.page";
 import Error from "./Pages/Error/Error";
 
+import { withRouter } from "react-router";
+import { setManagerPage } from "./Actions/action";
+
 class App extends React.Component {
   render() {
+    this.props.location.pathname === "/profiles"
+      ? this.props.onSetManagerPage(true)
+      : this.props.onSetManagerPage(false);
+
     return (
       <div className="app">
         <NavBar />
         <Switch>
-          
           <Route exact path="/" component={HomePage} />
 
           {this.props.roles.includes("ROLE_HEAD") &&
@@ -35,6 +41,9 @@ class App extends React.Component {
 
           <Route component={Error} />
 
+          {/* {this.props.location.pathname === "profiles"
+            ? this.props.onSetManagerPage(true)
+            : this.props.onSetManagerPage(false)} */}
         </Switch>
         <Footer />
       </div>
@@ -47,4 +56,8 @@ const mapStateToProps = state => ({
   logged: state.user.logged
 });
 
-export default connect(mapStateToProps, null)(App);
+const mapDispatchToProps = dispatch => ({
+  onSetManagerPage: profile => dispatch(setManagerPage(profile))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App));

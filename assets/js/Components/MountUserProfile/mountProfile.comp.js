@@ -1,19 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-import Profile from "../Profile.v2/profile.comp";
 import "./mountProfile.style.scss";
 import Axios from "axios";
 import { setChoiceList, restartAnswers } from "../../Actions/action";
+import CompetenceView from "../CompetenceView/competenceView.comp";
 
 class MountProfile extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      showProfile: []
-    };
-  }
-
   componentDidMount() {
     Axios.get(`/api/answers/${this.props.formId}`)
       .then(res => {
@@ -27,23 +19,13 @@ class MountProfile extends React.Component {
       .catch(err => console.log(err));
   }
 
-  toogle = i => {
-    if (this.state.showProfile.includes(i)) {
-      const array = [...this.state.showProfile];
-      const index = array.indexOf(i);
-      array.splice(index, 1);
-      this.setState({ showProfile: array });
-    } else {
-      this.setState({ showProfile: this.state.showProfile.concat(i) });
-    }
-  };
-
   submit = () => {
     let obj = {
       formId: this.props.formId,
       choiceAnswers: this.props.answers,
       commentAnswers: this.props.comments
     };
+    console.log(obj)
 
     if (this.props.answers.length === 0 && this.props.comments.length === 0) {
       alert("You haven't changed anything.");
@@ -66,41 +48,12 @@ class MountProfile extends React.Component {
   render() {
     return (
       <div className="mountProfile">
-        <div className="u-flexCenter">
-          <h4>Name: {this.props.name}</h4>
-          <h4>Position: {this.props.data.profile.professionTitle}</h4>
-        </div>
-
-        <div className="profile">
-          <h4 className="careerProfile">Competences:</h4>
-          {this.props.data.profile.criteriaList.map((data, index) => {
-            return (
-              <React.Fragment key={index}>
-                <div className="competence">
-                  <h4
-                    onClick={() => this.toogle(index)}
-                    style={
-                      this.state.showProfile.includes(index)
-                        ? {
-                            borderBottom: "none",
-                            borderRadius: "30px 30px 0px 0px"
-                          }
-                        : { borderRadius: "30px 30px 30px 30px" }
-                    }
-                  >
-                    {data.competence}
-                  </h4>
-                  {this.state.showProfile.includes(index) ? (
-                    <Profile criteriaList={data.criteria} />
-                  ) : null}
-                </div>
-              </React.Fragment>
-            );
-          })}
-          <button className="submitButton" onClick={this.submit}>
-            Save
-          </button>
-        </div>
+        <CompetenceView
+          name={this.props.name}
+          position={this.props.data.profile.professionTitle}
+          competence={this.props.data.profile.criteriaList}
+          submit={this.submit}
+        />
       </div>
     );
   }

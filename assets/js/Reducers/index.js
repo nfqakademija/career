@@ -1,13 +1,13 @@
 import { combineReducers } from 'redux';
 import { profilesList } from './profilesList';
-import { selectedProfile } from './selectedProfile';
+import { managerPage } from './managerPage';
 import { user } from './User';
 import { trackUserChanges } from './trackUserChanges';
 //rootReducer
 
 const appReducer = combineReducers({
     profilesList,
-    selectedProfile,
+    managerPage,
     user,
     trackUserChanges
 })

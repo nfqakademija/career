@@ -1,14 +1,14 @@
 import React from "react";
-import { setSelectedProfile } from "../../Actions/action";
-
-import { connect } from "react-redux";
+// import { setSelectedProfile } from "../../Actions/action";
+// import Axios from 'axios';
+// import { connect } from "react-redux";
 
 class ProfileButtons extends React.Component {
   render() {
-    const { id, name } = this.props;
+    const { id, name, handle } = this.props;
     return (
       <div>
-        <button onClick={() => this.props.onSetSelectedProfile(id)}>
+        <button onClick={() => handle(id)}>
           {name}
         </button>
       </div>
@@ -16,11 +16,4 @@ class ProfileButtons extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  selectedProfile: state.selectedProfile.id
-});
-const mapDispatchToProps = dispatch => ({
-  onSetSelectedProfile: profile => dispatch(setSelectedProfile(profile))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ProfileButtons);
+export default ProfileButtons;

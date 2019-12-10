@@ -1,9 +1,9 @@
 import React from "react";
 import "./user.style.scss";
 import Axios from "axios";
-import MountProfile from "../../Components/MountProfile/mountProfile.comp";
+import MountUserProfile from "../../Components/MountUserProfile/mountProfile.comp";
 import { connect } from "react-redux";
-import { setCareerFormId, setAnswers, setChoiceList } from "../../Actions/action";
+import { setCareerFormId, setAnswers} from "../../Actions/action";
 
 class User extends React.Component {
   constructor() {
@@ -29,7 +29,7 @@ class User extends React.Component {
     }
     return (
       <div className="user">
-        <MountProfile data={this.state.userProfile} />
+        <MountUserProfile data={this.state.userProfile} />
       </div>
     );
   }

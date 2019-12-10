@@ -1,83 +1,65 @@
 import React from "react";
-import Profile from "../../Components/Profile/Profile.competence.comp";
-import { setProfilesList } from "../../Actions/action";
+// import { setProfilesList } from "../../Actions/action";
 import Axios from "axios";
 import { connect } from "react-redux";
 import "./ProfilePage.style.scss";
 import ProfileButtons from "../../Components/ProfileButtons/ProfileButtons.comp";
+import CompetenceView from '../../Components/CompetenceView/competenceView.comp';
 
 class ProfilePage extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      profileNames: []
+      profileNames: [],
+      fullProfile: []
     };
   }
   componentDidMount() {
-    Axios.get("./example.json")
-      .then(res => this.props.onSetProfileList(res.data))
-      .catch(err => console.log(err));
-
-    Axios.get("./example.buttons.json")
-      .then(res => this.setState({ profileNames: res.data }))
+    Axios.get(`/api/teams/${this.props.teams[0].id}/users`)
+      .then(res => {
+        // console.log(res.data.list);
+        this.setState({ profileNames: res.data.list });
+      })
       .catch(err => console.log(err));
   }
 
-  change = (profileId, rowID, criteriaID, criteriaName, value) => {
-    let copyState = this.props.profilesList;
-
-    copyState
-      .filter(checkProfileId => checkProfileId.id === profileId)
-      .map(profile =>
-        profile.all
-          .filter(checkAllId => checkAllId.id === rowID)
-          .map(all =>
-            all.list
-              .filter(checkCriteriaId => checkCriteriaId.id === criteriaID)
-              .map(criteria => {
-                criteria[criteriaName] = value;
-              })
-          )
-      );
-    this.props.onSetProfileList(copyState);
-    console.log("Check array if state is changed");
+  selectedUser = id => {
+    Axios.get(`/api/forms/${id}`)
+      .then(res => {
+        console.log(res.data)
+        this.setState({ fullProfile: res.data });
+      })
+      .catch(err => console.log(err));
   };
 
   render() {
     return (
       <div className="profilePage">
-        <h1>THIS PAGE IS STILL IN DEVELOPMENT</h1>
         {this.state.profileNames.map(profileNames => (
           <ProfileButtons
             key={profileNames.id}
             id={profileNames.id}
-            name={profileNames.title}
+            name={profileNames.firstName + " " + profileNames.lastName}
+            handle={this.selectedUser}
           />
         ))}
-
-        {this.props.profilesList.map(data => (
-          <Profile
-            key={data.id}
-            id={data.id}
-            name={data.name}
-            position={data.position}
-            all={data.all}
-            change={this.change}
+        <div>
+        {this.state.fullProfile.length === 0 ? null : (
+          <CompetenceView
+            name={this.state.fullProfile.userView.firstName}
+            position={this.state.fullProfile.profile.professionTitle}
+            competence={this.state.fullProfile.profile.criteriaList}
           />
-        ))}
-        {/* {console.log(this.props.selectedProfile)} */}
+        )}
+        </div>
       </div>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  profilesList: state.profilesList.profiles,
-  selectedProfile: state.selectedProfile.id
-});
-const mapDispatchToProps = dispatch => ({
-  onSetProfileList: profiles => dispatch(setProfilesList(profiles))
+  teams: state.user.teams
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProfilePage);
+export default connect(mapStateToProps, null)(ProfilePage);

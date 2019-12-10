@@ -14,12 +14,16 @@ class ChoiceList extends React.Component {
   render() {
     const { choices } = this.props;
     let answer = "Not answered";
-    for(let i = 0; i < this.props.choiceList.length; i++){
-      for(let j = 0; j < choices.length; j++){
-        if(this.props.choiceList[i].choiceId === choices[j].id){
+    for (let i = 0; i < this.props.choiceList.length; i++) {
+      for (let j = 0; j < choices.length; j++) {
+        if (this.props.choiceList[i].choiceId === choices[j].id) {
           answer = choices[j].title;
         }
       }
+    }
+
+    if (this.props.managerPage) {
+      return <div>{answer}</div>;
     }
 
     return (
@@ -39,7 +43,8 @@ class ChoiceList extends React.Component {
 
 const mapStateToProps = state => ({
   answers: state.trackUserChanges.choiceAnswers,
-  choiceList: state.user.choiceList
+  choiceList: state.user.choiceList,
+  managerPage: state.managerPage.selected
 });
 
 const mapDispatchToProps = dispatch => ({

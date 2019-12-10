@@ -15,7 +15,10 @@ class Comments extends React.Component {
 
   componentDidMount() {
     for (let i = 0; i < this.props.choiceList.length; i++) {
-      if (this.props.choiceList[i].criteriaId === this.props.criteriaId) {
+      if (
+        this.props.choiceList[i].criteriaId === this.props.criteriaId &&
+        this.props.choiceList[i].comment !== null
+      ) {
         this.setState({ inputValue: this.props.choiceList[i].comment });
       }
     }
@@ -27,6 +30,13 @@ class Comments extends React.Component {
   };
 
   render() {
+    if (this.props.managerPage) {
+      return (
+        <div className="comment-Box">
+          <span className="comment">{this.state.inputValue}</span>
+        </div>
+      );
+    }
     return (
       <div>
         {this.state.changeComment ? (
@@ -61,7 +71,8 @@ class Comments extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  choiceList: state.user.choiceList
+  choiceList: state.user.choiceList,
+  managerPage: state.managerPage.selected
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -4,7 +4,7 @@ export const setProfilesList = profiles =>({
 })
 //////////////////////////////////////
 
-export const setSelectedProfile = profile => ({
+export const setManagerPage = profile => ({
     type: 'setSelectedProfile',
     profile
 })
