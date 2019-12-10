@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\CareerForm;
 use App\Factory\FormListViewFactory;
 use App\Factory\FormViewFactory;
+use App\Factory\ListViewFactory;
 use App\Repository\CareerFormRepository;
 use App\Repository\CareerProfileRepository;
 use App\Repository\UserRepository;
@@ -36,14 +37,14 @@ class CareerFormController extends AbstractFOSRestController
     /** @var ViewHandlerInterface */
     private $viewHandler;
 
-    /** @var FormListViewFactory */
-    private $formListViewFactory;
-
     /** @var FormViewFactory */
     private $formViewFactory;
 
     /** @var UserRepository */
     private $userRepository;
+
+    /** @var ListViewFactory  */
+    private $listViewFactory;
 
 
     public function __construct(
@@ -51,15 +52,15 @@ class CareerFormController extends AbstractFOSRestController
         CareerProfileRepository $careerProfileRepository,
         UserRepository $userRepository,
         ViewHandlerInterface $viewHandler,
-        FormListViewFactory $formListViewFactory,
-        FormViewFactory $formViewFactory
+        FormViewFactory $formViewFactory,
+        ListViewFactory $listViewFactory
     ) {
-        $this->formListViewFactory = $formListViewFactory;
         $this->formViewFactory = $formViewFactory;
         $this->viewHandler = $viewHandler;
         $this->careerFormRepository = $careerFormRepository;
         $this->careerProfileRepository = $careerProfileRepository;
         $this->userRepository = $userRepository;
+        $this->listViewFactory = $listViewFactory;
     }
 
     /**
@@ -70,7 +71,8 @@ class CareerFormController extends AbstractFOSRestController
     public function getFormListAction()
     {
         $formList = $this->careerFormRepository->findAll();
-        return $this->viewHandler->handle(View::create($this->formListViewFactory->create($formList)));
+        $this->listViewFactory->setViewFactory(FormViewFactory::class);
+        return $this->viewHandler->handle(View::create($this->listViewFactory->create($formList)));
     }
 
 

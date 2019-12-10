@@ -15,7 +15,7 @@ class UserAnswerViewFactory
         $userAnswerView->id = $userAnswer->getId();
         $userAnswerView->comment = $userAnswer->getComment();
         $userAnswerView->criteria = $userAnswer->getFkCriteria()->getId();
-        $userAnswerView->choice = ($userAnswer->getFkChoice())? $userAnswer->getFkChoice()->getId() : 'No Comments';
+        $userAnswerView->choice = ($userAnswer->getFkChoice())? $userAnswer->getFkChoice()->getId() : null;
 
         return $userAnswerView;
     }

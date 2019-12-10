@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Factory\FormListViewFactory;
 use App\Factory\ManagerAnswerViewFactory;
 use App\Repository\ManagerAnswerRepository;
 use App\Repository\UserAnswerRepository;
@@ -23,9 +22,6 @@ class ManagerFeedbackController extends AbstractFOSRestController
     /** @var ViewHandlerInterface  */
     private $viewHandler;
 
-    /** @var FormListViewFactory  */
-    private $formListViewFactory;
-
     /** @var ManagerAnswerViewFactory  */
     private $managerAnswerListViewFactory;
 
@@ -33,12 +29,10 @@ class ManagerFeedbackController extends AbstractFOSRestController
     public function __construct(
         ViewHandlerInterface $viewHandler,
         UserAnswerRepository $userAnswerRepository,
-        FormListViewFactory $formListViewFactory,
         ManagerAnswerViewFactory $managerAnswerViewFactory,
         ManagerAnswerRepository $managerAnswerRepository
     ) {
         $this->viewHandler = $viewHandler;
-        $this->formListViewFactory = $formListViewFactory;
         $this->userAnswerRepository = $userAnswerRepository;
         $this->managerAnswerListViewFactory = $managerAnswerViewFactory;
         $this->managerAnswerRepository = $managerAnswerRepository;

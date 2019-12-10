@@ -3,15 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\CareerProfile;
+use App\Factory\ListViewFactory;
 use App\Factory\ProfileViewFactory;
+use App\Service\CareerProfileService;
 use FOS\RestBundle\View\ViewHandlerInterface;
-use App\Factory\ProfileListViewFactory;
 use App\Repository\CareerProfileRepository;
 use App\Repository\CriteriaRepository;
 use App\Repository\ProfessionRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
-use PhpParser\Node\Expr\Array_;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -27,23 +27,26 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CareerProfileController extends AbstractFOSRestController
 {
-    /** @var CriteriaRepository  */
+    /** @var CriteriaRepository */
     private $criteriaRepository;
 
-    /** @var CareerProfileRepository  */
+    /** @var CareerProfileRepository */
     private $careerProfileRepository;
 
-    /** @var ProfessionRepository  */
+    /** @var ProfessionRepository */
     private $professionRepository;
 
-    /** @var ViewHandlerInterface  */
+    /** @var ViewHandlerInterface */
     private $viewHandler;
 
-    /** @var ProfileListViewFactory  */
-    private $profileListViewFactory;
-
-    /** @var ProfileViewFactory  */
+    /** @var ProfileViewFactory */
     private $profileViewFactory;
+
+    /** @var  CareerProfileService */
+    private $careerProfileService;
+
+    /** @var ListViewFactory */
+    private $listViewFactory;
 
 
     public function __construct(
@@ -51,15 +54,17 @@ class CareerProfileController extends AbstractFOSRestController
         CriteriaRepository $criteriaRepository,
         ProfessionRepository $professionRepository,
         CareerProfileRepository $careerProfileRepository,
-        ProfileListViewFactory $profileListViewFactory,
-        ProfileViewFactory $profileViewFactory
+        ProfileViewFactory $profileViewFactory,
+        CareerProfileService $careerProfileService,
+        ListViewFactory $listViewFactory
     ) {
         $this->viewHandler = $viewHandler;
-        $this->profileListViewFactory = $profileListViewFactory;
         $this->profileViewFactory = $profileViewFactory;
         $this->professionRepository = $professionRepository;
         $this->careerProfileRepository = $careerProfileRepository;
         $this->criteriaRepository = $criteriaRepository;
+        $this->careerProfileService = $careerProfileService;
+        $this->listViewFactory = $listViewFactory;
     }
 
     /**
@@ -70,67 +75,32 @@ class CareerProfileController extends AbstractFOSRestController
     public function postProfileAction(Request $request)
     {
         // Fetch data from JSON
+        $requestBody = $this->careerProfileService->dispatchJson($request);
+        $positionId = $requestBody['position'];
+        $competences = $requestBody['competences'];
 
-        $data = ((array)json_decode(((string)$request->getContent()), true))['data'];
+        $criteriaFields = $this->careerProfileService->dispatchField($competences, 'criteriaList');
 
-        // Get position ID from data
-        $positionId = (int)array_shift($data)['position'];
+        $criteriaIds = array();
 
-        // Check if position has its career profile and create career profile object depending on the decision
-        $existingProfile = $this->careerProfileRepository->findOneBy(['profession' => $positionId]);
-        $careerProfile = ($existingProfile) ? $existingProfile : new CareerProfile();
-
-        // Get competence array from data
-        $competences = (array)array_shift($data)['competences'];
-        // Gather all checked criteria ids
-        $checkedCriteriaIdList = array();
-        foreach ($competences as $competenceId => $competenceBody) {
-            foreach ($competenceBody as $key => $value) {
-                if ($key === 'criteriaList') {
-                    foreach ($value as $item => $field) {
-                        $checkedCriteriaIdList[] = ((int)$field['id']);
-                    }
-                }
-            }
+        foreach ($criteriaFields as $field) {
+            $criteriaIds[] = $this->careerProfileService->dispatchField($field, 'id');
         }
 
         // get available Criterias from Database by criteria ids
-        $checkedCriteriaObjects = $this->criteriaRepository->findBy(array('id' => $checkedCriteriaIdList));
-        // loop through checked criterias and add to Criteria array
-        if ($checkedCriteriaObjects != null) {
-            foreach ($checkedCriteriaObjects as $criteria) {
-                $careerProfile->addFkCriterion($criteria);
-            }
+        $criterias = $this->criteriaRepository->findBy(array('id' => $criteriaIds));
+        if (!$criterias) {
+            return new Response(Response::HTTP_NOT_FOUND);
         }
-
         $profession = $this->professionRepository->findOneBy(['id' => $positionId]);
-        $careerProfile->setProfession($profession);
-        $careerProfile->setIsArchived(0);
-        $careerProfile->setCriteriaCount(count($checkedCriteriaIdList));
 
-        $this->careerProfileRepository->save($careerProfile);
+        if (!$profession) {
+            return new Response(Response::HTTP_NOT_FOUND);
+        }
+
+        $this->careerProfileService->saveCareerProfile($criterias, $profession);
+
         return new Response(json_encode(['message' => 'Created']), Response::HTTP_CREATED);
-    }
-
-    private function dispatchJson(Request $request)
-    {
-        $values = array();
-        // Fetch data from JSON
-        $json = (array)json_decode(((string)$request->getContent()), true);
-        if (!$json) {
-            return false;
-        }
-        $data = $json['data'] ?? $json;
-
-        $values['positionId'] = $data['position'] ?? null;
-
-        if (!$values['positionId']) {
-            return false;
-        }
-
-        $values['competences'] = (array) $data['competences'] ?? null;
-
-        return $values;
     }
 
     /**
@@ -140,7 +110,8 @@ class CareerProfileController extends AbstractFOSRestController
     public function getProfileListAction()
     {
         $profileList = $this->careerProfileRepository->findBy(['isArchived' => 0]);
-        return $this->viewHandler->handle(View::create($this->profileListViewFactory->create($profileList)));
+        $this->listViewFactory->setViewFactory(ProfileViewFactory::class);
+        return $this->viewHandler->handle(View::create($this->listViewFactory->create($profileList)));
     }
 
     /**
@@ -150,7 +121,7 @@ class CareerProfileController extends AbstractFOSRestController
      */
     public function getProfileAction($slug)
     {
-        $careerProfile = $this->careerProfileRepository->findOneBy(['profession' => $slug]);
+        $careerProfile = $this->careerProfileRepository->findOneBy(['profession' => $slug, 'isArchived' => 0]);
         if (!$careerProfile) {
             return new Response(Response::HTTP_NOT_FOUND);
         }
