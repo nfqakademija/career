@@ -109,14 +109,10 @@ class HrPage extends React.Component {
 
     copy.map((data, index) => copy[index].criteriaList.remove(0));
 
-    let obj = [
-      {
-        position: this.state.position
-      },
-      {
-        competences: copy
-      }
-    ];
+    let obj = {
+      position: this.state.position,
+      competences: copy
+    };
 
     if (this.state.position === null || copy.length === 0) {
       alert("Select position or criterias");
@@ -126,7 +122,7 @@ class HrPage extends React.Component {
   };
 
   sendData = obj => {
-    // console.log(obj);
+    console.log(obj);
 
     Axios.post("/api/profiles", {
       data: obj
