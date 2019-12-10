@@ -4,7 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Criteria;
 use App\Entity\CriteriaChoice;
-use App\Factory\CompetenceListViewFactory;
+use App\Factory\CompetenceViewFactory;
+use App\Factory\ListViewFactory;
 use App\Repository\CompetenceRepository;
 use App\Repository\CriteriaChoiceRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -38,8 +39,8 @@ class CriteriaListController extends AbstractFOSRestController
     /** @var ViewHandlerInterface  */
     private $viewHandler;
 
-    /** @var CompetenceListViewFactory  */
-    private $competenceListViewFactory;
+    /** @var CompetenceViewFactory  */
+    private $competenceViewFactory;
 
     /** @var EntityManagerInterface  */
     private $entityManager;
@@ -47,20 +48,25 @@ class CriteriaListController extends AbstractFOSRestController
     /** @var CriteriaChoiceRepository  */
     private $criteriaChoiceRepository;
 
+    /** @var ListViewFactory */
+    private $listViewFactory;
+
     public function __construct(
         ViewHandlerInterface $viewHandler,
         CriteriaRepository $criteriaRepository,
         CompetenceRepository $competenceRepository,
-        CompetenceListViewFactory $competenceListViewFactory,
+        CompetenceViewFactory $competenceViewFactory,
         EntityManagerInterface $entityManager,
-        CriteriaChoiceRepository $criteriaChoiceRepository
+        CriteriaChoiceRepository $criteriaChoiceRepository,
+        ListViewFactory $listViewFactory
     ) {
         $this->viewHandler = $viewHandler;
-        $this->competenceListViewFactory = $competenceListViewFactory;
+        $this->competenceViewFactory = $competenceViewFactory;
         $this->criteriaRepository = $criteriaRepository;
         $this->competenceRepository = $competenceRepository;
         $this->entityManager = $entityManager;
         $this->criteriaChoiceRepository = $criteriaChoiceRepository;
+        $this->listViewFactory = $listViewFactory;
     }
 
 
@@ -69,8 +75,8 @@ class CriteriaListController extends AbstractFOSRestController
         $competenceList = $this->competenceRepository->findBy([
             'isApplicable' => 1
         ]);
-
-        return $this->viewHandler->handle(View::create($this->competenceListViewFactory->create($competenceList)));
+        $this->listViewFactory->setViewFactory(CompetenceViewFactory::class);
+        return $this->viewHandler->handle(View::create($this->listViewFactory->create($competenceList)));
     }
 
     /**

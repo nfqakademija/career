@@ -9,7 +9,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ListViewFactory
 {
 
+    /** @var  string */
     private $viewFactory;
+
+    /** @var ContainerInterface  */
     private $container;
 
     public function __construct(ContainerInterface $container)
