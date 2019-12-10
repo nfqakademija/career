@@ -80,20 +80,16 @@ class CareerProfileController extends AbstractFOSRestController
         $positionId = $requestBody['position'];
         $competences = $requestBody['competences'];
 
-        // Gather all checked criteria ids
-        $checkedCriteriaIdList = array();
-        foreach ($competences as $competenceId => $competenceBody) {
-            foreach ($competenceBody as $key => $value) {
-                if ($key === 'criteriaList') {
-                    foreach ($value as $item => $field) {
-                        $checkedCriteriaIdList[] = ((int)$field['id']);
-                    }
-                }
-            }
+        $criteriaFields = $this->careerProfileService->dispatchField($competences, 'criteriaList');
+
+        $criteriaIds = array();
+
+        foreach ($criteriaFields as $field) {
+            $criteriaIds[] = $this->careerProfileService->dispatchField($field, 'id');
         }
 
         // get available Criterias from Database by criteria ids
-        $criterias = $this->criteriaRepository->findBy(array('id' => $checkedCriteriaIdList));
+        $criterias = $this->criteriaRepository->findBy(array('id' => $criteriaIds));
         if (!$criterias) {
             return new Response(Response::HTTP_NOT_FOUND);
         }

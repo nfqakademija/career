@@ -58,4 +58,19 @@ class CareerProfileService
 
         return $values;
     }
+
+    public function dispatchField($array, $fieldName)
+    {
+        foreach ($array as $key => $value) {
+            if ($key === $fieldName) {
+                return $value;
+            }
+            if (is_array($value)) {
+                if ($result = $this->dispatchField($value, $fieldName)) {
+                    return $result;
+                }
+            }
+        }
+        return false;
+    }
 }
