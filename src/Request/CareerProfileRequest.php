@@ -3,6 +3,7 @@
 
 namespace App\Request;
 
+use App\Utils\ArrayFieldDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 
 class CareerProfileRequest
@@ -17,8 +18,8 @@ class CareerProfileRequest
     public function __construct(Request $request)
     {
         $json = (array)json_decode(((string)$request->getContent()), true);
-        $this->professionId = $this->dispatchField($json, 'position');
-        $this->competences = $this->dispatchField($json, 'competences');
+        $this->professionId = ArrayFieldDispatcher::dispatchField($json, 'position');
+        $this->competences = ArrayFieldDispatcher::dispatchField($json, 'competences');
     }
 
     /**
@@ -55,26 +56,5 @@ class CareerProfileRequest
         }
 
         return $criteriaIds;
-    }
-
-    /**
-     * Helper
-     * @param $array
-     * @param $fieldName
-     * @return bool|mixed
-     */
-    private function dispatchField($array, $fieldName)
-    {
-        foreach ($array as $key => $value) {
-            if ($key === $fieldName) {
-                return $value;
-            }
-            if (is_array($value)) {
-                if ($result = $this->dispatchField($value, $fieldName)) {
-                    return $result;
-                }
-            }
-        }
-        return false;
     }
 }

@@ -3,6 +3,7 @@
 
 namespace App\Request;
 
+use App\Utils\ArrayFieldDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 
 class UserAnswerRequest
@@ -19,9 +20,9 @@ class UserAnswerRequest
     public function __construct(Request $request)
     {
         $json = (array)json_decode(((string)$request->getContent()), true);
-        $this->formId = $this->dispatchField($json, 'formId');
-        $this->answers = $this->dispatchField($json, 'choiceAnswers');
-        $this->comments = $this->dispatchField($json, 'commentAnswers');
+        $this->formId = ArrayFieldDispatcher::dispatchField($json, 'formId');
+        $this->answers = ArrayFieldDispatcher::dispatchField($json, 'choiceAnswers');
+        $this->comments = ArrayFieldDispatcher::dispatchField($json, 'commentAnswers');
     }
     /**
      * @return bool|mixed
@@ -61,26 +62,5 @@ class UserAnswerRequest
             $choiceIds[] = (int) $this->dispatchField($answer, 'choiceId');
         }
         return $choiceIds;
-    }
-
-    /**
-     * Helper
-     * @param $array
-     * @param $fieldName
-     * @return bool|mixed
-     */
-    private function dispatchField($array, $fieldName)
-    {
-        foreach ($array as $key => $value) {
-            if ($key === $fieldName) {
-                return $value;
-            }
-            if (is_array($value)) {
-                if ($result = $this->dispatchField($value, $fieldName)) {
-                    return $result;
-                }
-            }
-        }
-        return false;
     }
 }

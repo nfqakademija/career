@@ -3,8 +3,10 @@
 
 namespace App\Service;
 
+use App\Entity\CareerForm;
 use App\Entity\CareerProfile;
 use App\Entity\Profession;
+use App\Entity\User;
 use App\Repository\CareerProfileRepository;
 use App\Repository\CriteriaRepository;
 use App\Repository\ProfessionRepository;
