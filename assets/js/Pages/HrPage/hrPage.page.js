@@ -1,12 +1,7 @@
 import React from "react";
 import Axios from "axios";
-// import _ from 'loadash';
-
 import "./hrPage.style.scss";
-
 import CheckBox from "../../Components/checkbox/checkbox.comp";
-import { timingSafeEqual } from "crypto";
-// import { red } from "ansi-colors";
 
 class HrPage extends React.Component {
   constructor() {
@@ -14,7 +9,6 @@ class HrPage extends React.Component {
 
     this.state = {
       profiles: [],
-      // profilesCopy:[],
       positions: [],
       position: null,
       competenceList: [],
@@ -26,16 +20,13 @@ class HrPage extends React.Component {
   componentDidMount() {
     Axios.get("/api/criteria/list")
       .then(res => {
-        // const copy = res.data.list;
         this.setState({ profiles: res.data.list });
-        // console.log(res);
       })
       .catch(err => console.log(err));
 
     Axios.get("/api/profession/list")
       .then(res => {
         this.setState({ positions: res.data.list });
-        // console.log(res);
       })
       .catch(err => console.log(err));
   }

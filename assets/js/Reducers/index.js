@@ -1,15 +1,15 @@
 import { combineReducers } from 'redux';
-import { profilesList } from './profilesList';
 import { managerPage } from './managerPage';
 import { user } from './User';
 import { trackUserChanges } from './trackUserChanges';
+import { answerListUserSide } from './answerListUserSide';
 //rootReducer
 
 const appReducer = combineReducers({
-    profilesList,
     managerPage,
     user,
-    trackUserChanges
+    trackUserChanges,
+    answerListUserSide
 })
 
 export const allReducer = (state, action) =>{

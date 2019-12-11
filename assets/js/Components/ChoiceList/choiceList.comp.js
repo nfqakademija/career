@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { setAnswers } from "../../Actions/action";
+import { setAnswers, updateChoiceAnswerUserSide } from "../../Actions/action";
 
 class ChoiceList extends React.Component {
   onSelect = event => {
@@ -9,6 +9,7 @@ class ChoiceList extends React.Component {
       "data-value"
     );
     this.props.onSetAnswers(this.props.criteriaId, choiceId);
+    this.props. onUpdateChoiceAnswer(this.props.criteriaId, choiceId);
   };
 
   render() {
@@ -42,14 +43,15 @@ class ChoiceList extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  answers: state.trackUserChanges.choiceAnswers,
-  choiceList: state.user.choiceList,
+  choiceList: state.answerListUserSide.choiceList,
   managerPage: state.managerPage.selected
 });
 
 const mapDispatchToProps = dispatch => ({
   onSetAnswers: (criteriaId, choiceId) =>
-    dispatch(setAnswers(criteriaId, choiceId))
+    dispatch(setAnswers(criteriaId, choiceId)),
+  onUpdateChoiceAnswer: (criteriaId, choiceId) =>
+    dispatch(updateChoiceAnswerUserSide(criteriaId, choiceId))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChoiceList);

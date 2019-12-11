@@ -2,21 +2,13 @@ import React from "react";
 import { connect } from "react-redux";
 import "./mountProfile.style.scss";
 import Axios from "axios";
-import { setChoiceList, restartAnswers } from "../../Actions/action";
+import { restartAnswers } from "../../Actions/action";
 import CompetenceView from "../CompetenceView/competenceView.comp";
+import { getUserAnswer } from "../../thunk/getUserAnswer";
 
 class MountProfile extends React.Component {
   componentDidMount() {
-    Axios.get(`/api/answers/${this.props.formId}`)
-      .then(res => {
-        if (res.data === 404) {
-          this.props.onRestartAnswers();
-        } else {
-          const data = res.data;
-          this.props.onSetChoiceList(data.list);
-        }
-      })
-      .catch(err => console.log(err));
+    this.props.onGetUserAnswer(this.props.formId);
   }
 
   submit = () => {
@@ -25,8 +17,7 @@ class MountProfile extends React.Component {
       choiceAnswers: this.props.answers,
       commentAnswers: this.props.comments
     };
-    console.log(obj)
-
+    console.log(obj);
     if (this.props.answers.length === 0 && this.props.comments.length === 0) {
       alert("You haven't changed anything.");
     } else {
@@ -40,7 +31,6 @@ class MountProfile extends React.Component {
           console.log(error);
           alert("Something went wrong... Try again later");
         });
-
       this.props.onRestartAnswers();
     }
   };
@@ -60,7 +50,6 @@ class MountProfile extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  userId: state.user.userId,
   name: state.user.name,
   formId: state.user.formId,
   answers: state.trackUserChanges.choiceAnswers,
@@ -68,8 +57,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onSetChoiceList: choiceList => dispatch(setChoiceList(choiceList)),
-  onRestartAnswers: () => dispatch(restartAnswers())
+  onRestartAnswers: () => dispatch(restartAnswers()),
+  onGetUserAnswer: formId => dispatch(getUserAnswer(formId))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MountProfile);

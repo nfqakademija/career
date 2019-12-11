@@ -1,5 +1,5 @@
 const initialState = {
-  selected: false
+  selected: false,
 };
 
 export const managerPage = (state = initialState, action) => {
