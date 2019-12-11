@@ -59,7 +59,7 @@ class UserAnswerRequest
 
         $choiceIds = array();
         foreach ($this->answers as $answer) {
-            $choiceIds[] = (int) $this->dispatchField($answer, 'choiceId');
+            $choiceIds[] = (int) ArrayFieldDispatcher::dispatchField($answer, 'choiceId');
         }
         return $choiceIds;
     }

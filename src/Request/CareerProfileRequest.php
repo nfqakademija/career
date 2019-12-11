@@ -43,7 +43,7 @@ class CareerProfileRequest
      */
     public function getCriteriaIds()
     {
-        $criteriaLists = $this->dispatchField($this->competences, 'criteriaList');
+        $criteriaLists = ArrayFieldDispatcher::dispatchField($this->competences, 'criteriaList');
 
         if (!$criteriaLists) {
             return false;
@@ -52,7 +52,7 @@ class CareerProfileRequest
         $criteriaIds = array();
 
         foreach ($criteriaLists as $list) {
-            $criteriaIds[] = $this->dispatchField($list, 'id');
+            $criteriaIds[] = ArrayFieldDispatcher::dispatchField($list, 'id');
         }
 
         return $criteriaIds;
