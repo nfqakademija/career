@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Factory\ManagerAnswerViewFactory;
 use App\Repository\ManagerAnswerRepository;
 use App\Repository\UserAnswerRepository;
+use App\Request\ManagerFeedbackRequest;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\View\ViewHandlerInterface;
@@ -41,17 +42,12 @@ class ManagerFeedbackController extends AbstractFOSRestController
 
     public function postFeedbackAction(Request $request)
     {
-        $data = ((array)json_decode(((string)$request->getContent()), true))['data'];
-        $formId = (array_key_exists('formId', $data)) ? (int)$data['formId'] : null;
-        $criterias = (array_key_exists('criterias', $data)) ? (array)$data['criterias'] : null;
+        // TODO: implement when json will be ready
+        $requestObject = new ManagerFeedbackRequest($request);
 
-        if (!$criterias) {
-            return new Response(Response::HTTP_NOT_FOUND);
-        }
+        $form = $this->careerFormRepository->findOneBy(['id' => $requestObject->getFormId()]);
 
-        $form = $this->careerFormRepository->findOneBy(['id' => $formId]);
-
-        return true;
+        return new Response(json_encode(['message' => 'Created']), Response::HTTP_CREATED);
     }
 
     /**

@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Class CareerProfileController
  *
  * endpoints:
- * /api/profiles/{slug} - get career profile title and id by profession id;
+ * /api/profiles/{slug} - get career profile by profession;
  * /api/profile/list - get all career profiles;
  * /api/profiles - post new career profile
  *
