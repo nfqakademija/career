@@ -8,6 +8,7 @@ use App\Repository\CareerFormRepository;
 use App\Repository\CriteriaChoiceRepository;
 use App\Repository\CriteriaRepository;
 use App\Repository\UserAnswerRepository;
+use App\Request\UserAnswerRequest;
 use App\Service\UserAnswerService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
@@ -72,33 +73,13 @@ class UserAnswerController extends AbstractFOSRestController
      */
     public function postAnswerAction(Request $request)
     {
-        $requestBody = $this->userAnswerService->dispatchJson($request, [
-            'formId',
-            'choiceAnswers',
-            'commentAnswers'
-        ]);
+        $requestBody = new UserAnswerRequest($request);
 
-        $formId = $requestBody['formId'];
-
-        if (!$formId) {
+        if (!$this->userAnswerService->handleSaveUserAnswers($requestBody)) {
             return new Response(Response::HTTP_NOT_FOUND);
         }
 
-        $answers = $requestBody['choiceAnswers'];
-        $comments = $requestBody['commentAnswers'];
-
-        $form = $this->careerFormRepository->findOneBy(['id' => $formId]);
-
-        $choices = $this->criteriaChoiceRepository->findBy([
-            'id' => $this->userAnswerService->extractIds($answers, 'choiceId')]);
-
-        if ($choices) {
-            $this->userAnswerService->saveUserChoices($choices, $form);
-        }
-
-        if ($comments) {
-            $this->userAnswerService->saveUserComments($comments, $form);
-        }
+        $form = $this->careerFormRepository->findOneBy(['id' => $requestBody->getFormId()]);
 
         return $this->viewHandler->handle(View::create($this->formViewFactory->create($form)));
     }
