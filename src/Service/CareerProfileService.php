@@ -6,28 +6,67 @@ namespace App\Service;
 use App\Entity\CareerProfile;
 use App\Entity\Profession;
 use App\Repository\CareerProfileRepository;
+use App\Repository\CriteriaRepository;
+use App\Repository\ProfessionRepository;
+use App\Request\CareerProfileRequest;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class CareerProfileService
 {
     /** @var CareerProfileRepository  */
     private $careerProfileRepository;
 
-    public function __construct(CareerProfileRepository $careerProfileRepository)
-    {
+    /** @var CriteriaRepository */
+    private $criteriaRepository;
+
+    /** @var ProfessionRepository */
+    private $professionRepository;
+
+    public function __construct(
+        CareerProfileRepository $careerProfileRepository,
+        CriteriaRepository $criteriaRepository,
+        ProfessionRepository $professionRepository
+    ) {
+        $this->criteriaRepository = $criteriaRepository;
+        $this->professionRepository = $professionRepository;
         $this->careerProfileRepository = $careerProfileRepository;
     }
 
-    public function saveCareerProfile(Array $criterias, Profession $profession)
+    /**
+     * @param CareerProfileRequest $request
+     * @return bool
+     */
+    public function handleCareerProfileSave(CareerProfileRequest $request)
     {
+        $profession = $this->professionRepository->findOneBy(['id' => $request->getProfessionId()]);
 
-        // Check if position has its career profile and create career profile object depending on the decision
+        if (!$profession) {
+            return false;
+        }
+
+        $criteriaList = $this->criteriaRepository->findBy(array('id' => $request->getCriteriaIds()));
+        if (!$criteriaList) {
+            return false;
+        }
+
+        $this->saveCareerProfile($criteriaList, $profession);
+
+        return true;
+    }
+
+
+    /**
+     * @param array $criteriaList
+     * @param Profession $profession
+     */
+    public function saveCareerProfile(Array $criteriaList, Profession $profession)
+    {
         $careerProfile = ($this->careerProfileRepository->findOneBy(['profession' => $profession])) ??
             new CareerProfile();
 
-        // loop through checked criterias and add to Criteria array
-        if ($criterias != null) {
-            foreach ($criterias as $criteria) {
+        if ($criteriaList != null) {
+            foreach ($criteriaList as $criteria) {
                 $careerProfile->addFkCriterion($criteria);
             }
         }
@@ -36,41 +75,5 @@ class CareerProfileService
         $careerProfile->setIsArchived(0);
 
         $this->careerProfileRepository->save($careerProfile);
-    }
-
-    public function dispatchJson(Request $request, $fields = array())
-    {
-        $values = array();
-        // Fetch data from JSON
-        $json = (array)json_decode(((string)$request->getContent()), true);
-
-        if (!$json) {
-            return false;
-        }
-        $data = $json['data'] ?? $json;
-        $values['position'] = $data['position'] ?? null;
-
-        if (!$values['position']) {
-            return false;
-        }
-
-        $values['competences'] = (array)$data['competences'] ?? null;
-
-        return $values;
-    }
-
-    public function dispatchField($array, $fieldName)
-    {
-        foreach ($array as $key => $value) {
-            if ($key === $fieldName) {
-                return $value;
-            }
-            if (is_array($value)) {
-                if ($result = $this->dispatchField($value, $fieldName)) {
-                    return $result;
-                }
-            }
-        }
-        return false;
     }
 }
