@@ -11,7 +11,6 @@ use App\Repository\CriteriaRepository;
 use App\Repository\UserAnswerRepository;
 use App\Request\UserAnswerRequest;
 use Exception;
-use Symfony\Component\HttpFoundation\Request;
 
 class UserAnswerService
 {

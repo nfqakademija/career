@@ -5,15 +5,12 @@ namespace App\Controller;
 use App\Factory\FormViewFactory;
 use App\Factory\UserAnswerListViewFactory;
 use App\Repository\CareerFormRepository;
-use App\Repository\CriteriaChoiceRepository;
-use App\Repository\CriteriaRepository;
 use App\Repository\UserAnswerRepository;
 use App\Request\UserAnswerRequest;
 use App\Service\UserAnswerService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\View\ViewHandlerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -34,12 +31,6 @@ class UserAnswerController extends AbstractFOSRestController
     /** @var UserAnswerRepository */
     private $userAnswerRepository;
 
-    /** @var CriteriaRepository */
-    private $criteriaRepository;
-
-    /** @var CriteriaChoiceRepository */
-    private $criteriaChoiceRepository;
-
     /** @var UserAnswerListViewFactory */
     private $userAnswerListViewFactory;
 
@@ -50,8 +41,6 @@ class UserAnswerController extends AbstractFOSRestController
         UserAnswerRepository $userAnswerRepository,
         ViewHandlerInterface $viewHandler,
         FormViewFactory $formViewFactory,
-        CriteriaRepository $criteriaRepository,
-        CriteriaChoiceRepository $criteriaChoiceRepository,
         UserAnswerListViewFactory $userAnswerListViewFactory
     ) {
         $this->userAnswerService = $answerService;
@@ -59,8 +48,6 @@ class UserAnswerController extends AbstractFOSRestController
         $this->viewHandler = $viewHandler;
         $this->careerFormRepository = $careerFormRepository;
         $this->userAnswerRepository = $userAnswerRepository;
-        $this->criteriaRepository = $criteriaRepository;
-        $this->criteriaChoiceRepository = $criteriaChoiceRepository;
         $this->userAnswerListViewFactory = $userAnswerListViewFactory;
     }
 
@@ -73,13 +60,13 @@ class UserAnswerController extends AbstractFOSRestController
      */
     public function postAnswerAction(Request $request)
     {
-        $requestBody = new UserAnswerRequest($request);
+        $requestObject = new UserAnswerRequest($request);
 
-        if (!$this->userAnswerService->handleSaveUserAnswers($requestBody)) {
+        if (!$this->userAnswerService->handleSaveUserAnswers($requestObject)) {
             return new Response(Response::HTTP_NOT_FOUND);
         }
 
-        $form = $this->careerFormRepository->findOneBy(['id' => $requestBody->getFormId()]);
+        $form = $this->careerFormRepository->findOneBy(['id' => $requestObject->getFormId()]);
 
         return $this->viewHandler->handle(View::create($this->formViewFactory->create($form)));
     }
