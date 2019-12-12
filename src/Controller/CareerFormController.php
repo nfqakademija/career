@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\CareerForm;
-use App\Entity\User;
 use App\Factory\FormListViewFactory;
 use App\Factory\FormViewFactory;
 use App\Factory\ListViewFactory;
@@ -90,11 +89,17 @@ class CareerFormController extends AbstractFOSRestController
      */
     public function getFormAction(int $slug)
     {
-        $careerForm = $this->careerFormRepository->findOneBy(['fkUser' => $slug]) ?? new CareerForm();
+        $user = $this->userRepository->findOneBy(['id' => $slug]);
+        $careerForm = $this->careerFormRepository->findOneBy(['fkUser' => $user]) ?? new CareerForm();
+
+        $careerProfile = $this->careerProfileRepository->findOneBy(['profession' => $user->getProfession()->getId()]);
+
+        if (!$careerProfile) {
+            return new Response(Response::HTTP_NOT_FOUND);
+        }
 
         if (!$careerForm->getId()) {
             $user = $this->userRepository->findOneBy(['id' => $slug]);
-            $careerProfile = $this->careerProfileRepository->findOneBy(['profession' => $user->getProfession()->getId()]);
             $careerForm->setFkUser($user);
             $careerForm->setFkCareerProfile($careerProfile);
             $careerForm->setIsArchived(0);
