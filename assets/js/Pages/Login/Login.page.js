@@ -61,6 +61,7 @@ class Login extends React.Component {
           onSetLogged(!this.props.logged);
           onSetTeams(response.data.teams)
           // console.log("Success");
+          // console.log(response.data)
         } else {
          alert("Login Failed");
         }

@@ -5,8 +5,8 @@ namespace App\View;
 
 use Doctrine\Common\Collections\Collection;
 
-class FormListView
+class UserListView
 {
-    /** @var Collection|FormView[] */
+    /** @var Collection|UserView[] */
     public $list;
 }

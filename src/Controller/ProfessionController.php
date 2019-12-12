@@ -2,7 +2,8 @@
 
 namespace App\Controller;
 
-use App\Factory\ProfessionListViewFactory;
+use App\Factory\ListViewFactory;
+use App\Factory\ProfessionViewFactory;
 use App\Repository\ProfessionRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
@@ -26,17 +27,17 @@ class ProfessionController extends AbstractFOSRestController
     /** @var ViewHandlerInterface */
     private $viewHandler;
 
-    /** @var ProfessionListViewFactory*/
-    private $professionListViewFactory;
+    /** @var ListViewFactory  */
+    private $listViewFactory;
 
     public function __construct(
         ProfessionRepository $professionRepository,
         ViewHandlerInterface $viewHandler,
-        ProfessionListViewFactory $professionListViewFactory
+        ListViewFactory $listViewFactory
     ) {
         $this->viewHandler = $viewHandler;
         $this->professionRepository = $professionRepository;
-        $this->professionListViewFactory = $professionListViewFactory;
+        $this->listViewFactory = $listViewFactory;
     }
 
     /**
@@ -46,7 +47,7 @@ class ProfessionController extends AbstractFOSRestController
     public function getProfessionListAction()
     {
         $professionList = $this->professionRepository->findAll();
-
-        return $this->viewHandler->handle(View::create($this->professionListViewFactory->create($professionList)));
+        $this->listViewFactory->setViewFactory(ProfessionViewFactory::class);
+        return $this->viewHandler->handle(View::create($this->listViewFactory->create($professionList)));
     }
 }

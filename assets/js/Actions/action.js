@@ -4,7 +4,7 @@ export const setProfilesList = profiles =>({
 })
 //////////////////////////////////////
 
-export const setSelectedProfile = profile => ({
+export const setManagerPage = profile => ({
     type: 'setSelectedProfile',
     profile
 })
@@ -54,10 +54,26 @@ export const setTeams = teams => ({
     type: 'setTeams',
     teams
 })
+///////////////////////////
+export const setAnswersUserSide = answers => ({
+    type: 'setAnswersFromUser',
+    answers
+})
 
-export const setChoiceList = choiceList => ({
-    type: 'setChoiceList',
-    choiceList
+export const restartAnswersUserSide = () => ({
+    type:'restartAnswersFromUser'
+})
+
+export const updateChoiceAnswerUserSide = (criteriaId, choiceId) =>({
+    type: 'updateChoiceAnswer',
+    criteriaId,
+    choiceId
+})
+
+export const updateCommentAnswerUserSide = (criteriaId, comment) =>({
+    type: 'updateCommentAnswer',
+    criteriaId,
+    comment
 })
 
 // export const setCommentList = commentList => ({

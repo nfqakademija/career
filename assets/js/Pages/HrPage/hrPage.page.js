@@ -1,12 +1,7 @@
 import React from "react";
 import Axios from "axios";
-// import _ from 'loadash';
-
 import "./hrPage.style.scss";
-
 import CheckBox from "../../Components/checkbox/checkbox.comp";
-import { timingSafeEqual } from "crypto";
-// import { red } from "ansi-colors";
 
 class HrPage extends React.Component {
   constructor() {
@@ -14,7 +9,6 @@ class HrPage extends React.Component {
 
     this.state = {
       profiles: [],
-      // profilesCopy:[],
       positions: [],
       position: null,
       competenceList: [],
@@ -26,16 +20,13 @@ class HrPage extends React.Component {
   componentDidMount() {
     Axios.get("/api/criteria/list")
       .then(res => {
-        // const copy = res.data.list;
         this.setState({ profiles: res.data.list });
-        // console.log(res);
       })
       .catch(err => console.log(err));
 
     Axios.get("/api/profession/list")
       .then(res => {
         this.setState({ positions: res.data.list });
-        // console.log(res);
       })
       .catch(err => console.log(err));
   }
@@ -109,15 +100,11 @@ class HrPage extends React.Component {
 
     copy.map((data, index) => copy[index].criteriaList.remove(0));
 
-    let obj = [
-      {
-        position: this.state.position
-      },
-      {
-        competences: copy
-      }
-    ];
-    
+    let obj = {
+      position: this.state.position,
+      competences: copy
+    };
+
     if (this.state.position === null || copy.length === 0) {
       alert("Select position or criterias");
     } else {
@@ -126,8 +113,8 @@ class HrPage extends React.Component {
   };
 
   sendData = obj => {
-    // console.log(obj);
-    
+    console.log(obj);
+
     Axios.post("/api/profiles", {
       data: obj
     })
@@ -173,73 +160,33 @@ class HrPage extends React.Component {
         {this.state.profiles.map((competences, i) => {
           return (
             <React.Fragment key={competences.id}>
-              <h4 className="competence" onClick={() => this.toogle(i)}>{competences.title}</h4>
-              {this.state.show.includes(i) ? (
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Criteria</th>
-                      <th>Check to include</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {competences.criteriaList.map(criterias => (
-                      <tr key={criterias.id}>
-                        <td data-label="Criteria">{criterias.title}</td>
-                        <td data-label="Check to include">
-                          <CheckBox
-                            add={this.add}
-                            remove={this.remove}
-                            competenceId={competences.id}
-                            criteriaId={criterias.id}
-                            criteriaList={competences.criteriaList}
-                          />
-                        </td>
+              <div className="competence">
+                <h4
+                  style={
+                    this.state.show.includes(i)
+                      ? {
+                          borderBottom: "none",
+                          borderRadius: "30px 30px 0px 0px"
+                        }
+                      : { borderRadius: "30px 30px 30px 30px" }
+                  }
+                  onClick={() => this.toogle(i)}
+                >
+                  {competences.title}
+                </h4>
+                {this.state.show.includes(i) ? (
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Criteria</th>
+                        <th>Check to include</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              ) : null}
-            </React.Fragment>
-          );
-        })}
-
-        {/* <table className="Profile">
-          <tbody>
-            <tr className="u-textCenter">
-              <th></th>
-              <th>Criteria</th>
-            </tr>
-            {this.state.profiles.map((competences, i) => {
-              return (
-                <React.Fragment key={competences.id}>
-                  <tr>
-                    <td
-                      onClick={() => this.toogle(i)}
-                      className="competence"
-                      rowSpan={competences.criteriaList.length}
-                    >
-                      {competences.title}
-                    </td>
-                    <td>{competences.criteriaList[0].title}</td>
-                    <td>
-                      <CheckBox
-                        add={this.add}
-                        remove={this.remove}
-                        competenceId={competences.id}
-                        criteriaId={competences.criteriaList[0].id}
-                        criteriaList={competences.criteriaList}
-                      />
-                    </td>
-                  </tr>
-
-                  {competences.criteriaList
-                    .filter((check, i) => i !== 0)
-                    .map(criterias => {
-                      return (
+                    </thead>
+                    <tbody>
+                      {competences.criteriaList.map(criterias => (
                         <tr key={criterias.id}>
-                          <td>{criterias.title}</td>
-                          <td>
+                          <td data-label="Criteria">{criterias.title}</td>
+                          <td data-label="Check to include">
                             <CheckBox
                               add={this.add}
                               remove={this.remove}
@@ -249,13 +196,14 @@ class HrPage extends React.Component {
                             />
                           </td>
                         </tr>
-                      );
-                    })}
-                </React.Fragment>
-              );
-            })}
-          </tbody>
-        </table> */}
+                      ))}
+                    </tbody>
+                  </table>
+                ) : null}
+              </div>
+            </React.Fragment>
+          );
+        })}
         <button onClick={this.submit}>Save</button>
       </div>
     );

@@ -2,16 +2,17 @@
 
 namespace App\Controller;
 
-use App\Factory\FormListViewFactory;
 use App\Factory\ManagerAnswerViewFactory;
 use App\Repository\ManagerAnswerRepository;
 use App\Repository\UserAnswerRepository;
+use App\Request\ManagerFeedbackRequest;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\View\ViewHandlerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class ManagerAnswerController extends AbstractFOSRestController
+class ManagerFeedbackController extends AbstractFOSRestController
 {
     /** @var UserAnswerRepository  */
     private $userAnswerRepository;
@@ -22,9 +23,6 @@ class ManagerAnswerController extends AbstractFOSRestController
     /** @var ViewHandlerInterface  */
     private $viewHandler;
 
-    /** @var FormListViewFactory  */
-    private $formListViewFactory;
-
     /** @var ManagerAnswerViewFactory  */
     private $managerAnswerListViewFactory;
 
@@ -32,17 +30,25 @@ class ManagerAnswerController extends AbstractFOSRestController
     public function __construct(
         ViewHandlerInterface $viewHandler,
         UserAnswerRepository $userAnswerRepository,
-        FormListViewFactory $formListViewFactory,
         ManagerAnswerViewFactory $managerAnswerViewFactory,
         ManagerAnswerRepository $managerAnswerRepository
     ) {
         $this->viewHandler = $viewHandler;
-        $this->formListViewFactory = $formListViewFactory;
         $this->userAnswerRepository = $userAnswerRepository;
         $this->managerAnswerListViewFactory = $managerAnswerViewFactory;
         $this->managerAnswerRepository = $managerAnswerRepository;
     }
 
+
+    public function postFeedbackAction(Request $request)
+    {
+        // TODO: implement when json will be ready
+        $requestObject = new ManagerFeedbackRequest($request);
+
+        $form = $this->careerFormRepository->findOneBy(['id' => $requestObject->getFormId()]);
+
+        return new Response(json_encode(['message' => 'Created']), Response::HTTP_CREATED);
+    }
 
     /**
      * @param $slug

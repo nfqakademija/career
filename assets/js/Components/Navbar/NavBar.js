@@ -64,8 +64,9 @@ class NavBar extends React.Component {
             this.state.route === "/"
               ? { background: "rgb(224, 107, 18)", width: this.state.width }
               : {
-                  background: "rgb(184, 165, 127)",
+                  background: "rgb(209, 209, 209)",
                   borderColor: "white",
+                  color:"black",
                   width: "100%"
                 }
           }
