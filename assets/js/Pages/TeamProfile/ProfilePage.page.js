@@ -4,7 +4,9 @@ import Axios from "axios";
 import { connect } from "react-redux";
 import "./ProfilePage.style.scss";
 import ProfileButtons from "../../Components/ProfileButtons/ProfileButtons.comp";
-import CompetenceView from '../../Components/CompetenceView/competenceView.comp';
+import CompetenceView from "../../Components/CompetenceView/competenceView.comp";
+import { restartAnswersUserSide } from "../../Actions/action";
+import { getUserAnswer } from "../../thunk/getUserAnswer";
 
 class ProfilePage extends React.Component {
   constructor() {
@@ -18,7 +20,7 @@ class ProfilePage extends React.Component {
   componentDidMount() {
     Axios.get(`/api/teams/${this.props.teams[0].id}/users`)
       .then(res => {
-        // console.log(res.data.list);
+        console.log(res.data.list);
         this.setState({ profileNames: res.data.list });
       })
       .catch(err => console.log(err));
@@ -27,8 +29,8 @@ class ProfilePage extends React.Component {
   selectedUser = id => {
     Axios.get(`/api/forms/${id}`)
       .then(res => {
-        console.log(res.data)
         this.setState({ fullProfile: res.data });
+        this.props.onGetUserAnswer(res.data.id)
       })
       .catch(err => console.log(err));
   };
@@ -45,13 +47,13 @@ class ProfilePage extends React.Component {
           />
         ))}
         <div>
-        {this.state.fullProfile.length === 0 ? null : (
-          <CompetenceView
-            name={this.state.fullProfile.userView.firstName}
-            position={this.state.fullProfile.profile.professionTitle}
-            competence={this.state.fullProfile.profile.criteriaList}
-          />
-        )}
+          {this.state.fullProfile.length === 0 ? null : (
+            <CompetenceView
+              name={this.state.fullProfile.userView.firstName}
+              position={this.state.fullProfile.profile.professionTitle}
+              competence={this.state.fullProfile.profile.criteriaList}
+            />
+          )}
         </div>
       </div>
     );
@@ -62,4 +64,9 @@ const mapStateToProps = state => ({
   teams: state.user.teams
 });
 
-export default connect(mapStateToProps, null)(ProfilePage);
+const mapDispatchToProps = dispatch => ({
+  onRestartAnswersUserSide: () => dispatch(restartAnswersUserSide()),
+  onGetUserAnswer: formId => dispatch(getUserAnswer(formId))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProfilePage);

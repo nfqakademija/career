@@ -6,9 +6,11 @@ namespace App\Service;
 use App\Entity\CareerForm;
 use App\Entity\UserAnswer;
 use App\Repository\CareerFormRepository;
+use App\Repository\CriteriaChoiceRepository;
 use App\Repository\CriteriaRepository;
 use App\Repository\UserAnswerRepository;
-use Symfony\Component\HttpFoundation\Request;
+use App\Request\UserAnswerRequest;
+use Exception;
 
 class UserAnswerService
 {
@@ -22,43 +24,88 @@ class UserAnswerService
     /** @var CriteriaRepository */
     private $criteriaRepository;
 
+    /** @var CriteriaChoiceRepository */
+    private $criteriaChoiceRepository;
+
     public function __construct(
         CriteriaRepository $criteriaRepository,
         UserAnswerRepository $userAnswerRepository,
-        CareerFormRepository $careerFormRepository
+        CareerFormRepository $careerFormRepository,
+        CriteriaChoiceRepository $criteriaChoiceRepository
     ) {
         $this->criteriaRepository = $criteriaRepository;
         $this->userAnswerRepository = $userAnswerRepository;
         $this->careerFormRepository = $careerFormRepository;
+        $this->criteriaChoiceRepository = $criteriaChoiceRepository;
     }
 
-    public function saveUserChoices(Array $criteriaChoices, CareerForm $form)
+    /**
+     * @param UserAnswerRequest $request
+     * @return bool
+     * @throws Exception
+     */
+    public function handleSaveUserAnswers(UserAnswerRequest $request)
     {
-        foreach ($criteriaChoices as $choice) {
+        $form = $this->careerFormRepository->findOneBy(['id' => $request->getFormId()]);
+
+        if (!$form) {
+            return false;
+        }
+
+        $choices = $this->criteriaChoiceRepository->findBy([
+            'id' => $request->getChoiceIds()]);
+
+        if ($choices) {
+            $this->saveChoicesToForm($choices, $form);
+        }
+
+        $comments = $request->getComments();
+
+        if ($comments) {
+            $this->saveCommentsToForm($comments, $form);
+        }
+        return true;
+    }
+
+    /**
+     * @param array $choices
+     * @param CareerForm $form
+     * @throws Exception
+     */
+    private function saveChoicesToForm(Array $choices, CareerForm $form)
+    {
+        foreach ($choices as $choice) {
             $answered = $this->userAnswerRepository->findOneBy([
                 'fkCareerForm' => $form,
                 'fkCriteria' => $choice->getFkCriteria()]);
 
-            if ($answered) {
-                $answered->setFkChoice($choice);
-                $answered->setUpdatedAt(new \DateTime("now"));
-            }
-            $userAnswer = ($answered) ? $answered : new UserAnswer();
+            $userAnswer = $answered ?? new UserAnswer();
 
             if (!$userAnswer->getId()) {
                 $userAnswer->setCreatedAt(new \DateTime("now"));
+            } else {
+                $userAnswer->setUpdatedAt(new \DateTime("now"));
             }
+
             $userAnswer->setFkChoice($choice);
             $userAnswer->setFkCriteria($choice->getFkCriteria());
+            $userAnswer->setFkCareerForm($form);
 
             $this->userAnswerRepository->save($userAnswer);
-            $userAnswer->setFkCareerForm($form);
+
             $form->addUserAnswer($userAnswer);
         }
+
+        $form->setUpdatedAt(new \DateTime("now"));
         $this->careerFormRepository->save($form);
     }
 
-    public function saveUserComments(Array $comments, CareerForm $form)
+    /**
+     * @param array $comments
+     * @param CareerForm $form
+     * @throws Exception
+     */
+    private function saveCommentsToForm(Array $comments, CareerForm $form)
     {
         foreach ($comments as $key => $comment) {
             $criteriaId = (int)$comment['criteriaId'] ?? null;
@@ -67,66 +114,21 @@ class UserAnswerService
             $answered = $this->userAnswerRepository->findOneBy([
                 'fkCriteria' => $criteriaId,
                 'fkCareerForm' => $form]);
-            if ($answered) {
-                $answered->setComment($text);
-                $answered->setUpdatedAt(new \DateTime("now"));
-            }
+
             $userAnswer = ($answered) ?? new UserAnswer();
 
             if (!$userAnswer->getId()) {
-                $userAnswer->setCreatedAt(new \DateTime("now"));
+                $userAnswer->setCreatedAt(new \DateTime('now'));
+            } else {
+                $userAnswer->setUpdatedAt(new \DateTime('now'));
             }
             $userAnswer->setComment($text);
             $userAnswer->setFkCriteria($criteria);
             $this->userAnswerRepository->save($userAnswer);
             $form->addUserAnswer($userAnswer);
         }
+
+        $form->setUpdatedAt(new \DateTime("now"));
         $this->careerFormRepository->save($form);
     }
-
-    public function dispatchJson(Request $request, $fields = array())
-    {
-        // Fetch data from JSON
-        $json = (array)json_decode(((string)$request->getContent()), true);
-        if (!$json) {
-            return false;
-        }
-
-        $data = $json['data'] ?? $json;
-
-        $values = array();
-        foreach ($fields as $field) {
-            $values[$field] = $data[$field]?? null;
-        }
-        return $values;
-    }
-
-    public function extractIds($array, $idNeedle)
-    {
-        $idArray = array();
-        foreach ($array as $i => $item) {
-            foreach ($item as $key => $value) {
-                if ($key === $idNeedle) {
-                    $idArray[] = (int)$value;
-                }
-            }
-        }
-        return $idArray;
-    }
-
-    private function dispatchField($array, $fieldName)
-    {
-        foreach ($array as $key => $value) {
-            if ($key === $fieldName) {
-                return $value;
-            }
-            if (is_array($value)) {
-                if ($result = $this->dispatchField($value, $fieldName)) {
-                    return $result;
-                }
-            }
-        }
-        return false;
-    }
-
 }

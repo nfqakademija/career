@@ -1,5 +1,5 @@
 import React from "react";
-import Profile from '../Profile.v2/profile.comp';
+import Profile from "../Profile.v2/profile.comp";
 
 class CompetenceView extends React.Component {
   constructor() {

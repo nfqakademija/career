@@ -9,6 +9,8 @@ use App\Factory\ListViewFactory;
 use App\Repository\CareerFormRepository;
 use App\Repository\CareerProfileRepository;
 use App\Repository\UserRepository;
+use App\Service\CareerFormService;
+use App\Service\CareerProfileService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\View\ViewHandlerInterface;
@@ -20,7 +22,7 @@ use FOS\RestBundle\View\View;
  * endpoints:
  * /api/forms/{slug} - get career form by User id.
  * If User does not have a career form assigned, create one by career profile;
- * /api/form/list - get career form list; TODO: get career form list by team;
+ * /api/form/list - get career form list;
  * /api/answers - post answer
  * /api/answers/{slug} - get answers by form id
  *
@@ -46,6 +48,9 @@ class CareerFormController extends AbstractFOSRestController
     /** @var ListViewFactory  */
     private $listViewFactory;
 
+    /** @var CareerFormService  */
+    private $careerFormService;
+
 
     public function __construct(
         CareerFormRepository $careerFormRepository,
@@ -53,7 +58,8 @@ class CareerFormController extends AbstractFOSRestController
         UserRepository $userRepository,
         ViewHandlerInterface $viewHandler,
         FormViewFactory $formViewFactory,
-        ListViewFactory $listViewFactory
+        ListViewFactory $listViewFactory,
+        CareerFormService $careerFormService
     ) {
         $this->formViewFactory = $formViewFactory;
         $this->viewHandler = $viewHandler;
@@ -61,10 +67,10 @@ class CareerFormController extends AbstractFOSRestController
         $this->careerProfileRepository = $careerProfileRepository;
         $this->userRepository = $userRepository;
         $this->listViewFactory = $listViewFactory;
+        $this->careerFormService = $careerFormService;
     }
 
     /**
-     *
      *
      * @return Response
      */
@@ -84,19 +90,13 @@ class CareerFormController extends AbstractFOSRestController
      */
     public function getFormAction(int $slug)
     {
-        $user = $this->userRepository->findOneBy(['id' => $slug]);
-        $careerProfile = $this->careerProfileRepository->findOneBy(['profession' => $user->getProfession()->getId()]);
+        $careerForm = $this->careerFormRepository->findOneBy(['fkUser' => $slug]) ?? null;
 
-        $existingForm = $this->careerFormRepository->findOneBy(['fkUser' => $user]);
-        $careerForm = ($existingForm) ? $existingForm : new CareerForm();
-
-        if (!$careerForm->getId()) {
-            $careerForm->setFkUser($user);
-            $careerForm->setFkCareerProfile($careerProfile);
-            $careerForm->setIsArchived(0);
-            $careerForm->setCreatedAt(new \DateTime("now"));
-            $this->careerFormRepository->save($careerForm);
+        if (!$careerForm) {
+            $user = $this->userRepository->findOneBy(['id' => $slug]);
+            $careerForm = $this->careerFormService->getCareerForm($user);
         }
+
         return $this->viewHandler->handle(View::create($this->formViewFactory->create($careerForm)));
     }
 }

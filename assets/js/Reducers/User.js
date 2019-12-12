@@ -8,7 +8,7 @@ const initialState = {
   roles: [],
   logged: false,
   teams: [],
-  choiceList: []
+  // choiceList: []
 };
 
 export const user = (state = initialState, action) => {
@@ -58,11 +58,11 @@ export const user = (state = initialState, action) => {
         ...state,
         teams: action.teams
       };
-    case "setChoiceList":
-      return {
-        ...state,
-        choiceList: action.choiceList
-      };
+    // case "setChoiceList":
+    //   return {
+    //     ...state,
+    //     choiceList: action.choiceList
+    //   };
       // case 'setCommentList':
       //   return{
       //     ...state,
