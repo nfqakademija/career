@@ -95,6 +95,8 @@ class UserAnswerService
 
             $form->addUserAnswer($userAnswer);
         }
+
+        $form->setUpdatedAt(new \DateTime("now"));
         $this->careerFormRepository->save($form);
     }
 
@@ -125,6 +127,8 @@ class UserAnswerService
             $this->userAnswerRepository->save($userAnswer);
             $form->addUserAnswer($userAnswer);
         }
+
+        $form->setUpdatedAt(new \DateTime("now"));
         $this->careerFormRepository->save($form);
     }
 }

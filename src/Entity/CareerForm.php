@@ -45,6 +45,16 @@ class CareerForm
      */
     private $isArchived;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $updatedAt;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $underEvaluation;
+
     public function __construct()
     {
         $this->userAnswers = new ArrayCollection();
@@ -130,6 +140,30 @@ class CareerForm
     public function setIsArchived(bool $isArchived): self
     {
         $this->isArchived = $isArchived;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getUnderEvaluation(): ?bool
+    {
+        return $this->underEvaluation;
+    }
+
+    public function setUnderEvaluation(bool $underEvaluation): self
+    {
+        $this->underEvaluation = $underEvaluation;
 
         return $this;
     }
