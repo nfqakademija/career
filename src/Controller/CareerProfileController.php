@@ -59,6 +59,7 @@ class CareerProfileController extends AbstractFOSRestController
      *
      * @param Request $request
      * @return Response
+     * @throws \Exception
      */
     public function postProfileAction(Request $request)
     {
