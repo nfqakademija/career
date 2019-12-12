@@ -44,6 +44,8 @@ class CareerProfileService
             return false;
         }
 
+
+
         $criteriaList = $this->criteriaRepository->findBy(array('id' => $request->getCriteriaIds()));
         if (!$criteriaList) {
             return false;
