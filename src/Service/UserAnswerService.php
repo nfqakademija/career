@@ -101,7 +101,7 @@ class UserAnswerService
     /**
      * @param array $comments
      * @param CareerForm $form
-     * @return CareerForm
+     * @return void
      * @throws Exception
      */
     private function addCommentsToForm(Array $comments, CareerForm $form)
@@ -128,11 +128,5 @@ class UserAnswerService
         }
         $form->setUpdatedAt(new \DateTime("now"));
         $this->careerFormRepository->save($form);
-    }
-
-    public function putUnderEvaluation(CareerForm $form)
-    {
-
-
     }
 }
