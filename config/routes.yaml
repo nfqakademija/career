@@ -38,3 +38,6 @@ user_answer:
   type: rest
   resource: App\Controller\UserAnswerController
   prefix: api
+api_login_check:
+  path: /api/login_check
+

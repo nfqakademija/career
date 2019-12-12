@@ -47,7 +47,8 @@ class UserController extends AbstractFOSRestController
         ViewHandlerInterface $viewHandler,
         UserViewFactory $userViewFactory,
         UserListViewFactory $userListViewFactory
-    ) {
+    )
+    {
         $this->userRepository = $userRepository;
         $this->passwordEncoder = $passwordEncoder;
         $this->viewHandler = $viewHandler;
@@ -66,7 +67,6 @@ class UserController extends AbstractFOSRestController
         $data = json_decode($request->getContent(), true);
 
         $user = $this->userRepository->findOneBy(['email' => $data['email']]);
-
         if (!$user) {
             // fail authentication with a custom error
             return new Response(Response::HTTP_NOT_FOUND);
