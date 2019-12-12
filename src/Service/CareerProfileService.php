@@ -61,21 +61,32 @@ class CareerProfileService
     /**
      * @param array $criteriaList
      * @param Profession $profession
+     * @return bool
+     * @throws \Exception
      */
     public function saveCareerProfile(Array $criteriaList, Profession $profession)
     {
         $careerProfile = ($this->careerProfileRepository->findOneBy(['profession' => $profession])) ??
             new CareerProfile();
 
-        if ($criteriaList != null) {
-            foreach ($criteriaList as $criteria) {
-                $careerProfile->addFkCriterion($criteria);
-            }
+        if (!$careerProfile->getId()) {
+            $careerProfile->setCreatedAt(new \DateTime("now"));
+        } else {
+            $careerProfile->setUpdatedAt(new \DateTime("now"));
+        }
+
+        if ($criteriaList == null) {
+            return false;
+        }
+
+        foreach ($criteriaList as $criteria) {
+            $careerProfile->addFkCriterion($criteria);
         }
 
         $careerProfile->setProfession($profession);
         $careerProfile->setIsArchived(0);
 
         $this->careerProfileRepository->save($careerProfile);
+        return true;
     }
 }
