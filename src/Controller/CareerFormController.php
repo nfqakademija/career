@@ -9,6 +9,7 @@ use App\Factory\ListViewFactory;
 use App\Repository\CareerFormRepository;
 use App\Repository\CareerProfileRepository;
 use App\Repository\UserRepository;
+use App\Service\CareerFormService;
 use App\Service\CareerProfileService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,8 +48,8 @@ class CareerFormController extends AbstractFOSRestController
     /** @var ListViewFactory  */
     private $listViewFactory;
 
-    /** @var CareerProfileService */
-    private $careerProfileService;
+    /** @var CareerFormService  */
+    private $careerFormService;
 
 
     public function __construct(
@@ -58,7 +59,7 @@ class CareerFormController extends AbstractFOSRestController
         ViewHandlerInterface $viewHandler,
         FormViewFactory $formViewFactory,
         ListViewFactory $listViewFactory,
-        CareerProfileService $careerProfileService
+        CareerFormService $careerFormService
     ) {
         $this->formViewFactory = $formViewFactory;
         $this->viewHandler = $viewHandler;
@@ -66,7 +67,7 @@ class CareerFormController extends AbstractFOSRestController
         $this->careerProfileRepository = $careerProfileRepository;
         $this->userRepository = $userRepository;
         $this->listViewFactory = $listViewFactory;
-        $this->careerProfileService = $careerProfileService;
+        $this->careerFormService = $careerFormService;
     }
 
     /**
@@ -89,24 +90,13 @@ class CareerFormController extends AbstractFOSRestController
      */
     public function getFormAction(int $slug)
     {
-        $user = $this->userRepository->findOneBy(['id' => $slug]);
-        $careerForm = $this->careerFormRepository->findOneBy(['fkUser' => $user]) ?? new CareerForm();
+        $careerForm = $this->careerFormRepository->findOneBy(['fkUser' => $slug]) ?? null;
 
-        $careerProfile = $this->careerProfileRepository->findOneBy(['profession' => $user->getProfession()->getId()]);
-
-        if (!$careerProfile) {
-            return new Response(Response::HTTP_NOT_FOUND);
-        }
-
-        if (!$careerForm->getId()) {
+        if (!$careerForm) {
             $user = $this->userRepository->findOneBy(['id' => $slug]);
-            $careerForm->setFkUser($user);
-            $careerForm->setFkCareerProfile($careerProfile);
-            $careerForm->setIsArchived(0);
-            $careerForm->setCreatedAt(new \DateTime("now"));
-            $careerForm->setUnderEvaluation(false);
-            $this->careerFormRepository->save($careerForm);
+            $careerForm = $this->careerFormService->getCareerForm($user);
         }
+
         return $this->viewHandler->handle(View::create($this->formViewFactory->create($careerForm)));
     }
 }
