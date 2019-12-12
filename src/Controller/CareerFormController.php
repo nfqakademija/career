@@ -22,7 +22,7 @@ use FOS\RestBundle\View\View;
  * endpoints:
  * /api/forms/{slug} - get career form by User id.
  * If User does not have a career form assigned, create one by career profile;
- * /api/form/list - get career form list; TODO: get career form list by team;
+ * /api/form/list - get career form list;
  * /api/answers - post answer
  * /api/answers/{slug} - get answers by form id
  *
