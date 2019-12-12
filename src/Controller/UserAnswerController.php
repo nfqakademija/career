@@ -62,7 +62,7 @@ class UserAnswerController extends AbstractFOSRestController
     {
         $requestObject = new UserAnswerRequest($request);
 
-        if (!$this->userAnswerService->handleSaveUserAnswers($requestObject)) {
+        if (!$this->userAnswerService->handleSave($requestObject)) {
             return new Response(Response::HTTP_NOT_FOUND);
         }
 

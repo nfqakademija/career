@@ -3,7 +3,6 @@
 
 namespace App\Service;
 
-use App\Entity\CareerForm;
 use App\Entity\UserAnswer;
 use App\Repository\CareerFormRepository;
 use App\Repository\CriteriaChoiceRepository;
@@ -40,93 +39,51 @@ class UserAnswerService
     }
 
     /**
-     * @param UserAnswerRequest $request
+     * @param UserAnswerRequest $req
      * @return bool
      * @throws Exception
      */
-    public function handleSaveUserAnswers(UserAnswerRequest $request)
+    public function handleSave(UserAnswerRequest $req)
     {
-        $form = $this->careerFormRepository->findOneBy(['id' => $request->getFormId()]);
+        $form = $this->careerFormRepository->findOneBy(['id' => $req->getFormId()]);
 
         if (!$form) {
             return false;
         }
 
-        if ($request->getChoiceIds()) {
-            $choices = $this->criteriaChoiceRepository->findBy([
-                'id' => $request->getChoiceIds()]);
-            $this->addChoicesToForm($choices, $form);
-        }
-
-        if ($request->getComments()) {
-            $this->addCommentsToForm($request->getComments(), $form);
-        }
-
-        return true;
-    }
-
-    /**
-     * @param array $choices
-     * @param CareerForm $form
-     * @return void
-     * @throws Exception
-     */
-    private function addChoicesToForm(Array $choices, CareerForm $form)
-    {
-        foreach ($choices as $choice) {
+        foreach ($req->getMapAnswersAndComments() as $answer) {
             $answered = $this->userAnswerRepository->findOneBy([
                 'fkCareerForm' => $form,
-                'fkCriteria' => $choice->getFkCriteria()]);
+                'fkCriteria' => $answer['criteriaId']]);
 
             $userAnswer = $answered ?? new UserAnswer();
 
             if (!$userAnswer->getId()) {
+                $criteria = $this->criteriaRepository->findOneBy(['id'=> $answer['criteriaId']]);
+                $userAnswer->setFkCriteria($criteria);
                 $userAnswer->setCreatedAt(new \DateTime("now"));
             } else {
                 $userAnswer->setUpdatedAt(new \DateTime("now"));
             }
 
-            $userAnswer->setFkChoice($choice);
-            $userAnswer->setFkCriteria($choice->getFkCriteria());
-            $userAnswer->setFkCareerForm($form);
+            $choice = ($answer['choiceId'])? $this->criteriaChoiceRepository->findOneBy(['id' => $answer['choiceId']])
+                : null;
 
-            $this->userAnswerRepository->save($userAnswer);
-            $form->addUserAnswer($userAnswer);
-        }
-
-        $form->setUpdatedAt(new \DateTime("now"));
-        $this->careerFormRepository->save($form);
-    }
-
-    /**
-     * @param array $comments
-     * @param CareerForm $form
-     * @return void
-     * @throws Exception
-     */
-    private function addCommentsToForm(Array $comments, CareerForm $form)
-    {
-        foreach ($comments as $key => $comment) {
-            $criteriaId = (int)$comment['criteriaId'] ?? null;
-            $criteria = $this->criteriaRepository->findOneBy(['id' => $criteriaId]);
-            $commentBody = (string)$comment['comment'] ?? null;
-            $answered = $this->userAnswerRepository->findOneBy([
-                'fkCriteria' => $criteriaId,
-                'fkCareerForm' => $form]);
-
-            $userAnswer = ($answered) ?? new UserAnswer();
-
-            if (!$userAnswer->getId()) {
-                $userAnswer->setCreatedAt(new \DateTime('now'));
-            } else {
-                $userAnswer->setUpdatedAt(new \DateTime('now'));
+            if ($userAnswer->getFkChoice() !== $choice && $choice !== null) {
+                $userAnswer->setFkChoice($choice);
             }
-            $userAnswer->setComment($commentBody);
-            $userAnswer->setFkCriteria($criteria);
+
+            if ($answer['comment']) {
+                $userAnswer->setComment($answer['comment']);
+            }
+
+            $userAnswer->setFkCareerForm($form);
             $this->userAnswerRepository->save($userAnswer);
             $form->addUserAnswer($userAnswer);
         }
+
         $form->setUpdatedAt(new \DateTime("now"));
         $this->careerFormRepository->save($form);
+        return true;
     }
 }

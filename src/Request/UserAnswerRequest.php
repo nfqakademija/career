@@ -24,10 +24,9 @@ class UserAnswerRequest
     {
         $json = (array)json_decode(((string)$request->getContent()), true);
         $this->formId = ArrayFieldDispatcher::dispatchField($json, 'formId');
-        $this->answers = ArrayFieldDispatcher::dispatchField($json, 'choiceAnswers');
-        $this->comments = ArrayFieldDispatcher::dispatchField($json, 'commentAnswers');
+        $this->answers = ArrayFieldDispatcher::dispatchField($json, 'choiceAnswers') ?? array();
+        $this->comments = ArrayFieldDispatcher::dispatchField($json, 'commentAnswers') ?? array();
         $this->underEvaluation = ArrayFieldDispatcher::dispatchField($json, 'underEvaluation');
-        var_dump($this->mapAnswersAndComments());
     }
     /**
      * @return bool|mixed
@@ -77,7 +76,11 @@ class UserAnswerRequest
         return $choiceIds;
     }
 
-    private function mapAnswersAndComments()
+    /**
+     * Returns choice ids mapped with comments under single criteria Id
+     * @return array
+     */
+    public function getMapAnswersAndComments()
     {
         $answerCriteria = array();
         foreach ($this->answers as $answer) {
@@ -92,36 +95,27 @@ class UserAnswerRequest
         asort($uniq);
 
         $mapped = array();
-        $clonedComments = $this->comments;
-        foreach ($this->answers as $answer) {
+        foreach ($uniq as $id) {
             $criteria = array();
-            $doBreak = false;
-
-            foreach ($uniq as $id) {
+            foreach ($this->answers as $answer) {
                 if ((int) $answer['criteriaId'] === $id) {
                     $criteria['criteriaId'] = (int) $id;
                     $criteria['choiceId'] = (int) $answer['choiceId'];
-                    $doBreak = true;
+                    $criteria['comment'] = null;
                     break;
                 }
             }
-            foreach ($clonedComments as $comment) {
-                foreach ($uniq as $id) {
-                    if ((int) $comment['criteriaId'] === $id) {
-                        $criteria['criteriaId'] === $id;
-                        $criteria['comment'] = (string) $comment['comment'];
-                        array_shift($clonedComments);
-                        //array_shift($uniq);
-                        $doBreak = true;
-                        break;
-                    }
-                }
-                if ($doBreak) {
+            foreach ($this->comments as $comment) {
+                if ((int)$comment['criteriaId'] === $id) {
+                    $criteria['criteriaId'] = (int) $id;
+                    $criteria['choiceId'] = $criteria['choiceId'] ?? null;
+                    $criteria['comment'] = (string) $comment['comment'];
                     break;
                 }
             }
             $mapped[] = $criteria;
         }
+
         return $mapped;
     }
 }
