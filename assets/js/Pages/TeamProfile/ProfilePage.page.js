@@ -30,9 +30,12 @@ class ProfilePage extends React.Component {
     Axios.get(`/api/forms/${id}`)
       .then(res => {
         this.setState({ fullProfile: res.data });
-        this.props.onGetUserAnswer(res.data.id)
+        this.props.onGetUserAnswer(res.data.id);
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        console.log(err);
+        this.setState({ fullProfile: null });
+      });
   };
 
   render() {
@@ -47,7 +50,11 @@ class ProfilePage extends React.Component {
           />
         ))}
         <div>
-          {this.state.fullProfile.length === 0 ? null : (
+          {this.state.fullProfile.length === 0 ? (
+            this.state.fullProfile === null ? (
+              <h1>No data about this profile yet.</h1>
+            ) : null
+          ) : (
             <CompetenceView
               name={this.state.fullProfile.userView.firstName}
               position={this.state.fullProfile.profile.professionTitle}

@@ -18,13 +18,19 @@ class User extends React.Component {
       .then(res => {
         this.props.onSetCareerFormId(res.data.id);
         this.setState({ userProfile: res.data });
+        console.log(res.data);
       })
       .catch(err => console.log(err));
   }
 
   render() {
+    console.log(this.state.userProfile);
     if (this.state.userProfile.length === 0) {
-      return <h1>Loading...</h1>;
+      return (
+        <div className="user">
+          <h1>No data about your profile.</h1>
+        </div>
+      );
     }
     return (
       <div className="user">
