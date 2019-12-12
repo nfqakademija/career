@@ -24,6 +24,6 @@ class ArrayFieldDispatcher
                 }
             }
         }
-        return false;
+        return null;
     }
 }

@@ -17,12 +17,16 @@ class UserAnswerRequest
     /** @var bool|array  */
     private $comments;
 
+    /** @var  bool*/
+    private $underEvaluation;
+
     public function __construct(Request $request)
     {
         $json = (array)json_decode(((string)$request->getContent()), true);
         $this->formId = ArrayFieldDispatcher::dispatchField($json, 'formId');
         $this->answers = ArrayFieldDispatcher::dispatchField($json, 'choiceAnswers');
         $this->comments = ArrayFieldDispatcher::dispatchField($json, 'commentAnswers');
+        $this->underEvaluation = ArrayFieldDispatcher::dispatchField($json, 'underEvaluation');
     }
     /**
      * @return bool|mixed
@@ -46,6 +50,14 @@ class UserAnswerRequest
     public function getComments()
     {
         return $this->comments;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUnderEvaluation(): bool
+    {
+        return $this->underEvaluation;
     }
 
     /**

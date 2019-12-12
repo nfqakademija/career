@@ -52,27 +52,26 @@ class UserAnswerService
             return false;
         }
 
-        $choices = $this->criteriaChoiceRepository->findBy([
-            'id' => $request->getChoiceIds()]);
-
-        if ($choices) {
-            $this->saveChoicesToForm($choices, $form);
+        if ($request->getChoiceIds()) {
+            $choices = $this->criteriaChoiceRepository->findBy([
+                'id' => $request->getChoiceIds()]);
+            $this->addChoicesToForm($choices, $form);
         }
 
-        $comments = $request->getComments();
-
-        if ($comments) {
-            $this->saveCommentsToForm($comments, $form);
+        if ($request->getComments()) {
+            $this->addCommentsToForm($request->getComments(), $form);
         }
+
         return true;
     }
 
     /**
      * @param array $choices
      * @param CareerForm $form
+     * @return void
      * @throws Exception
      */
-    private function saveChoicesToForm(Array $choices, CareerForm $form)
+    private function addChoicesToForm(Array $choices, CareerForm $form)
     {
         foreach ($choices as $choice) {
             $answered = $this->userAnswerRepository->findOneBy([
@@ -92,7 +91,6 @@ class UserAnswerService
             $userAnswer->setFkCareerForm($form);
 
             $this->userAnswerRepository->save($userAnswer);
-
             $form->addUserAnswer($userAnswer);
         }
 
@@ -103,14 +101,15 @@ class UserAnswerService
     /**
      * @param array $comments
      * @param CareerForm $form
+     * @return CareerForm
      * @throws Exception
      */
-    private function saveCommentsToForm(Array $comments, CareerForm $form)
+    private function addCommentsToForm(Array $comments, CareerForm $form)
     {
         foreach ($comments as $key => $comment) {
             $criteriaId = (int)$comment['criteriaId'] ?? null;
             $criteria = $this->criteriaRepository->findOneBy(['id' => $criteriaId]);
-            $text = (string)$comment['comment'] ?? null;
+            $commentBody = (string)$comment['comment'] ?? null;
             $answered = $this->userAnswerRepository->findOneBy([
                 'fkCriteria' => $criteriaId,
                 'fkCareerForm' => $form]);
@@ -122,13 +121,18 @@ class UserAnswerService
             } else {
                 $userAnswer->setUpdatedAt(new \DateTime('now'));
             }
-            $userAnswer->setComment($text);
+            $userAnswer->setComment($commentBody);
             $userAnswer->setFkCriteria($criteria);
             $this->userAnswerRepository->save($userAnswer);
             $form->addUserAnswer($userAnswer);
         }
-
         $form->setUpdatedAt(new \DateTime("now"));
         $this->careerFormRepository->save($form);
+    }
+
+    public function putUnderEvaluation(CareerForm $form)
+    {
+
+
     }
 }
