@@ -90,7 +90,26 @@ class CareerFormController extends AbstractFOSRestController
      */
     public function getFormAction(int $slug)
     {
-        $user = $this->userRepository->findOneBy(['id' => $slug]);
+        $user = $this->userRepository->findOneBy(['id' => $slug, 'underEvaluation'  => false]);
+
+        $careerForm = $this->careerFormService->getuserCareerForm($user);
+        if (!$careerForm) {
+            return new Response(Response::HTTP_NOT_FOUND);
+        }
+
+        return $this->viewHandler->handle(View::create($this->formViewFactory->create($careerForm)));
+    }
+
+    public function getEvaluationListAction()
+    {
+        $formList = $this->careerFormRepository->findBy(['underEvaluation'  => true]);
+        $this->listViewFactory->setViewFactory(FormViewFactory::class);
+        return $this->viewHandler->handle(View::create($this->listViewFactory->create($formList)));
+    }
+
+    public function getEvaluationAction($slug)
+    {
+        $user = $this->userRepository->findOneBy(['id' => $slug, 'underEvaluation'  => true]);
 
         $careerForm = $this->careerFormService->getuserCareerForm($user);
         if (!$careerForm) {

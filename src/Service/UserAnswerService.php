@@ -82,6 +82,12 @@ class UserAnswerService
             $form->addUserAnswer($userAnswer);
         }
 
+        if ($req->isUnderEvaluation() !== null) {
+            if ($req->isUnderEvaluation()) {
+                $form->setUnderEvaluation(true);
+            }
+        }
+
         $form->setUpdatedAt(new \DateTime("now"));
         $this->careerFormRepository->save($form);
         return true;
