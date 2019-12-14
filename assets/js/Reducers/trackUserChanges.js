@@ -9,6 +9,7 @@ export const trackUserChanges = (state = initialState, action) => {
       let obj = {
         criteriaId: action.criteriaId,
         choiceId: action.choiceId,
+        answerId: action.answerId
       };
       let answer = state.choiceAnswers;
       for (let i = 0; i < answer.length; i++) {
@@ -26,7 +27,8 @@ export const trackUserChanges = (state = initialState, action) => {
     case "setComment":
       obj = {
         criteriaId: action.criteriaId,
-        comment: action.comment
+        comment: action.comment,
+        answerId: action.answerId
       };
       answer = state.comment;
       for (let i = 0; i < answer.length; i++) {

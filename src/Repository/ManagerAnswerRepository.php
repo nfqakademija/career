@@ -4,7 +4,8 @@ namespace App\Repository;
 
 use App\Entity\ManagerAnswer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManager;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * @method ManagerAnswer|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,8 +15,18 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class ManagerAnswerRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    /** @var EntityManager  */
+    private $entityManager;
+
+    public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, ManagerAnswer::class);
+        $this->entityManager = $this->getEntityManager();
+    }
+
+    public function save(ManagerAnswer $managerAnswer)
+    {
+        $this->entityManager->persist($managerAnswer);
+        $this->entityManager->flush();
     }
 }

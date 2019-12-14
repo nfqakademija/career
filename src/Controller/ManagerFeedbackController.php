@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Factory\FormViewFactory;
+use App\Factory\ManagerAnswerListViewFactory;
 use App\Factory\ManagerAnswerViewFactory;
 use App\Repository\CareerFormRepository;
 use App\Repository\ManagerAnswerRepository;
@@ -42,7 +43,7 @@ class ManagerFeedbackController extends AbstractFOSRestController
     public function __construct(
         ViewHandlerInterface $viewHandler,
         UserAnswerRepository $userAnswerRepository,
-        ManagerAnswerViewFactory $managerAnswerViewFactory,
+        ManagerAnswerListViewFactory $managerAnswerListViewFactory,
         ManagerAnswerRepository $managerAnswerRepository,
         ManagerFeedbackService $managerFeedbackService,
         FormViewFactory $formViewFactory,
@@ -50,7 +51,7 @@ class ManagerFeedbackController extends AbstractFOSRestController
     ) {
         $this->viewHandler = $viewHandler;
         $this->userAnswerRepository = $userAnswerRepository;
-        $this->managerAnswerListViewFactory = $managerAnswerViewFactory;
+        $this->managerAnswerListViewFactory = $managerAnswerListViewFactory;
         $this->managerAnswerRepository = $managerAnswerRepository;
         $this->managerFeedbackService = $managerFeedbackService;
         $this->formViewFactory = $formViewFactory;
@@ -62,9 +63,7 @@ class ManagerFeedbackController extends AbstractFOSRestController
     {
         $requestObject = new ManagerFeedbackRequest($request);
 
-        var_dump($requestObject->getMapEvaluationAndComments());
-
-        if ($this->managerFeedbackService->handleSave($requestObject)) {
+        if (!$this->managerFeedbackService->handleSave($requestObject)) {
             return new Response(Response::HTTP_NOT_FOUND);
         }
 

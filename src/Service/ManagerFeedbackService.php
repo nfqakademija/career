@@ -8,6 +8,7 @@ use App\Repository\CareerFormRepository;
 use App\Repository\ManagerAnswerRepository;
 use App\Repository\UserAnswerRepository;
 use App\Request\ManagerFeedbackRequest;
+use phpDocumentor\Reflection\Types\Null_;
 
 class ManagerFeedbackService
 {
@@ -18,6 +19,7 @@ class ManagerFeedbackService
     /** @var CareerFormRepository  */
     private $careerFormRepository;
 
+    /** @var UserAnswerRepository  */
     private $userAnswerRepository;
 
     public function __construct(
@@ -40,7 +42,6 @@ class ManagerFeedbackService
 
         foreach ($req->getMapEvaluationAndComments() as $evaluation) {
             $evaluated = $this->managerAnswerRepository->findOneBy([
-                'fkCareerForm' => $form,
                 'fkUserAnswer' => $evaluation['answerId']]);
 
             $feedback = ($evaluated) ?? new ManagerAnswer();
@@ -58,7 +59,7 @@ class ManagerFeedbackService
             }
 
             $this->managerAnswerRepository->save($feedback);
-            return true;
         }
+        return true;
     }
 }

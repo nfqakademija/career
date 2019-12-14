@@ -11,18 +11,23 @@ class ChoiceListTeamLead extends React.Component {
     const choiceValue = event.target.options[selectedIndex].getAttribute(
       "data-value"
     );
-    this.props.onSetAnswers(this.props.criteriaId, choiceValue);
+
+    let answerId = null;
+    for (let i = 0; i < this.props.choicesFromUser.length; i++) {
+      if (this.props.choicesFromUser[i].criteriaId === this.props.criteriaId) {
+        answerId = this.props.choicesFromUser[i].answerId;
+      }
+    }
+
+    this.props.onSetAnswers(this.props.criteriaId, choiceValue, answerId);
     this.props.onUpdateChoiceTeamLeadAnswer(this.props.criteriaId, choiceValue);
   };
 
   render() {
-    const { choices } = this.props;
     let answer = "False";
     for (let i = 0; i < this.props.choiceList.length; i++) {
-      for (let j = 0; j < choices.length; j++) {
-        if (this.props.choiceList[i].choiceId === choices[j].id) {
-          answer = "True";
-        }
+      if (this.props.choiceList[i].criteriaId === this.props.criteriaId) {
+        answer = "True";
       }
     }
 
@@ -39,6 +44,7 @@ class ChoiceListTeamLead extends React.Component {
           True
         </option>
         ))}
+        {/* {console.log(this.props.choicesFromUser)} */}
       </select>
     );
   }
@@ -46,12 +52,13 @@ class ChoiceListTeamLead extends React.Component {
 
 const mapStateToProps = state => ({
   choiceList: state.answerListTeamLeadSide.choiceList,
+  choicesFromUser: state.answerListUserSide.choiceList,
   managerPage: state.managerPage.selected
 });
 
 const mapDispatchToProps = dispatch => ({
-  onSetAnswers: (criteriaId, choiceId) =>
-    dispatch(setAnswers(criteriaId, choiceId)),
+  onSetAnswers: (criteriaId, choiceId, answerId) =>
+    dispatch(setAnswers(criteriaId, choiceId, answerId)),
   onUpdateChoiceTeamLeadAnswer: (criteriaId, choiceId) =>
     dispatch(updateChoiceAnswerTeamLeadSide(criteriaId, choiceId))
 });

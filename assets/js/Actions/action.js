@@ -99,16 +99,18 @@ export const restartAnswersTeamLeadSide = () => ({
 
 ////////////////////// setting answers for post to api
 
-export const setAnswers = (criteriaId, choiceId) => ({
+export const setAnswers = (criteriaId, choiceId, answerId) => ({
   type: "setAnswers",
   criteriaId,
-  choiceId
+  choiceId,
+  answerId
 });
 
-export const setComment = (criteriaId, comment) => ({
+export const setComment = (criteriaId, comment, answerId) => ({
   type: "setComment",
   criteriaId,
-  comment
+  comment,
+  answerId
 });
 
 export const restartAnswers = () => ({
