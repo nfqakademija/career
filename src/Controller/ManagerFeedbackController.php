@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Factory\FormViewFactory;
 use App\Factory\ManagerAnswerViewFactory;
+use App\Repository\CareerFormRepository;
 use App\Repository\ManagerAnswerRepository;
 use App\Repository\UserAnswerRepository;
 use App\Request\ManagerFeedbackRequest;
@@ -34,6 +35,9 @@ class ManagerFeedbackController extends AbstractFOSRestController
     /** @var FormViewFactory  */
     private $formViewFactory;
 
+    /** @var CareerFormRepository  */
+    private $careerFormRepository;
+
 
     public function __construct(
         ViewHandlerInterface $viewHandler,
@@ -41,7 +45,8 @@ class ManagerFeedbackController extends AbstractFOSRestController
         ManagerAnswerViewFactory $managerAnswerViewFactory,
         ManagerAnswerRepository $managerAnswerRepository,
         ManagerFeedbackService $managerFeedbackService,
-        FormViewFactory $formViewFactory
+        FormViewFactory $formViewFactory,
+        CareerFormRepository $careerFormRepository
     ) {
         $this->viewHandler = $viewHandler;
         $this->userAnswerRepository = $userAnswerRepository;
@@ -49,6 +54,7 @@ class ManagerFeedbackController extends AbstractFOSRestController
         $this->managerAnswerRepository = $managerAnswerRepository;
         $this->managerFeedbackService = $managerFeedbackService;
         $this->formViewFactory = $formViewFactory;
+        $this->careerFormRepository = $careerFormRepository;
     }
 
 
