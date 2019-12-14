@@ -1,12 +1,12 @@
 import React from "react";
-// import { setProfilesList } from "../../Actions/action";
 import Axios from "axios";
 import { connect } from "react-redux";
 import "./ProfilePage.style.scss";
 import ProfileButtons from "../../Components/ProfileButtons/ProfileButtons.comp";
 import CompetenceView from "../../Components/CompetenceView/competenceView.comp";
-import { restartAnswersUserSide } from "../../Actions/action";
+import { restartAnswersTeamLeadSide, restartAnswers } from "../../Actions/action";
 import { getUserAnswer } from "../../thunk/getUserAnswer";
+import { getTeamLeadAnswer } from "../../thunk/getTeamLeadAnswer";
 
 class ProfilePage extends React.Component {
   constructor() {
@@ -14,7 +14,8 @@ class ProfilePage extends React.Component {
 
     this.state = {
       profileNames: [],
-      fullProfile: []
+      fullProfile: [],
+      userFormId: null
     };
   }
   componentDidMount() {
@@ -31,11 +32,38 @@ class ProfilePage extends React.Component {
       .then(res => {
         this.setState({ fullProfile: res.data });
         this.props.onGetUserAnswer(res.data.id);
+        // this.props.onGetTeamLeadAnswer(...)
+        this.setState({userFormId: res.data.id})
       })
       .catch(err => {
         console.log(err);
         this.setState({ fullProfile: null });
       });
+  };
+
+  submit = () => {
+    let obj = {
+      formId: this.state.userFormId,
+      choiceAnswers: this.props.answers,
+      commentAnswers: this.props.comments
+    };
+    console.log(obj);
+    console.log("THis is teamLead page Submit")
+    if (this.props.answers.length === 0 && this.props.comments.length === 0) {
+      alert("You haven't changed anything.");
+    } else {
+      Axios.post("/api/feedback", {
+        data: obj
+      })
+        .then(function(response) {
+          alert("Created successfully");
+        })
+        .catch(function(error) {
+          console.log(error);
+          alert("Something went wrong... Try again later");
+        });
+      this.props.onRestartAnswers();
+    }
   };
 
   render() {
@@ -55,11 +83,14 @@ class ProfilePage extends React.Component {
               <h1>No data about this profile yet.</h1>
             ) : null
           ) : (
-            <CompetenceView
-              name={this.state.fullProfile.userView.firstName}
-              position={this.state.fullProfile.profile.professionTitle}
-              competence={this.state.fullProfile.profile.criteriaList}
-            />
+            <React.Fragment>
+              <CompetenceView
+                name={this.state.fullProfile.userView.firstName}
+                position={this.state.fullProfile.profile.professionTitle}
+                competence={this.state.fullProfile.profile.criteriaList}
+                submit={this.submit}
+              />
+            </React.Fragment>
           )}
         </div>
       </div>
@@ -68,12 +99,16 @@ class ProfilePage extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  teams: state.user.teams
+  teams: state.user.teams,
+  answers: state.trackUserChanges.choiceAnswers,
+  comments: state.trackUserChanges.comment
 });
 
 const mapDispatchToProps = dispatch => ({
-  onRestartAnswersUserSide: () => dispatch(restartAnswersUserSide()),
+  onRestartAnswersTeamLeadSide: () => dispatch(restartAnswersTeamLeadSide()),
+  onRestartAnswers: () => dispatch(restartAnswers()),
   onGetUserAnswer: formId => dispatch(getUserAnswer(formId))
+  // onGetTeamLeadAnswer: formId => dispatch(getTeamLeadAnswer(formId))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfilePage);
