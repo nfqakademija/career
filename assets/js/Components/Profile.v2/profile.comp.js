@@ -36,7 +36,6 @@ class Profile extends React.Component {
                   <td data-label="Team lead evaluation">
                     <ChoiceListTeamLead
                       criteriaId={criteria.id}
-                      choices={criteria.choiceList}
                     />
                   </td>
                   <td data-label="Overall">
