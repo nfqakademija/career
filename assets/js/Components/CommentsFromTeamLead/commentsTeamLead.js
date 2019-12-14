@@ -1,5 +1,8 @@
 import React from "react";
-import { setComment, updateCommentAnswerTeamLeadSide } from "../../Actions/action";
+import {
+  setComment,
+  updateCommentAnswerTeamLeadSide
+} from "../../Actions/action";
 import { connect } from "react-redux";
 // import picturePress from '../../../pics/press.svg';
 
@@ -33,8 +36,19 @@ class Comments extends React.Component {
   };
 
   handle = () => {
+    let answerId;
+    for (let i = 0; i < this.props.choicesFromUser.length; i++) {
+      if (this.props.choicesFromUser[i].criteriaId === this.props.criteriaId) {
+        answerId = this.props.choicesFromUser[i].answerId;
+      }
+    }
+
     this.setState({ changeComment: !this.state.changeComment });
-    this.props.onSetComment(this.props.criteriaId, this.state.inputValue);
+    this.props.onSetComment(
+      this.props.criteriaId,
+      this.state.inputValue,
+      answerId
+    );
     this.props.onUpdateCommentAnswer(
       this.props.criteriaId,
       this.state.inputValue
@@ -88,12 +102,13 @@ class Comments extends React.Component {
 
 const mapStateToProps = state => ({
   choiceList: state.answerListTeamLeadSide.choiceList,
+  choicesFromUser: state.answerListUserSide.choiceList,
   managerPage: state.managerPage.selected
 });
 
 const mapDispatchToProps = dispatch => ({
-  onSetComment: (criteriaId, comment) =>
-    dispatch(setComment(criteriaId, comment)),
+  onSetComment: (criteriaId, comment, answerId) =>
+    dispatch(setComment(criteriaId, comment, answerId)),
   onUpdateCommentAnswer: (criteriaId, comment) =>
     dispatch(updateCommentAnswerTeamLeadSide(criteriaId, comment))
 });
