@@ -5,8 +5,8 @@ namespace App\Service;
 
 use App\Entity\ManagerAnswer;
 use App\Repository\CareerFormRepository;
-use App\Repository\CriteriaRepository;
 use App\Repository\ManagerAnswerRepository;
+use App\Repository\UserAnswerRepository;
 use App\Request\ManagerFeedbackRequest;
 
 class ManagerFeedbackService
@@ -18,17 +18,16 @@ class ManagerFeedbackService
     /** @var CareerFormRepository  */
     private $careerFormRepository;
 
-    /** @var CriteriaRepository  */
-    private $criteriaRepository;
+    private $userAnswerRepository;
 
     public function __construct(
         ManagerAnswerRepository $managerAnswerRepository,
         CareerFormRepository $careerFormRepository,
-        CriteriaRepository $criteriaRepository
+        UserAnswerRepository $userAnswerRepository
     ) {
         $this->careerFormRepository = $careerFormRepository;
         $this->managerAnswerRepository = $managerAnswerRepository;
-        $this->criteriaRepository = $criteriaRepository;
+        $this->userAnswerRepository = $userAnswerRepository;
     }
 
     public function handleSave(ManagerFeedbackRequest $req)
@@ -42,15 +41,24 @@ class ManagerFeedbackService
         foreach ($req->getMapEvaluationAndComments() as $evaluation) {
             $evaluated = $this->managerAnswerRepository->findOneBy([
                 'fkCareerForm' => $form,
-                'fkCriteria' => $evaluation['criteriaId']]);
+                'fkUserAnswer' => $evaluation['answerId']]);
 
             $feedback = ($evaluated) ?? new ManagerAnswer();
 
             if (!$feedback->getId()) {
-                $criteria = $this->criteriaRepository->findOneBy(['id'=> $evaluation['criteriaId']]);
-                $feedback->setFkCriteria($criteria);
+                $userAnswer = $this->userAnswerRepository->findOneBy(['id'=> $evaluation['answerId']]);
+                $feedback->setFkUserAnswer($userAnswer);
                 $feedback->setCreatedAt(new \DateTime("now"));
             }
+
+            $feedback->setIsValidAnswer($evaluation['choiceId']);
+
+            if ($evaluation['comment']) {
+                $feedback->setComment($evaluation['comment']);
+            }
+
+            $this->managerAnswerRepository->save($feedback);
+            return true;
         }
     }
 }

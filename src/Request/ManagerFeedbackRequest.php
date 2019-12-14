@@ -61,11 +61,11 @@ class ManagerFeedbackRequest
     {
         $answerCriteria = array();
         foreach ($this->evaluation as $answer) {
-            $answerCriteria[] = (int) ArrayFieldDispatcher::dispatchField($answer, 'criteriaId');
+            $answerCriteria[] = (int) ArrayFieldDispatcher::dispatchField($answer, 'answerId');
         }
 
         foreach ($this->comments as $comment) {
-            $answerCriteria[] = (int) ArrayFieldDispatcher::dispatchField($comment, 'criteriaId');
+            $answerCriteria[] = (int) ArrayFieldDispatcher::dispatchField($comment, 'answerId');
         }
 
         $uniq= array_unique($answerCriteria, SORT_NUMERIC);
@@ -75,16 +75,16 @@ class ManagerFeedbackRequest
         foreach ($uniq as $id) {
             $criteria = array();
             foreach ($this->evaluation as $answer) {
-                if ((int) $answer['criteriaId'] === $id) {
-                    $criteria['criteriaId'] = (int) $id;
+                if ((int) $answer['answerId'] === $id) {
+                    $criteria['answerId'] = (int) $id;
                     $criteria['choiceId'] = (int) $answer['choiceId'];
                     $criteria['comment'] = null;
                     break;
                 }
             }
             foreach ($this->comments as $comment) {
-                if ((int)$comment['criteriaId'] === $id) {
-                    $criteria['criteriaId'] = (int) $id;
+                if ((int)$comment['answerId'] === $id) {
+                    $criteria['answerId'] = (int) $id;
                     $criteria['choiceId'] = $criteria['choiceId'] ?? null;
                     $criteria['comment'] = (string) $comment['comment'];
                     break;
