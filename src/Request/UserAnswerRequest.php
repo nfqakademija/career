@@ -77,7 +77,8 @@ class UserAnswerRequest
     }
 
     /**
-     * Returns choice ids mapped with comments under single criteria Id
+     * Use this method when comments and answers/evaluation arrays are not aligned under a single criteriaId in a
+     * JSON passed.
      * @return array
      */
     public function getMapAnswersAndComments()

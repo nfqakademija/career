@@ -9,30 +9,26 @@ use Symfony\Component\HttpFoundation\Request;
 class ManagerFeedbackRequest
 {
 
-    /** @var bool|mixed  */
+    /** @var int|null  */
     private $formId;
 
-    /** @var bool|mixed  */
-    private $criteriaId;
-
-    /** @var bool|mixed  */
+    /** @var mixed  */
     private $evaluation;
 
-    /** @var bool|mixed  */
-    private $comment;
+    /** @var mixed  */
+    private $comments;
 
 
     public function __construct(Request $request)
     {
         $json = (array)json_decode(((string)$request->getContent()), true);
         $this->formId = ArrayFieldDispatcher::dispatchField($json, 'formId');
-        $this->criteriaId =  ArrayFieldDispatcher::dispatchField($json, 'criteriaId');
-        $this->evaluation =  ArrayFieldDispatcher::dispatchField($json, 'evaluation');
-        $this->comment = ArrayFieldDispatcher::dispatchField($json, 'comment');
+        $this->evaluation = ArrayFieldDispatcher::dispatchField($json, 'choiceAnswers') ?? array();
+        $this->comments = ArrayFieldDispatcher::dispatchField($json, 'commentAnswers') ?? array();
     }
 
     /**
-     * @return bool|mixed
+     * @return int
      */
     public function getFormId()
     {
@@ -40,15 +36,7 @@ class ManagerFeedbackRequest
     }
 
     /**
-     * @return bool|mixed
-     */
-    public function getCriteriaId()
-    {
-        return $this->criteriaId;
-    }
-
-    /**
-     * @return bool|mixed
+     * @return array
      */
     public function getEvaluation()
     {
@@ -56,10 +44,55 @@ class ManagerFeedbackRequest
     }
 
     /**
-     * @return bool|mixed
+     * @return array
      */
     public function getComment()
     {
-        return $this->comment;
+        return $this->comments;
+    }
+
+    /**
+     * Returns choice ids mapped with comments under single criteria Id
+     * Use this method when comments and answers/evaluation arrays are not aligned under a single criteriaId in a
+     * JSON passed.
+     * @return array
+     */
+    public function getMapEvaluationAndComments()
+    {
+        $answerCriteria = array();
+        foreach ($this->evaluation as $answer) {
+            $answerCriteria[] = (int) ArrayFieldDispatcher::dispatchField($answer, 'criteriaId');
+        }
+
+        foreach ($this->comments as $comment) {
+            $answerCriteria[] = (int) ArrayFieldDispatcher::dispatchField($comment, 'criteriaId');
+        }
+
+        $uniq= array_unique($answerCriteria, SORT_NUMERIC);
+        asort($uniq);
+
+        $mapped = array();
+        foreach ($uniq as $id) {
+            $criteria = array();
+            foreach ($this->evaluation as $answer) {
+                if ((int) $answer['criteriaId'] === $id) {
+                    $criteria['criteriaId'] = (int) $id;
+                    $criteria['choiceId'] = (int) $answer['choiceId'];
+                    $criteria['comment'] = null;
+                    break;
+                }
+            }
+            foreach ($this->comments as $comment) {
+                if ((int)$comment['criteriaId'] === $id) {
+                    $criteria['criteriaId'] = (int) $id;
+                    $criteria['choiceId'] = $criteria['choiceId'] ?? null;
+                    $criteria['comment'] = (string) $comment['comment'];
+                    break;
+                }
+            }
+            $mapped[] = $criteria;
+        }
+
+        return $mapped;
     }
 }

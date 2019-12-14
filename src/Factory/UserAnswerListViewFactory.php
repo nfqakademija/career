@@ -25,6 +25,7 @@ class UserAnswerListViewFactory
         $userAnswerListView = new UserAnswerListView();
         foreach ($userAnswers as $key => $userAnswer) {
             $userAnswerView = $this->userAnswerViewFactory->create($userAnswer);
+            $userAnswerListView->list[$key]['answerId'] = $userAnswerView->id;
             $userAnswerListView->list[$key]['criteriaId'] = $userAnswerView->criteria;
             $userAnswerListView->list[$key]['choiceId'] = ($userAnswerView->choice)? $userAnswerView->choice: null;
             $userAnswerListView->list[$key]['comment'] = ($userAnswerView->comment)? $userAnswerView->comment: null;

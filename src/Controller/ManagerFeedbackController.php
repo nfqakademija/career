@@ -45,6 +45,8 @@ class ManagerFeedbackController extends AbstractFOSRestController
         // TODO: implement when json will be ready
         $requestObject = new ManagerFeedbackRequest($request);
 
+        var_dump($requestObject->getMapEvaluationAndComments());
+
         $form = $this->careerFormRepository->findOneBy(['id' => $requestObject->getFormId()]);
 
         return new Response(json_encode(['message' => 'Created']), Response::HTTP_CREATED);
