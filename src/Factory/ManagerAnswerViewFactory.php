@@ -23,7 +23,7 @@ class ManagerAnswerViewFactory
     {
         /** @var ManagerAnswerView $managerAnswerView */
         $managerAnswerView = new ManagerAnswerView();
-        $managerAnswerView->userAnswerId = $managerAnswer->getFkUserAnswer()->getFkCriteria()->getId();
+        $managerAnswerView->criteriaId = $managerAnswer->getFkUserAnswer()->getFkCriteria()->getId();
         $managerAnswerView->evaluation = $managerAnswer->getIsValidAnswer() ?? null;
         $managerAnswerView->comment = $managerAnswer->getComment();
 

@@ -6,7 +6,7 @@ namespace App\View;
 class ManagerAnswerView
 {
     /** @var int */
-    public $userAnswerId;
+    public $criteriaId;
 
     /** @var bool| null */
     public $evaluation;
