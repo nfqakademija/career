@@ -17,7 +17,7 @@ class UserAnswerRequest
     /** @var bool|array  */
     private $comments;
 
-    /** @var  bool*/
+    /** @var  bool|null*/
     private $underEvaluation;
 
     public function __construct(Request $request)
@@ -53,9 +53,9 @@ class UserAnswerRequest
     }
 
     /**
-     * @return bool
+     * @return bool|null
      */
-    public function isUnderEvaluation(): bool
+    public function isUnderEvaluation()
     {
         return $this->underEvaluation;
     }
