@@ -2,10 +2,14 @@
 
 namespace App\Controller;
 
+use App\Factory\FormViewFactory;
+use App\Factory\ManagerAnswerListViewFactory;
 use App\Factory\ManagerAnswerViewFactory;
+use App\Repository\CareerFormRepository;
 use App\Repository\ManagerAnswerRepository;
 use App\Repository\UserAnswerRepository;
 use App\Request\ManagerFeedbackRequest;
+use App\Service\ManagerFeedbackService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\View\ViewHandlerInterface;
@@ -26,30 +30,46 @@ class ManagerFeedbackController extends AbstractFOSRestController
     /** @var ManagerAnswerViewFactory  */
     private $managerAnswerListViewFactory;
 
+    /** @var ManagerFeedbackService  */
+    private $managerFeedbackService;
+
+    /** @var FormViewFactory  */
+    private $formViewFactory;
+
+    /** @var CareerFormRepository  */
+    private $careerFormRepository;
+
 
     public function __construct(
         ViewHandlerInterface $viewHandler,
         UserAnswerRepository $userAnswerRepository,
-        ManagerAnswerViewFactory $managerAnswerViewFactory,
-        ManagerAnswerRepository $managerAnswerRepository
+        ManagerAnswerListViewFactory $managerAnswerListViewFactory,
+        ManagerAnswerRepository $managerAnswerRepository,
+        ManagerFeedbackService $managerFeedbackService,
+        FormViewFactory $formViewFactory,
+        CareerFormRepository $careerFormRepository
     ) {
         $this->viewHandler = $viewHandler;
         $this->userAnswerRepository = $userAnswerRepository;
-        $this->managerAnswerListViewFactory = $managerAnswerViewFactory;
+        $this->managerAnswerListViewFactory = $managerAnswerListViewFactory;
         $this->managerAnswerRepository = $managerAnswerRepository;
+        $this->managerFeedbackService = $managerFeedbackService;
+        $this->formViewFactory = $formViewFactory;
+        $this->careerFormRepository = $careerFormRepository;
     }
 
 
     public function postFeedbackAction(Request $request)
     {
-        // TODO: implement when json will be ready
         $requestObject = new ManagerFeedbackRequest($request);
 
-        var_dump($requestObject->getMapEvaluationAndComments());
+        if (!$this->managerFeedbackService->handleSave($requestObject)) {
+            return new Response(Response::HTTP_NOT_FOUND);
+        }
 
         $form = $this->careerFormRepository->findOneBy(['id' => $requestObject->getFormId()]);
 
-        return new Response(json_encode(['message' => 'Created']), Response::HTTP_CREATED);
+        return $this->viewHandler->handle(View::create($this->formViewFactory->create($form)));
     }
 
     /**

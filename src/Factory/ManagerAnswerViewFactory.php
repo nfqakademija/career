@@ -3,9 +3,8 @@
 
 namespace App\Factory;
 
-use App\Entity\CareerForm;
+
 use App\Entity\ManagerAnswer;
-use App\View\FormView;
 use App\View\ManagerAnswerView;
 
 class ManagerAnswerViewFactory
@@ -24,8 +23,8 @@ class ManagerAnswerViewFactory
     {
         /** @var ManagerAnswerView $managerAnswerView */
         $managerAnswerView = new ManagerAnswerView();
-        $managerAnswerView->employAnswerId = $managerAnswer->getFkUserAnswer()->getFkChoice()->getId();
-        $managerAnswerView->evaluation = $managerAnswer->getIsValidAnswer();
+        $managerAnswerView->userAnswerId = $managerAnswer->getFkUserAnswer()->getId();
+        $managerAnswerView->evaluation = $managerAnswer->getIsValidAnswer() ?? null;
         $managerAnswerView->comment = $managerAnswer->getComment();
 
         return $managerAnswerView;
