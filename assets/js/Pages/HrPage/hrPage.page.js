@@ -13,7 +13,8 @@ class HrPage extends React.Component {
       position: null,
       competenceList: [],
       criteriaList: [],
-      show: []
+      show: [],
+      positionIncludedCriterias: []
     };
   }
 
@@ -127,8 +128,20 @@ class HrPage extends React.Component {
       });
   };
 
+  getPositionList = positionId => {
+    Axios.get(`/api/profiles/${positionId}`)
+      .then(res => {
+        this.setState({ positionIncludedCriterias: res.data.criteriaList });
+        console.log(res.data.criteriaList);
+      })
+      .catch(err => console.log(err));
+  };
+
   positonInput = e => {
     this.setState({ position: e.target.value });
+    if (e.target.value !== null) {
+      this.getPositionList(e.target.value);
+    }
   };
 
   toogle = i => {
@@ -146,7 +159,7 @@ class HrPage extends React.Component {
     return (
       <div className="hrPage">
         <label>Choose position: </label>
-        <select onChange={e => this.positonInput(e)}>
+        <select onChange={this.positonInput}>
           <option id={null} value={null}>
             --Select--
           </option>
@@ -193,6 +206,10 @@ class HrPage extends React.Component {
                               competenceId={competences.id}
                               criteriaId={criterias.id}
                               criteriaList={competences.criteriaList}
+                              positionIncludes={
+                                this.state.positionIncludedCriterias
+                              }
+                              competenceName={criterias.title}
                             />
                           </td>
                         </tr>

@@ -1,10 +1,11 @@
 import React from "react";
 import {
   setComment,
-  updateCommentAnswerTeamLeadSide
+  updateCommentAnswerTeamLeadSide,
+  isActionCalled
 } from "../../Actions/action";
 import { connect } from "react-redux";
-// import picturePress from '../../../pics/press.svg';
+import { checkForAnswerId } from "../../helpers/helpers";
 
 class Comments extends React.Component {
   constructor() {
@@ -36,23 +37,27 @@ class Comments extends React.Component {
   };
 
   handle = () => {
-    let answerId;
-    for (let i = 0; i < this.props.choicesFromUser.length; i++) {
-      if (this.props.choicesFromUser[i].criteriaId === this.props.criteriaId) {
-        answerId = this.props.choicesFromUser[i].answerId;
-      }
-    }
-
     this.setState({ changeComment: !this.state.changeComment });
+
+    let answerId = checkForAnswerId(
+      this.props.choicesFromUser,
+      this.props.criteriaId
+    );
+
+    //we track changes of comment
     this.props.onSetComment(
       this.props.criteriaId,
       this.state.inputValue,
       answerId
     );
+
+    //we update list of answers in return our changes wont disapear until website refresh
     this.props.onUpdateCommentAnswer(
       this.props.criteriaId,
       this.state.inputValue
     );
+
+    this.props.onSetChangedValues(true);
   };
 
   render() {
@@ -110,7 +115,8 @@ const mapDispatchToProps = dispatch => ({
   onSetComment: (criteriaId, comment, answerId) =>
     dispatch(setComment(criteriaId, comment, answerId)),
   onUpdateCommentAnswer: (criteriaId, comment) =>
-    dispatch(updateCommentAnswerTeamLeadSide(criteriaId, comment))
+    dispatch(updateCommentAnswerTeamLeadSide(criteriaId, comment)),
+  onSetChangedValues: bollean => dispatch(isActionCalled(bollean))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Comments);

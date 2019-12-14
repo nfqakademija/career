@@ -2,8 +2,10 @@ import React from "react";
 import { connect } from "react-redux";
 import {
   setAnswers,
-  updateChoiceAnswerTeamLeadSide
+  updateChoiceAnswerTeamLeadSide,
+  isActionCalled
 } from "../../Actions/action";
+import { checkForAnswerId } from '../../helpers/helpers';
 
 class ChoiceListTeamLead extends React.Component {
   onSelect = event => {
@@ -12,15 +14,11 @@ class ChoiceListTeamLead extends React.Component {
       "data-value"
     );
 
-    let answerId = null;
-    for (let i = 0; i < this.props.choicesFromUser.length; i++) {
-      if (this.props.choicesFromUser[i].criteriaId === this.props.criteriaId) {
-        answerId = this.props.choicesFromUser[i].answerId;
-      }
-    }
-
+    let answerId = checkForAnswerId(this.props.choicesFromUser, this.props.criteriaId);
+   
     this.props.onSetAnswers(this.props.criteriaId, choiceValue, answerId);
     this.props.onUpdateChoiceTeamLeadAnswer(this.props.criteriaId, choiceValue);
+    this.props.onSetChangedValues(true);
   };
 
   render() {
@@ -44,7 +42,6 @@ class ChoiceListTeamLead extends React.Component {
           True
         </option>
         ))}
-        {/* {console.log(this.props.choicesFromUser)} */}
       </select>
     );
   }
@@ -60,7 +57,8 @@ const mapDispatchToProps = dispatch => ({
   onSetAnswers: (criteriaId, choiceId, answerId) =>
     dispatch(setAnswers(criteriaId, choiceId, answerId)),
   onUpdateChoiceTeamLeadAnswer: (criteriaId, choiceId) =>
-    dispatch(updateChoiceAnswerTeamLeadSide(criteriaId, choiceId))
+    dispatch(updateChoiceAnswerTeamLeadSide(criteriaId, choiceId)),
+  onSetChangedValues: bollean => dispatch(isActionCalled(bollean))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChoiceListTeamLead);

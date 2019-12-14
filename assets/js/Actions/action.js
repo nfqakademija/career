@@ -82,20 +82,20 @@ export const setAnswersTeamLeadSide = answers => ({
 });
 
 export const restartAnswersTeamLeadSide = () => ({
-    type: "restartAnswersFromTeamLead"
-  });
-  
-  export const updateChoiceAnswerTeamLeadSide = (criteriaId, choiceId) => ({
-    type: "updateChoiceAnswerTeamLead",
-    criteriaId,
-    choiceId
-  });
-  
-  export const updateCommentAnswerTeamLeadSide = (criteriaId, comment) => ({
-    type: "updateCommentAnswerTeamLead",
-    criteriaId,
-    comment
-  });
+  type: "restartAnswersFromTeamLead"
+});
+
+export const updateChoiceAnswerTeamLeadSide = (criteriaId, choiceId) => ({
+  type: "updateChoiceAnswerTeamLead",
+  criteriaId,
+  choiceId
+});
+
+export const updateCommentAnswerTeamLeadSide = (criteriaId, comment) => ({
+  type: "updateCommentAnswerTeamLead",
+  criteriaId,
+  comment
+});
 
 ////////////////////// setting answers for post to api
 
@@ -115,6 +115,11 @@ export const setComment = (criteriaId, comment, answerId) => ({
 
 export const restartAnswers = () => ({
   type: "restartAnswers"
+});
+
+export const isActionCalled = bollean => ({
+  type: "isActionCalled",
+  bollean
 });
 
 /// reset redux store

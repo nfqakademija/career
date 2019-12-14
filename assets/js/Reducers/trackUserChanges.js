@@ -1,6 +1,7 @@
 const initialState = {
   choiceAnswers: [],
-  comment: []
+  comment: [],
+  isActionCalled: false
 };
 
 export const trackUserChanges = (state = initialState, action) => {
@@ -50,6 +51,11 @@ export const trackUserChanges = (state = initialState, action) => {
         choiceAnswers: [],
         comment: []
       };
+      case 'isActionCalled':
+        return{
+          ...state,
+          isActionCalled: action.bollean
+        }
 
     default:
       return state;

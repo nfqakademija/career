@@ -1,5 +1,5 @@
 import React from "react";
-import { setComment, updateCommentAnswerUserSide } from "../../Actions/action";
+import { setComment, updateCommentAnswerUserSide, isActionCalled } from "../../Actions/action";
 import { connect } from "react-redux";
 // import picturePress from '../../../pics/press.svg';
 
@@ -39,6 +39,7 @@ class Comments extends React.Component {
       this.props.criteriaId,
       this.state.inputValue
     );
+    this.props.onSetChangedValues(true);
   };
 
   render() {
@@ -95,7 +96,8 @@ const mapDispatchToProps = dispatch => ({
   onSetComment: (criteriaId, comment) =>
     dispatch(setComment(criteriaId, comment)),
   onUpdateCommentAnswer: (criteriaId, comment) =>
-    dispatch(updateCommentAnswerUserSide(criteriaId, comment))
+    dispatch(updateCommentAnswerUserSide(criteriaId, comment)),
+    onSetChangedValues: bollean => dispatch(isActionCalled(bollean))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Comments);

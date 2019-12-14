@@ -4,9 +4,13 @@ import { connect } from "react-redux";
 import "./ProfilePage.style.scss";
 import ProfileButtons from "../../Components/ProfileButtons/ProfileButtons.comp";
 import CompetenceView from "../../Components/CompetenceView/competenceView.comp";
-import { restartAnswersTeamLeadSide, restartAnswers } from "../../Actions/action";
+import {
+  restartAnswersTeamLeadSide,
+  restartAnswers
+} from "../../Actions/action";
 import { getUserAnswer } from "../../thunk/getUserAnswer";
 import { getTeamLeadAnswer } from "../../thunk/getTeamLeadAnswer";
+import { submitAnswers } from "../../thunk/submitAnswers";
 
 class ProfilePage extends React.Component {
   constructor() {
@@ -30,10 +34,11 @@ class ProfilePage extends React.Component {
   selectedUser = id => {
     Axios.get(`/api/forms/${id}`)
       .then(res => {
+        const formId = res.data.id;
         this.setState({ fullProfile: res.data });
-        this.props.onGetUserAnswer(res.data.id);
-        // this.props.onGetTeamLeadAnswer(...)
-        this.setState({userFormId: res.data.id})
+        this.props.onGetUserAnswer(formId);
+        this.props.onGetTeamLeadAnswer(formId);
+        this.setState({ userFormId: formId });
       })
       .catch(err => {
         console.log(err);
@@ -42,28 +47,12 @@ class ProfilePage extends React.Component {
   };
 
   submit = () => {
-    let obj = {
-      formId: this.state.userFormId,
-      choiceAnswers: this.props.answers,
-      commentAnswers: this.props.comments
-    };
-    console.log(obj);
-    console.log("THis is teamLead page Submit")
-    if (this.props.answers.length === 0 && this.props.comments.length === 0) {
-      alert("You haven't changed anything.");
-    } else {
-      Axios.post("/api/feedback", {
-        data: obj
-      })
-        .then(function(response) {
-          alert("Created successfully");
-        })
-        .catch(function(error) {
-          console.log(error);
-          alert("Something went wrong... Try again later");
-        });
-      this.props.onRestartAnswers();
-    }
+    this.props.onSubmitAnswers(
+      "/api/feedback",
+      this.state.userFormId,
+      this.props.answers,
+      this.props.comments
+    );
   };
 
   render() {
@@ -107,8 +96,10 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onRestartAnswersTeamLeadSide: () => dispatch(restartAnswersTeamLeadSide()),
   onRestartAnswers: () => dispatch(restartAnswers()),
-  onGetUserAnswer: formId => dispatch(getUserAnswer(formId))
-  // onGetTeamLeadAnswer: formId => dispatch(getTeamLeadAnswer(formId))
+  onGetUserAnswer: formId => dispatch(getUserAnswer(formId)),
+  onGetTeamLeadAnswer: formId => dispatch(getTeamLeadAnswer(formId)),
+  onSubmitAnswers: (api, formId, answers, comments) =>
+    dispatch(submitAnswers(api, formId, answers, comments))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfilePage);
