@@ -28,7 +28,8 @@ class Comments extends React.Component {
     for (let i = 0; i < this.props.choiceList.length; i++) {
       if (
         this.props.choiceList[i].criteriaId === this.props.criteriaId &&
-        this.props.choiceList[i].comment !== null
+        this.props.choiceList[i].comment !== null &&
+          this.props.choiceList[i].comment !== undefined
       ) {
         return this.props.choiceList[i].comment;
       }

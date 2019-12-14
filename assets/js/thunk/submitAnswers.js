@@ -7,6 +7,7 @@ export const submitAnswers = (api, formId, answers, comments) => dispatch => {
     choiceAnswers: answers,
     commentAnswers: comments
   };
+  console.log(obj)
   if (answers.length === 0 && comments.length === 0) {
     alert("You haven't changed anything.");
   } else {
