@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\CareerForm;
 use App\Factory\FormListViewFactory;
 use App\Factory\FormViewFactory;
 use App\Factory\ListViewFactory;
@@ -10,7 +9,6 @@ use App\Repository\CareerFormRepository;
 use App\Repository\CareerProfileRepository;
 use App\Repository\UserRepository;
 use App\Service\CareerFormService;
-use App\Service\CareerProfileService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\View\ViewHandlerInterface;
@@ -90,11 +88,30 @@ class CareerFormController extends AbstractFOSRestController
      */
     public function getFormAction(int $slug)
     {
-        $careerForm = $this->careerFormRepository->findOneBy(['fkUser' => $slug]) ?? null;
+        $user = $this->userRepository->findOneBy(['id' => $slug]);
 
+        $careerForm = $this->careerFormService->getUserCareerForm($user);
         if (!$careerForm) {
-            $user = $this->userRepository->findOneBy(['id' => $slug]);
-            $careerForm = $this->careerFormService->getCareerForm($user);
+            return new Response(Response::HTTP_NOT_FOUND);
+        }
+
+        return $this->viewHandler->handle(View::create($this->formViewFactory->create($careerForm)));
+    }
+
+    public function getEvaluationListAction()
+    {
+        $formList = $this->careerFormRepository->findBy(['underEvaluation'  => true]);
+        $this->listViewFactory->setViewFactory(FormViewFactory::class);
+        return $this->viewHandler->handle(View::create($this->listViewFactory->create($formList)));
+    }
+
+    public function getEvaluationAction($slug)
+    {
+        $user = $this->userRepository->findOneBy(['id' => $slug, 'underEvaluation'  => true]);
+
+        $careerForm = $this->careerFormService->getUserCareerForm($user);
+        if (!$careerForm) {
+            return new Response(Response::HTTP_NOT_FOUND);
         }
 
         return $this->viewHandler->handle(View::create($this->formViewFactory->create($careerForm)));

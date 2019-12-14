@@ -26,18 +26,22 @@ class CareerFormService
         $this->careerFormRepository = $careerFormRepository;
     }
 
-    public function getCareerForm(User $user)
+    public function getUserCareerForm(User $user)
     {
         $careerProfile = $this->careerProfileRepository->findOneBy(['profession' => $user->getProfession()->getId()]);
 
         if (!$careerProfile) {
             return false;
         }
-        $careerForm = new CareerForm();
+
+        $careerForm = $this->careerFormRepository->findOneBy(['fkUser' => $user]) ?? new CareerForm();
         $careerForm->setFkUser($user);
         $careerForm->setFkCareerProfile($careerProfile);
         $careerForm->setIsArchived(0);
-        $careerForm->setCreatedAt(new \DateTime("now"));
+        if (!$careerForm->getId()) {
+            $careerForm->setCreatedAt(new \DateTime("now"));
+        }
+
         $careerForm->setUnderEvaluation(false);
         $this->careerFormRepository->save($careerForm);
 
