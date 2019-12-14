@@ -58,14 +58,17 @@ class ProfilePage extends React.Component {
   render() {
     return (
       <div className="profilePage">
-        {this.state.profileNames.map(profileNames => (
-          <ProfileButtons
-            key={profileNames.id}
-            id={profileNames.id}
-            name={profileNames.firstName + " " + profileNames.lastName}
-            handle={this.selectedUser}
-          />
-        ))}
+        <div className="teamUsers">
+          {this.state.profileNames.map(profileNames => (
+            <ProfileButtons
+              key={profileNames.id}
+              id={profileNames.id}
+              name={profileNames.firstName + " " + profileNames.lastName}
+              handle={this.selectedUser}
+            />
+          ))}
+        </div>
+
         <div>
           {this.state.fullProfile.length === 0 ? (
             this.state.fullProfile === null ? (
@@ -74,7 +77,11 @@ class ProfilePage extends React.Component {
           ) : (
             <React.Fragment>
               <CompetenceView
-                name={this.state.fullProfile.userView.firstName}
+                name={
+                  this.state.fullProfile.userView.firstName +
+                  " " +
+                  this.state.fullProfile.userView.lastName
+                }
                 position={this.state.fullProfile.profile.professionTitle}
                 competence={this.state.fullProfile.profile.criteriaList}
                 submit={this.submit}
