@@ -3,13 +3,15 @@ import { managerPage } from './managerPage';
 import { user } from './User';
 import { trackUserChanges } from './trackUserChanges';
 import { answerListUserSide } from './answerListUserSide';
+import { answerListTeamLeadSide } from './answerListTeamLeadSide';
 //rootReducer
 
 const appReducer = combineReducers({
     managerPage,
     user,
     trackUserChanges,
-    answerListUserSide
+    answerListUserSide,
+    answerListTeamLeadSide
 })
 
 export const allReducer = (state, action) =>{

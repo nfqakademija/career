@@ -5,10 +5,12 @@ import Axios from "axios";
 import { restartAnswers } from "../../Actions/action";
 import CompetenceView from "../CompetenceView/competenceView.comp";
 import { getUserAnswer } from "../../thunk/getUserAnswer";
+import { getTeamLeadAnswer } from "../../thunk/getTeamLeadAnswer";
 
 class MountProfile extends React.Component {
   componentDidMount() {
     this.props.onGetUserAnswer(this.props.formId);
+    this.props.onGetTeamLeadAnswer();
   }
 
   submit = () => {
@@ -58,7 +60,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onRestartAnswers: () => dispatch(restartAnswers()),
-  onGetUserAnswer: formId => dispatch(getUserAnswer(formId))
+  onGetUserAnswer: formId => dispatch(getUserAnswer(formId)),
+  onGetTeamLeadAnswer: formId => dispatch(getTeamLeadAnswer(formId))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MountProfile);

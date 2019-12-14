@@ -2,6 +2,8 @@ import React from "react";
 import "./profile.style.scss";
 import ChoiceList from "../ChoiceList/choiceList.comp";
 import Comments from "../Comments/comments.comp";
+import ChoiceListTeamLead from "../ChoiceListFromTeamLead/choiceListTeamLead.comp";
+import CommentsTeamLead from "../CommentsFromTeamLead/commentsTeamLead";
 
 class Profile extends React.Component {
   render() {
@@ -31,8 +33,15 @@ class Profile extends React.Component {
                   <td data-label="Comments">
                     <Comments criteriaId={criteria.id} />
                   </td>
-                  <td data-label="Team lead evaluation">Test Test Test</td>
-                  <td data-label="Overall">Test Test Test</td>
+                  <td data-label="Team lead evaluation">
+                    <ChoiceListTeamLead
+                      criteriaId={criteria.id}
+                      choices={criteria.choiceList}
+                    />
+                  </td>
+                  <td data-label="Overall">
+                    <CommentsTeamLead criteriaId={criteria.id} />
+                  </td>
                 </tr>
               );
             })}
