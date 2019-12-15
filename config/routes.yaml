@@ -26,10 +26,6 @@ user:
   type: rest
   resource: App\Controller\UserController
   prefix: api
-team:
-  type: rest
-  resource: App\Controller\TeamController
-  prefix: api
 manager_feedback:
   type: rest
   resource: App\Controller\ManagerFeedbackController
