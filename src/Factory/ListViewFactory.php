@@ -15,17 +15,31 @@ class ListViewFactory
     /** @var ContainerInterface  */
     private $container;
 
+    /**
+     * ListViewFactory constructor.
+     * @param ContainerInterface $container
+     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
 
+    /**
+     * @param string $viewFactory
+     * @return $this
+     */
     public function setViewFactory(string $viewFactory)
     {
         $this->viewFactory = $viewFactory;
         return $this;
     }
 
+    /**
+     * Create view for list of objects provided
+     * NOTE: Not applicable for managerAnswerListView and userAnswerListView
+     * @param array $objects
+     * @return ListView
+     */
     public function create(Array $objects)
     {
         $listView = new ListView();

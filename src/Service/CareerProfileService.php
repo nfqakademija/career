@@ -4,11 +4,11 @@
 namespace App\Service;
 
 use App\Entity\CareerProfile;
-use App\Entity\Profession;
 use App\Repository\CareerProfileRepository;
 use App\Repository\CriteriaRepository;
 use App\Repository\ProfessionRepository;
 use App\Request\CareerProfileRequest;
+use Exception;
 
 class CareerProfileService
 {
@@ -21,6 +21,12 @@ class CareerProfileService
     /** @var ProfessionRepository */
     private $professionRepository;
 
+    /**
+     * CareerProfileService constructor.
+     * @param CareerProfileRepository $careerProfileRepository
+     * @param CriteriaRepository $criteriaRepository
+     * @param ProfessionRepository $professionRepository
+     */
     public function __construct(
         CareerProfileRepository $careerProfileRepository,
         CriteriaRepository $criteriaRepository,
@@ -32,11 +38,12 @@ class CareerProfileService
     }
 
     /**
+     * Save CareerProfile to database. Terminate with false if any of the required values is missing
      * @param CareerProfileRequest $request
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
-    public function handleCareerProfileSave(CareerProfileRequest $request)
+    public function handleSave(CareerProfileRequest $request)
     {
         $profession = $this->professionRepository->findOneBy(['id' => $request->getProfessionId()]);
 
@@ -49,20 +56,6 @@ class CareerProfileService
             return false;
         }
 
-        $this->saveCareerProfile($criteriaList, $profession);
-
-        return true;
-    }
-
-
-    /**
-     * @param array $criteriaList
-     * @param Profession $profession
-     * @return bool
-     * @throws \Exception
-     */
-    public function saveCareerProfile(Array $criteriaList, Profession $profession)
-    {
         $careerProfile = ($this->careerProfileRepository->findOneBy(['profession' => $profession])) ??
             new CareerProfile();
 

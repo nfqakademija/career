@@ -34,7 +34,15 @@ class UserAnswerController extends AbstractFOSRestController
     /** @var UserAnswerListViewFactory */
     private $userAnswerListViewFactory;
 
-
+    /**
+     * UserAnswerController constructor.
+     * @param UserAnswerService $answerService
+     * @param CareerFormRepository $careerFormRepository
+     * @param UserAnswerRepository $userAnswerRepository
+     * @param ViewHandlerInterface $viewHandler
+     * @param FormViewFactory $formViewFactory
+     * @param UserAnswerListViewFactory $userAnswerListViewFactory
+     */
     public function __construct(
         UserAnswerService $answerService,
         CareerFormRepository $careerFormRepository,
@@ -53,7 +61,7 @@ class UserAnswerController extends AbstractFOSRestController
 
 
     /**
-     *
+     * Post new UserAnswer (self evaluation)
      * @param Request $request
      * @return JsonResponse|Response
      * @throws \Exception
@@ -72,7 +80,7 @@ class UserAnswerController extends AbstractFOSRestController
     }
 
     /**
-     *
+     * Get list of user answers by career form id
      * @param $slug
      * @return Response
      * @throws \Exception

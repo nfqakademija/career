@@ -4,34 +4,39 @@
 namespace App\Request;
 
 use App\Utils\ArrayFieldDispatcher;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 
 class CareerProfileRequest
 {
 
-    /** @var int|bool */
+    /** @var int|null */
     private $professionId;
 
-    /** @var array|bool */
+    /** @var array */
     private $competences;
 
+    /**
+     * CareerProfileRequest constructor.
+     * @param Request $request
+     */
     public function __construct(Request $request)
     {
         $json = (array)json_decode(((string)$request->getContent()), true);
-        $this->professionId = ArrayFieldDispatcher::dispatchField($json, 'position');
-        $this->competences = ArrayFieldDispatcher::dispatchField($json, 'competences');
+        $this->professionId = ArrayFieldDispatcher::dispatchField($json, 'position') ?? null;
+        $this->competences = ArrayFieldDispatcher::dispatchField($json, 'competences') ?? array();
     }
 
     /**
-     * @return bool|int
+     * @return int
      */
     public function getProfessionId()
     {
-        return $this->professionId;
+        return (int) $this->professionId;
     }
 
     /**
-     * @return array|bool
+     * @return array
      */
     public function getCompetences()
     {
@@ -39,7 +44,9 @@ class CareerProfileRequest
     }
 
     /**
-     *
+     * Gather all criteria Ids throughout all competences provided
+     * @return array|null
+     * @throws Exception
      */
     public function getCriteriaIds()
     {
@@ -56,7 +63,7 @@ class CareerProfileRequest
 
         foreach ($criteriaLists as $list) {
             foreach ($list as $key => $value) {
-                $criteriaIds[] = ArrayFieldDispatcher::dispatchField($value, 'id');
+                $criteriaIds[] = (int) ArrayFieldDispatcher::dispatchField($value, 'id');
             }
         }
 

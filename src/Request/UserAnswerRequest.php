@@ -4,6 +4,7 @@
 namespace App\Request;
 
 use App\Utils\ArrayFieldDispatcher;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 
 class UserAnswerRequest
@@ -11,13 +12,13 @@ class UserAnswerRequest
     /** @var int|null */
     private $formId;
 
-    /** @var bool|array  */
+    /** @var array  */
     private $answers;
 
-    /** @var bool|array  */
+    /** @var array  */
     private $comments;
 
-    /** @var  bool|null*/
+    /** @var  bool|null */
     private $underEvaluation;
 
     public function __construct(Request $request)
@@ -26,7 +27,7 @@ class UserAnswerRequest
         $this->formId = ArrayFieldDispatcher::dispatchField($json, 'formId') ?? null;
         $this->answers = ArrayFieldDispatcher::dispatchField($json, 'choiceAnswers') ?? array();
         $this->comments = ArrayFieldDispatcher::dispatchField($json, 'commentAnswers') ?? array();
-        $this->underEvaluation = ArrayFieldDispatcher::dispatchField($json, 'underEvaluation');
+        $this->underEvaluation = ArrayFieldDispatcher::dispatchField($json, 'underEvaluation') ?? null;
     }
     /**
      * @return int
@@ -37,7 +38,7 @@ class UserAnswerRequest
     }
 
     /**
-     * @return bool|mixed
+     * @return array
      */
     public function getAnswers()
     {
@@ -45,7 +46,7 @@ class UserAnswerRequest
     }
 
     /**
-     * @return bool|mixed
+     * @return array
      */
     public function getComments()
     {
@@ -58,21 +59,5 @@ class UserAnswerRequest
     public function isUnderEvaluation()
     {
         return $this->underEvaluation;
-    }
-
-    /**
-     * @return array
-     */
-    public function getChoiceIds()
-    {
-        if (!$this->answers) {
-            return false;
-        }
-
-        $choiceIds = array();
-        foreach ($this->answers as $answer) {
-            $choiceIds[] = (int) ArrayFieldDispatcher::dispatchField($answer, 'choiceId');
-        }
-        return $choiceIds;
     }
 }

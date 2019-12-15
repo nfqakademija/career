@@ -49,7 +49,16 @@ class CareerFormController extends AbstractFOSRestController
     /** @var CareerFormService  */
     private $careerFormService;
 
-
+    /**
+     * CareerFormController constructor.
+     * @param CareerFormRepository $careerFormRepository
+     * @param CareerProfileRepository $careerProfileRepository
+     * @param UserRepository $userRepository
+     * @param ViewHandlerInterface $viewHandler
+     * @param FormViewFactory $formViewFactory
+     * @param ListViewFactory $listViewFactory
+     * @param CareerFormService $careerFormService
+     */
     public function __construct(
         CareerFormRepository $careerFormRepository,
         CareerProfileRepository $careerProfileRepository,
@@ -69,7 +78,7 @@ class CareerFormController extends AbstractFOSRestController
     }
 
     /**
-     *
+     * Get all registered career forms
      * @return Response
      */
     public function getFormListAction()
@@ -81,7 +90,7 @@ class CareerFormController extends AbstractFOSRestController
 
 
     /**
-     *
+     * Get CareerForm by user id
      * @param $slug
      * @return Response
      * @throws \Exception
@@ -98,6 +107,10 @@ class CareerFormController extends AbstractFOSRestController
         return $this->viewHandler->handle(View::create($this->formViewFactory->create($careerForm)));
     }
 
+    /**
+     * Get career forms that are under evaluation
+     * @return Response
+     */
     public function getEvaluationListAction()
     {
         $formList = $this->careerFormRepository->findBy(['underEvaluation'  => true]);
@@ -105,6 +118,11 @@ class CareerFormController extends AbstractFOSRestController
         return $this->viewHandler->handle(View::create($this->listViewFactory->create($formList)));
     }
 
+    /**
+     * Get CareerForm under evaluation by user id
+     * @param $slug
+     * @return Response
+     */
     public function getEvaluationAction($slug)
     {
         $user = $this->userRepository->findOneBy(['id' => $slug, 'underEvaluation'  => true]);

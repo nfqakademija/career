@@ -39,7 +39,16 @@ class ManagerFeedbackController extends AbstractFOSRestController
     /** @var CareerFormRepository  */
     private $careerFormRepository;
 
-
+    /**
+     * ManagerFeedbackController constructor.
+     * @param ViewHandlerInterface $viewHandler
+     * @param UserAnswerRepository $userAnswerRepository
+     * @param ManagerAnswerListViewFactory $managerAnswerListViewFactory
+     * @param ManagerAnswerRepository $managerAnswerRepository
+     * @param ManagerFeedbackService $managerFeedbackService
+     * @param FormViewFactory $formViewFactory
+     * @param CareerFormRepository $careerFormRepository
+     */
     public function __construct(
         ViewHandlerInterface $viewHandler,
         UserAnswerRepository $userAnswerRepository,
@@ -58,7 +67,11 @@ class ManagerFeedbackController extends AbstractFOSRestController
         $this->careerFormRepository = $careerFormRepository;
     }
 
-
+    /**
+     * Post new manager answer/feedback
+     * @param Request $request
+     * @return Response
+     */
     public function postFeedbackAction(Request $request)
     {
         $requestObject = new ManagerFeedbackRequest($request);
@@ -73,6 +86,7 @@ class ManagerFeedbackController extends AbstractFOSRestController
     }
 
     /**
+     * Get manager answers/feedback by career form id
      * @param $slug
      * @return Response
      */

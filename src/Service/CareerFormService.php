@@ -7,7 +7,6 @@ use App\Entity\CareerForm;
 use App\Entity\User;
 use App\Repository\CareerFormRepository;
 use App\Repository\CareerProfileRepository;
-use Symfony\Component\HttpFoundation\Response;
 
 class CareerFormService
 {
@@ -18,6 +17,11 @@ class CareerFormService
     /** @var CareerFormRepository  */
     private $careerFormRepository;
 
+    /**
+     * CareerFormService constructor.
+     * @param CareerProfileRepository $careerProfileRepository
+     * @param CareerFormRepository $careerFormRepository
+     */
     public function __construct(
         CareerProfileRepository $careerProfileRepository,
         CareerFormRepository $careerFormRepository
@@ -26,6 +30,11 @@ class CareerFormService
         $this->careerFormRepository = $careerFormRepository;
     }
 
+    /**
+     * Create CareerForm for user by assigning a CareerProfile according to user occupation
+     * @param User $user
+     * @return CareerForm|bool|null
+     */
     public function getUserCareerForm(User $user)
     {
         $careerProfile = $this->careerProfileRepository->findOneBy(['profession' => $user->getProfession()->getId()]);

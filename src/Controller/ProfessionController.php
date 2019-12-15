@@ -30,6 +30,12 @@ class ProfessionController extends AbstractFOSRestController
     /** @var ListViewFactory  */
     private $listViewFactory;
 
+    /**
+     * ProfessionController constructor.
+     * @param ProfessionRepository $professionRepository
+     * @param ViewHandlerInterface $viewHandler
+     * @param ListViewFactory $listViewFactory
+     */
     public function __construct(
         ProfessionRepository $professionRepository,
         ViewHandlerInterface $viewHandler,
@@ -41,7 +47,7 @@ class ProfessionController extends AbstractFOSRestController
     }
 
     /**
-     *
+     * Get list of all occupations/profession
      * @return Response
      */
     public function getProfessionListAction()

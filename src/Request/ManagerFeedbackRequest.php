@@ -12,17 +12,17 @@ class ManagerFeedbackRequest
     /** @var int|null  */
     private $formId;
 
-    /** @var mixed  */
+    /** @var array  */
     private $evaluation;
 
-    /** @var mixed  */
+    /** @var array  */
     private $comments;
 
 
     public function __construct(Request $request)
     {
         $json = (array)json_decode(((string)$request->getContent()), true);
-        $this->formId = ArrayFieldDispatcher::dispatchField($json, 'formId');
+        $this->formId = ArrayFieldDispatcher::dispatchField($json, 'formId') ?? null;
         $this->evaluation = ArrayFieldDispatcher::dispatchField($json, 'choiceAnswers') ?? array();
         $this->comments = ArrayFieldDispatcher::dispatchField($json, 'commentAnswers') ?? array();
     }

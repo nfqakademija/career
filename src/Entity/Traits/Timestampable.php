@@ -20,10 +20,7 @@ trait Timestampable
      */
     private $updatedAt;
 
-
     /**
-     * Gets triggered only on insert
-     *
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -33,7 +30,6 @@ trait Timestampable
     }
 
     /**
-     *
      * @ORM\PreUpdate
      */
     public function onPreUpdate()
@@ -42,7 +38,6 @@ trait Timestampable
     }
 
     /**
-     *
      * @param \DateTime $createdAt
      * @return Timestampable
      */
@@ -53,7 +48,6 @@ trait Timestampable
     }
 
     /**
-     *
      * @return \DateTime
      */
     public function getCreatedAt()
@@ -62,7 +56,6 @@ trait Timestampable
     }
 
     /**
-     *
      * @param \DateTime $updatedAt
      * @return Timestampable
      */
@@ -73,7 +66,6 @@ trait Timestampable
     }
 
     /**
-     *
      * @return \DateTime
      */
     public function getUpdatedAt()
