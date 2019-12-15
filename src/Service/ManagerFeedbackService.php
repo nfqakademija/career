@@ -8,7 +8,6 @@ use App\Repository\CareerFormRepository;
 use App\Repository\ManagerAnswerRepository;
 use App\Repository\UserAnswerRepository;
 use App\Request\ManagerFeedbackRequest;
-use phpDocumentor\Reflection\Types\Null_;
 
 class ManagerFeedbackService
 {
@@ -52,7 +51,9 @@ class ManagerFeedbackService
                 $feedback->setCreatedAt(new \DateTime("now"));
             }
 
-            $feedback->setIsValidAnswer($evaluation['choiceId']);
+            if ($evaluation['choiceId'] !== null) {
+                $feedback->setIsValidAnswer($evaluation['choiceId']);
+            }
 
             if ($evaluation['comment']) {
                 $feedback->setComment($evaluation['comment']);

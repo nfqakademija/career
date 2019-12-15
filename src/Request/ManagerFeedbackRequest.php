@@ -77,7 +77,7 @@ class ManagerFeedbackRequest
             foreach ($this->evaluation as $answer) {
                 if ((int) $answer['answerId'] === $id) {
                     $criteria['answerId'] = (int) $id;
-                    $criteria['choiceId'] = (int) $answer['choiceId'];
+                    $criteria['choiceId'] = (bool) $answer['choiceId'];
                     $criteria['comment'] = null;
                     break;
                 }
