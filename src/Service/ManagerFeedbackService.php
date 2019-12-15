@@ -48,7 +48,9 @@ class ManagerFeedbackService
             if (!$feedback->getId()) {
                 $userAnswer = $this->userAnswerRepository->findOneBy(['id'=> $evaluation['answerId']]);
                 $feedback->setFkUserAnswer($userAnswer);
-                $feedback->setCreatedAt(new \DateTime("now"));
+                $feedback->onPrePersist();
+            } else {
+                $feedback->onPreUpdate();
             }
 
             if ($evaluation['choiceId'] !== null) {

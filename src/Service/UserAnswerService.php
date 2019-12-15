@@ -59,11 +59,11 @@ class UserAnswerService
             $userAnswer = $answered ?? new UserAnswer();
 
             if (!$userAnswer->getId()) {
-                $criteria = $this->criteriaRepository->findOneBy(['id'=> $answer['criteriaId']]);
+                $criteria = $this->criteriaRepository->findOneBy(['id' => $answer['criteriaId']]);
                 $userAnswer->setFkCriteria($criteria);
-                $userAnswer->setCreatedAt(new \DateTime("now"));
+                $userAnswer->onPrePersist();
             } else {
-                $userAnswer->setUpdatedAt(new \DateTime("now"));
+                $userAnswer->onPreUpdate();
             }
 
             $choice = ($answer['choiceId'])? $this->criteriaChoiceRepository->findOneBy(['id' => $answer['choiceId']])
@@ -88,7 +88,7 @@ class UserAnswerService
             }
         }
 
-        $form->setUpdatedAt(new \DateTime("now"));
+        $form->onPreUpdate();
         $this->careerFormRepository->save($form);
         return true;
     }

@@ -39,9 +39,9 @@ class CareerFormService
         $careerForm->setFkCareerProfile($careerProfile);
         $careerForm->setIsArchived(0);
         if (!$careerForm->getId()) {
-            $careerForm->setCreatedAt(new \DateTime("now"));
+            $careerForm->onPrePersist();
         }
-
+        $careerForm->onPreUpdate();
         $careerForm->setUnderEvaluation(false);
         $this->careerFormRepository->save($careerForm);
 
