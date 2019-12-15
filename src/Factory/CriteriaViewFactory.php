@@ -9,17 +9,24 @@ use App\View\CriteriaView;
 class CriteriaViewFactory
 {
 
-    /**
-     * @var ChoiceViewFactory
-     */
+    /** @var ChoiceViewFactory */
     private $choiceViewFactory;
 
+    /**
+     * CriteriaViewFactory constructor.
+     * @param ChoiceViewFactory $choiceViewFactory
+     */
     public function __construct(ChoiceViewFactory $choiceViewFactory)
     {
         $this->choiceViewFactory = $choiceViewFactory;
     }
 
-    public function create(Criteria $criteria): CriteriaView
+    /**
+     * Create view from Criteria object
+     * @param Criteria $criteria
+     * @return CriteriaView
+     */
+    public function create(Criteria $criteria)
     {
         /** @var CriteriaView $criteriaView */
         $criteriaView = new CriteriaView();

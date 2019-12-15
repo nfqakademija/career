@@ -42,6 +42,15 @@ class CriteriaListController extends AbstractFOSRestController
     /** @var CriteriaListService */
     private $criteriaListService;
 
+
+    /**
+     * CriteriaListController constructor.
+     * @param ViewHandlerInterface $viewHandler
+     * @param CompetenceRepository $competenceRepository
+     * @param CompetenceViewFactory $competenceViewFactory
+     * @param ListViewFactory $listViewFactory
+     * @param CriteriaListService $criteriaListService
+     */
     public function __construct(
         ViewHandlerInterface $viewHandler,
         CompetenceRepository $competenceRepository,
@@ -56,7 +65,10 @@ class CriteriaListController extends AbstractFOSRestController
         $this->criteriaListService = $criteriaListService;
     }
 
-
+    /**
+     * Get all competences-criteria-choice structure
+     * @return Response
+     */
     public function getCriteriaListAction()
     {
         $competenceList = $this->competenceRepository->findBy([

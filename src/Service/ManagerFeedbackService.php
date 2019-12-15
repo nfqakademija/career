@@ -8,6 +8,7 @@ use App\Repository\CareerFormRepository;
 use App\Repository\ManagerAnswerRepository;
 use App\Repository\UserAnswerRepository;
 use App\Request\ManagerFeedbackRequest;
+use App\Utils\ArrayFieldDispatcher;
 
 class ManagerFeedbackService
 {
@@ -39,7 +40,18 @@ class ManagerFeedbackService
             return false;
         }
 
-        foreach ($req->getMapEvaluationAndComments() as $evaluation) {
+        $mappedEvaluations = ArrayFieldDispatcher::mapArraysByCommonIdx(
+            $req->getEvaluation(),
+            $req->getComment(),
+            'answerId',
+            'choiceId',
+            'comment'
+        );
+
+        foreach ($mappedEvaluations as $evaluation) {
+            if ($evaluation['answerId'] === 0) {
+                continue;
+            }
             $evaluated = $this->managerAnswerRepository->findOneBy([
                 'fkUserAnswer' => $evaluation['answerId']]);
 

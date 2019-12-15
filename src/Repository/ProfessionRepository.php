@@ -18,12 +18,19 @@ class ProfessionRepository extends ServiceEntityRepository
     /** @var EntityManager  */
     private $entityManager;
 
+    /**
+     * ProfessionRepository constructor.
+     * @param RegistryInterface $registry
+     */
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Profession::class);
         $this->entityManager = $this->getEntityManager();
     }
 
+    /**
+     * @return mixed
+     */
     public function fetchTitlesAndIds()
     {
         $query = $this->entityManager->createQuery('SELECT p.id, p.title '
