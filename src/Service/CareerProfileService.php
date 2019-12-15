@@ -67,9 +67,9 @@ class CareerProfileService
             new CareerProfile();
 
         if (!$careerProfile->getId()) {
-            $careerProfile->setCreatedAt(new \DateTime("now"));
+            $careerProfile->onPrePersist();
         } else {
-            $careerProfile->setUpdatedAt(new \DateTime("now"));
+            $careerProfile->onPreUpdate();
         }
 
         if ($criteriaList == null) {
