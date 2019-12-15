@@ -9,6 +9,7 @@ use App\Repository\CriteriaChoiceRepository;
 use App\Repository\CriteriaRepository;
 use App\Repository\UserAnswerRepository;
 use App\Request\UserAnswerRequest;
+use App\Utils\ArrayFieldDispatcher;
 use Exception;
 
 class UserAnswerService
@@ -51,7 +52,15 @@ class UserAnswerService
             return false;
         }
 
-        foreach ($req->getMapAnswersAndComments() as $answer) {
+        $mappedAnswers = ArrayFieldDispatcher::mapArraysByCommonIdx(
+            $req->getAnswers(),
+            $req->getComments(),
+            'criteriaId',
+            'choiceId',
+            'comment'
+        );
+
+        foreach ($mappedAnswers as $answer) {
             $answered = $this->userAnswerRepository->findOneBy([
                 'fkCareerForm' => $form,
                 'fkCriteria' => $answer['criteriaId']]);
