@@ -10,29 +10,39 @@ import { checkForAnswerId } from "../../helpers/helpers";
 class ChoiceListTeamLead extends React.Component {
   onSelect = event => {
     const selectedIndex = event.target.options.selectedIndex;
-    let choiceValue = event.target.options[selectedIndex].getAttribute(
+    const choiceValue = event.target.options[selectedIndex].getAttribute(
       "data-value"
     );
-    choiceValue === 'true'? choiceValue = true : choiceValue = false;
+    const convertedToBollean = choiceValue === "true" ? true : false;
 
     let answerId = checkForAnswerId(
       this.props.choicesFromUser,
       this.props.criteriaId
     );
-    
-    this.props.onSetAnswers(this.props.criteriaId, choiceValue, answerId);
-    this.props.onUpdateChoiceTeamLeadAnswer(this.props.criteriaId, choiceValue);
+
+    this.props.onSetAnswers(
+      this.props.criteriaId,
+      convertedToBollean,
+      answerId
+    );
+    this.props.onUpdateChoiceTeamLeadAnswer(
+      this.props.criteriaId,
+      convertedToBollean
+    );
     this.props.onSetChangedValues(true);
   };
 
   render() {
-    let answer = "False";
+    let answer = "NoAnswer";
     for (let i = 0; i < this.props.choiceList.length; i++) {
       if (
         this.props.choiceList[i].criteriaId === this.props.criteriaId &&
-        this.props.choiceList[i].evaluation === true
+        (this.props.choiceList[i].evaluation === true ||
+          this.props.choiceList[i].evaluation === false)
       ) {
-        answer = "True";
+        this.props.choiceList[i].evaluation === true
+          ? (answer = "True")
+          : (answer = "False");
       }
     }
 
@@ -42,6 +52,11 @@ class ChoiceListTeamLead extends React.Component {
 
     return (
       <select defaultValue={answer} onChange={this.onSelect}>
+        {answer === "NoAnswer" ? (
+          <option value={"NoAnswer"} data-value={"Not answered"}>
+            --Not answered--
+          </option>
+        ) : null}
         <option value={"False"} data-value={false}>
           False
         </option>

@@ -15,12 +15,9 @@ export const getTeamLeadAnswer = formId => dispatch => {
         dispatch(restartAnswersTeamLeadSide());
       } else {
         dispatch(setAnswersTeamLeadSide(res.data.list));
-        console.log("JO");
-        console.log(res.data);
       }
     })
     .catch(err => {
       console.log(err);
-      console.log("this is teamLead answers get");
     });
 };

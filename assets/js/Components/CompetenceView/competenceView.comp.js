@@ -22,6 +22,16 @@ class CompetenceView extends React.Component {
     }
   };
 
+  componentDidUpdate(prev, curr) {
+    if (
+      prev.showProfile !== curr.showProfile &&
+      prev.name !== this.props.name &&
+      curr.showProfile.length !== 0
+    ) {
+      this.setState({ showProfile: [] });
+    }
+  }
+
   render() {
     const { name, position, competence, submit } = this.props;
     return (

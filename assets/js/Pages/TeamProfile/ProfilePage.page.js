@@ -25,7 +25,6 @@ class ProfilePage extends React.Component {
   componentDidMount() {
     Axios.get(`/api/teams/${this.props.teams[0].id}/users`)
       .then(res => {
-        console.log(res.data.list);
         this.setState({ profileNames: res.data.list });
       })
       .catch(err => console.log(err));
