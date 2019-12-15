@@ -97,18 +97,6 @@ class UserController extends AbstractFOSRestController
         return $this->viewHandler->handle(View::create($this->userViewFactory->create($user)));
     }
 
-    public function getUserAllAction()
-    {
-        $user = $this->userRepository->findBy(['isActive' => 1]);
-
-        if (!$user) {
-            // users not found
-            return new Response(Response::HTTP_NOT_FOUND);
-        }
-
-        return $this->viewHandler->handle(View::create($this->userListViewFactory->create($user)));
-    }
-
     public function getTeamManagerAction($teamId)
     {
         $manager = $this->userRepository->findTeamManager($teamId);

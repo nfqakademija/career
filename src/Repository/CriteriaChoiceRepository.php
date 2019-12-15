@@ -4,7 +4,8 @@ namespace App\Repository;
 
 use App\Entity\CriteriaChoice;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManager;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * @method CriteriaChoice|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,8 +15,23 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class CriteriaChoiceRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    /** @var EntityManager */
+    private $entityManager;
+
+    public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, CriteriaChoice::class);
+        $this->entityManager = $this->getEntityManager();
     }
+
+    public function create(CriteriaChoice $criteriaChoice)
+    {
+        $this->entityManager->persist($criteriaChoice);
+    }
+
+    public function save()
+    {
+        $this->entityManager->flush();
+    }
+
 }

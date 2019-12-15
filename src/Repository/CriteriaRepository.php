@@ -23,4 +23,15 @@ class CriteriaRepository extends ServiceEntityRepository
         parent::__construct($registry, Criteria::class);
         $this->entityManager = $this->getEntityManager();
     }
+
+    public function create(Criteria $criteria)
+    {
+        $this->entityManager->persist($criteria);
+    }
+
+    public function save()
+    {
+        $this->entityManager->flush();
+    }
+
 }
