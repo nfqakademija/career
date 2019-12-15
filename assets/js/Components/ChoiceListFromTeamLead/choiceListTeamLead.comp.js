@@ -10,15 +10,16 @@ import { checkForAnswerId } from "../../helpers/helpers";
 class ChoiceListTeamLead extends React.Component {
   onSelect = event => {
     const selectedIndex = event.target.options.selectedIndex;
-    const choiceValue = event.target.options[selectedIndex].getAttribute(
+    let choiceValue = event.target.options[selectedIndex].getAttribute(
       "data-value"
     );
+    choiceValue === 'true'? choiceValue = true : choiceValue = false;
 
     let answerId = checkForAnswerId(
       this.props.choicesFromUser,
       this.props.criteriaId
     );
-
+    
     this.props.onSetAnswers(this.props.criteriaId, choiceValue, answerId);
     this.props.onUpdateChoiceTeamLeadAnswer(this.props.criteriaId, choiceValue);
     this.props.onSetChangedValues(true);
