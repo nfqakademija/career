@@ -23,7 +23,9 @@ class ProfilePage extends React.Component {
     };
   }
   componentDidMount() {
-    Axios.get(`/api/teams/${this.props.teams[0].id}/users`)
+    Axios.get(`/api/teams/${this.props.teams[0].id}/users`, {
+      headers: { Authorization: `Bearer ${this.props.token}` }
+    })
       .then(res => {
         this.setState({ profileNames: res.data.list });
         console.log(res.data.list);
@@ -32,7 +34,9 @@ class ProfilePage extends React.Component {
   }
 
   selectedUser = id => {
-    Axios.get(`/api/forms/${id}`)
+    Axios.get(`/api/forms/${id}`, {
+      headers: { Authorization: `Bearer ${this.props.token}` }
+    })
       .then(res => {
         const formId = res.data.id;
         this.setState({ fullProfile: res.data });
@@ -73,7 +77,9 @@ class ProfilePage extends React.Component {
           {this.state.fullProfile === 404 ||
           this.state.fullProfile.length === 0 ? (
             this.state.fullProfile === 404 ? (
-              <h1 style={{textAlign:"center"}}>No Data About This Profile Yet. Try Again Later</h1>
+              <h1 style={{ textAlign: "center" }}>
+                No Data About This Profile Yet. Try Again Later
+              </h1>
             ) : null
           ) : (
             <React.Fragment>
@@ -98,7 +104,8 @@ class ProfilePage extends React.Component {
 const mapStateToProps = state => ({
   teams: state.user.teams,
   answers: state.trackUserChanges.choiceAnswers,
-  comments: state.trackUserChanges.comment
+  comments: state.trackUserChanges.comment,
+  token: state.token.token
 });
 
 const mapDispatchToProps = dispatch => ({

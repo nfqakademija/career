@@ -14,17 +14,23 @@ class User extends React.Component {
     };
   }
   componentDidMount() {
-    Axios.get(`/api/forms/${this.props.userId}`)
+    // Axios.get(`/api/forms/${this.props.userId}`)
+    //   .then(res => {
+    //     this.props.onSetCareerFormId(res.data.id);
+    //     this.setState({ userProfile: res.data });
+    //   })
+    //   .catch(err => console.log(err));
+    Axios.get(`/api/forms/${this.props.userId}`, {
+      headers: { Authorization: `Bearer ${this.props.token}` }
+    })
       .then(res => {
         this.props.onSetCareerFormId(res.data.id);
         this.setState({ userProfile: res.data });
-        console.log(res.data);
       })
       .catch(err => console.log(err));
   }
 
   render() {
-    console.log(this.state.userProfile);
     if (this.state.userProfile.length === 0) {
       return (
         <div className="user">
@@ -41,12 +47,12 @@ class User extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  userId: state.user.userId
+  userId: state.user.userId,
+  token: state.token.token
 });
 
 const mapDispatchToProps = dispatch => ({
-  onSetCareerFormId: formId => dispatch(setCareerFormId(formId)),
-  // onSetAnswers: answers => dispatch(setAnswers(answers))
+  onSetCareerFormId: formId => dispatch(setCareerFormId(formId))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(User);

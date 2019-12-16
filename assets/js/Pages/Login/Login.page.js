@@ -9,27 +9,21 @@ import {
   setProfessionId,
   setRoles,
   setLogged,
-  setTeams
+  setTeams,
+  setPassword,
+  setToken
 } from "../../Actions/action";
 import Axios from "axios";
-import { Redirect } from 'react-router-dom';
+import { Redirect } from "react-router-dom";
 
 class Login extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      password: "",
-    };
-  }
-
   change = e => {
     if (e.target.name === "email") {
       this.props.onSetEmail(e.target.value);
     }
 
     if (e.target.name === "password") {
-      this.setState({ password: e.target.value });
+      this.props.onSetPassword(e.target.value);
     }
   };
 
@@ -38,32 +32,32 @@ class Login extends React.Component {
 
     const {
       onSetRoles,
-      onSetCareerFormId,
       onSetFullName,
       onSetUserId,
       onSetProfessionId,
       onSetTitle,
       onSetLogged,
-      onSetTeams
+      onSetTeams,
+      onSetToken
     } = this.props;
 
-    Axios.post("/api/users/logins", {
-      email: this.props.email,
-      password: this.state.password
+    Axios.post("/api/login_check", {
+      username: this.props.email,
+      password: this.props.password
     })
       .then(response => {
         if (response.data !== 401 && response.data !== 404) {
-          onSetFullName(response.data.firstName + " " + response.data.lastName);
-          onSetUserId(response.data.id);
-          onSetProfessionId(response.data.professionId);
-          onSetRoles(response.data.roles);
-          onSetTitle(response.data.professionTitle);
+          const data = response.data.data;
+          onSetFullName(data.firstName + " " + data.lastName);
+          onSetUserId(data.id);
+          onSetProfessionId(data.professionId);
+          onSetRoles(data.roles);
+          onSetTitle(data.professionTitle);
           onSetLogged(!this.props.logged);
-          onSetTeams(response.data.teams)
-          // console.log("Success");
-          // console.log(response.data)
+          onSetTeams(data.teams);
+          onSetToken(response.data.token);
         } else {
-         alert("Login Failed");
+          alert("Login Failed");
         }
       })
       .catch(function(error) {
@@ -105,7 +99,7 @@ class Login extends React.Component {
             Submit
           </button>
         </form>
-        {this.props.logged?<Redirect to="/" />: null}
+        {this.props.logged ? <Redirect to="/" /> : null}
       </div>
     );
   }
@@ -113,6 +107,7 @@ class Login extends React.Component {
 
 const mapStateToProps = state => ({
   email: state.user.email,
+  password: state.user.password,
   logged: state.user.logged
 });
 
@@ -121,11 +116,12 @@ const mapDispatchToProps = dispatch => ({
   onSetFullName: name => dispatch(setFullName(name)),
   onSetUserId: userId => dispatch(setUserId(userId)),
   onSetTitle: title => dispatch(setTitle(title)),
-  // onSetCareerFormId: formId => dispatch(setCareerFormId(formId)),
   onSetProfessionId: professionId => dispatch(setProfessionId(professionId)),
+  onSetPassword: password => dispatch(setPassword(password)),
   onSetRoles: roles => dispatch(setRoles(roles)),
   onSetLogged: logged => dispatch(setLogged(logged)),
-  onSetTeams: teams => dispatch(setTeams(teams))
+  onSetTeams: teams => dispatch(setTeams(teams)),
+  onSetToken: token => dispatch(setToken(token))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

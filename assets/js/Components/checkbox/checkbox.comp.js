@@ -23,6 +23,7 @@ class CheckBox extends React.Component {
   };
 
   componentDidMount() {
+    let found = false;
     if (this.props.positionIncludes !== undefined) {
       for (let i = 0; i < this.props.positionIncludes.length; i++) {
         for (
@@ -34,22 +35,21 @@ class CheckBox extends React.Component {
             this.props.positionIncludes[i].criteria[j].title ===
             this.props.competenceName
           ) {
+            found = true;
             this.setState({ checked: true });
           }
         }
       }
-      console.log(this.props.positionIncludes);
     } else {
+      this.setState({ checked: false });
+    }
+
+    if (found === false) {
       this.setState({ checked: false });
     }
   }
 
   componentDidUpdate(prevState, currentState) {
-    // console.log(prevState);
-    // console.log(currentState);
-    if (prevState.positionIncludes === undefined) {
-      return null;
-    }
     if (prevState.positionIncludes !== this.props.positionIncludes) {
       this.componentDidMount();
     }
