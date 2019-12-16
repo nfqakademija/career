@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Factory\ListViewFactory;
 use App\Factory\UserListViewFactory;
 use App\Factory\UserViewFactory;
 use App\Repository\UserRepository;
@@ -41,17 +42,22 @@ class UserController extends AbstractFOSRestController
     /** @var UserListViewFactory */
     private $userListViewFactory;
 
+    /** @var ListViewFactory  */
+    private $listViewFactory;
+
     public function __construct(
         UserRepository $userRepository,
         UserPasswordEncoderInterface $passwordEncoder,
         ViewHandlerInterface $viewHandler,
         UserViewFactory $userViewFactory,
-        UserListViewFactory $userListViewFactory
+        UserListViewFactory $userListViewFactory,
+        ListViewFactory $listViewFactory
     ) {
         $this->userRepository = $userRepository;
         $this->passwordEncoder = $passwordEncoder;
         $this->viewHandler = $viewHandler;
         $this->userViewFactory = $userViewFactory;
+        $this->listViewFactory = $listViewFactory;
         $this->userListViewFactory = $userListViewFactory;
     }
 
@@ -98,7 +104,11 @@ class UserController extends AbstractFOSRestController
         return $this->viewHandler->handle(View::create($this->userViewFactory->create($user)));
     }
 
-    public function getTeamManagerAction($teamId)
+    /**
+     * @param int $teamId
+     * @return Response
+     */
+    public function getTeamManagerAction(int $teamId)
     {
         $manager = $this->userRepository->findTeamManager($teamId);
 
@@ -107,10 +117,15 @@ class UserController extends AbstractFOSRestController
             return new Response(Response::HTTP_NOT_FOUND);
         }
 
-        return $this->viewHandler->handle(View::create($this->userListViewFactory->create($manager)));
+        $this->listViewFactory->setViewFactory(UserViewFactory::class);
+        return $this->viewHandler->handle(View::create($this->listViewFactory->create($manager)));
     }
 
-    public function getTeamUsersAction($teamId)
+    /**
+     * @param int $teamId
+     * @return Response
+     */
+    public function getTeamUsersAction(int $teamId)
     {
         $this->denyAccessUnlessGranted('team_id', $teamId);
         $users = $this->userRepository->findTeamUsers($teamId);
@@ -120,6 +135,7 @@ class UserController extends AbstractFOSRestController
             return new Response(Response::HTTP_NOT_FOUND);
         }
 
-        return $this->viewHandler->handle(View::create($this->userListViewFactory->create($users)));
+        $this->listViewFactory->setViewFactory(UserViewFactory::class);
+        return $this->viewHandler->handle(View::create($this->listViewFactory->create($users)));
     }
 }

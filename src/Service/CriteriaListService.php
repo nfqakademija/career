@@ -5,9 +5,12 @@ namespace App\Service;
 
 use App\Entity\Criteria;
 use App\Entity\CriteriaChoice;
+use App\Repository\CompetenceRepository;
 use App\Repository\CriteriaChoiceRepository;
 use App\Repository\CriteriaRepository;
 use App\Request\CriteriaListRequest;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 
 class CriteriaListService
 {
@@ -17,17 +20,30 @@ class CriteriaListService
     /** @var CriteriaChoiceRepository */
     private $criteriaChoiceRepository;
 
+    /** @var CompetenceRepository  */
+    private $competenceRepository;
+
+    /**
+     * CriteriaListService constructor.
+     * @param CriteriaRepository $criteriaRepository
+     * @param CriteriaChoiceRepository $criteriaChoiceRepository
+     * @param CompetenceRepository $competenceRepository
+     */
     public function __construct(
         CriteriaRepository $criteriaRepository,
-        CriteriaChoiceRepository $criteriaChoiceRepository
+        CriteriaChoiceRepository $criteriaChoiceRepository,
+        CompetenceRepository $competenceRepository
     ) {
         $this->criteriaRepository = $criteriaRepository;
         $this->criteriaChoiceRepository = $criteriaChoiceRepository;
+        $this->competenceRepository = $competenceRepository;
     }
 
     /**
      * @param CriteriaListRequest $request
      * @return bool
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function handleCriteriaChoiceCreation(CriteriaListRequest $request)
     {
@@ -40,15 +56,20 @@ class CriteriaListService
         $criteria = new Criteria();
         $criteriaChoice = new CriteriaChoice();
 
-        $criteria->setFkCompetence($request->getCompetenceId());
+        $competence = $this->competenceRepository->findOneBy(['id' => $request->getCompetenceId()]);
+
+        if (!$competence) {
+            return false;
+        }
+        $criteria->setFkCompetence($competence);
         $criteria->setTitle($request->getCriteriaTitle());
-        $criteria->setIsApplicable(1);
+        $criteria->setIsApplicable(true);
         $this->criteriaRepository->create($criteria);
 
         foreach ($choices as $key => $choice) {
             $criteriaChoice->setFkCriteria($criteria);
             $criteriaChoice->setTitle($choice);
-            $criteriaChoice->setIsApplicable(1);
+            $criteriaChoice->setIsApplicable(true);
             $this->criteriaChoiceRepository->create($criteriaChoice);
         }
 
@@ -59,6 +80,8 @@ class CriteriaListService
     /**
      * @param CriteriaListRequest $request
      * @return bool
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function handleCriteriaUpdate(CriteriaListRequest $request)
     {
@@ -71,6 +94,8 @@ class CriteriaListService
     /**
      * @param CriteriaListRequest $request
      * @return bool
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function handleCriteriaChoiceUpdate(CriteriaListRequest $request)
     {
@@ -83,11 +108,13 @@ class CriteriaListService
     /**
      * @param CriteriaListRequest $request
      * @return bool
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function handleCriteriaDelete(CriteriaListRequest $request)
     {
         $criteria = $this->criteriaRepository->findOneBy(['id' => $request->getCriteriaId()]);
-        $criteria->setIsApplicable(0);
+        $criteria->setIsApplicable(false);
         $this->criteriaRepository->save();
         return true;
     }
@@ -95,11 +122,13 @@ class CriteriaListService
     /**
      * @param CriteriaListRequest $request
      * @return bool
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function handleCriteriaChoiceDelete(CriteriaListRequest $request)
     {
         $criteriaChoice = $this->criteriaChoiceRepository->findOneBy(['id' => $request->getChoiceId()]);
-        $criteriaChoice->setIsApplicable(0);
+        $criteriaChoice->setIsApplicable(false);
         $this->criteriaChoiceRepository->save();
         return true;
     }

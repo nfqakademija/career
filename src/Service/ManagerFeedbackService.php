@@ -9,6 +9,8 @@ use App\Repository\ManagerAnswerRepository;
 use App\Repository\UserAnswerRepository;
 use App\Request\ManagerFeedbackRequest;
 use App\Utils\ArrayFieldDispatcher;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 
 class ManagerFeedbackService
 {
@@ -22,6 +24,12 @@ class ManagerFeedbackService
     /** @var UserAnswerRepository  */
     private $userAnswerRepository;
 
+    /**
+     * ManagerFeedbackService constructor.
+     * @param ManagerAnswerRepository $managerAnswerRepository
+     * @param CareerFormRepository $careerFormRepository
+     * @param UserAnswerRepository $userAnswerRepository
+     */
     public function __construct(
         ManagerAnswerRepository $managerAnswerRepository,
         CareerFormRepository $careerFormRepository,
@@ -32,6 +40,12 @@ class ManagerFeedbackService
         $this->userAnswerRepository = $userAnswerRepository;
     }
 
+    /**
+     * @param ManagerFeedbackRequest $req
+     * @return bool
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
     public function handleSave(ManagerFeedbackRequest $req)
     {
         $form = $this->careerFormRepository->findOneBy(['id' => $req->getFormId()]);

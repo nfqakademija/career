@@ -4,13 +4,14 @@ namespace App\Controller;
 
 use App\Factory\FormViewFactory;
 use App\Factory\ManagerAnswerListViewFactory;
-use App\Factory\ManagerAnswerViewFactory;
 use App\Repository\CareerFormRepository;
 use App\Repository\ManagerAnswerRepository;
 use App\Repository\UserAnswerRepository;
 use App\Repository\UserRepository;
 use App\Request\ManagerFeedbackRequest;
 use App\Service\ManagerFeedbackService;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\View\ViewHandlerInterface;
@@ -28,7 +29,7 @@ class ManagerFeedbackController extends AbstractFOSRestController
     /** @var ViewHandlerInterface */
     private $viewHandler;
 
-    /** @var ManagerAnswerViewFactory */
+    /** @var ManagerAnswerListViewFactory  */
     private $managerAnswerListViewFactory;
 
     /** @var ManagerFeedbackService */
@@ -78,6 +79,8 @@ class ManagerFeedbackController extends AbstractFOSRestController
      * Post new manager answer/feedback
      * @param Request $request
      * @return Response
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function postFeedbackAction(Request $request)
     {
@@ -96,17 +99,18 @@ class ManagerFeedbackController extends AbstractFOSRestController
     }
 
     /**
-     * Get manager answers/feedback by career form id
-     * @param $slug
+     * Get manager answers/feedback by career form id (type of string passed by request)
+     * @param string $slug
      * @return Response
      */
-    public function getFeedbackAction($slug)
+    public function getFeedbackAction(string $slug)
     {
+
         $user = $this->userRepository->findBy(['fkCareerForm' => $slug]);
         if ($user) {
             $this->denyAccessUnlessGranted('user_id', $user->getId());
         }
-        $userAnswers = $this->userAnswerRepository->findBy(['fkCareerForm' => $slug]);
+        $userAnswers = $this->userAnswerRepository->findBy(['fkCareerForm' => (int) $slug]);
         $feedback = $this->managerAnswerRepository->findBy(['fkUserAnswer' => $userAnswers]);
 
         if (!$feedback) {

@@ -74,7 +74,7 @@ class CareerProfileService
         }
 
         $careerProfile->setProfession($profession);
-        $careerProfile->setIsArchived(0);
+        $careerProfile->setIsArchived(false);
 
         $this->careerProfileRepository->save($careerProfile);
         return true;

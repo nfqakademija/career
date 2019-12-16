@@ -3,7 +3,9 @@
 
 namespace App\Factory;
 
+use App\Entity\User;
 use App\View\UserListView;
+use App\View\UserView;
 
 class UserListViewFactory
 {
