@@ -85,7 +85,7 @@ class UserAnswerController extends AbstractFOSRestController
      * @return Response
      * @throws \Exception
      */
-    public function getAnswerAction(int $slug)
+    public function getAnswerAction($slug)
     {
         $answers = $this->userAnswerRepository->findBy(['fkCareerForm' => $slug]);
 
