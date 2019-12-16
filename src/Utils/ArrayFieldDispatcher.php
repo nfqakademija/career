@@ -10,11 +10,11 @@ class ArrayFieldDispatcher
      * Search for a given key=>value in an array
      * This function is used to fetch a single key=>value pair from an array
      *
-     * @param $array
-     * @param $fieldName
+     * @param array $array
+     * @param string $fieldName
      * @return bool|mixed
      */
-    public static function dispatchField($array, $fieldName)
+    public static function dispatchField(array $array, string $fieldName)
     {
         foreach ($array as $key => $value) {
             if ($key === $fieldName) {

@@ -9,6 +9,7 @@ use App\Repository\CareerFormRepository;
 use App\Repository\CareerProfileRepository;
 use App\Repository\UserRepository;
 use App\Service\CareerFormService;
+use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\View\ViewHandlerInterface;
@@ -93,9 +94,9 @@ class CareerFormController extends AbstractFOSRestController
      * Get CareerForm by user id
      * @param $slug
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
-    public function getFormAction(int $slug)
+    public function getFormAction($slug)
     {
         $user = $this->userRepository->findOneBy(['id' => $slug]);
 
@@ -120,10 +121,10 @@ class CareerFormController extends AbstractFOSRestController
 
     /**
      * Get CareerForm under evaluation by user id
-     * @param $slug
+     * @param int $slug
      * @return Response
      */
-    public function getEvaluationAction($slug)
+    public function getEvaluationAction(int $slug)
     {
         $user = $this->userRepository->findOneBy(['id' => $slug, 'underEvaluation'  => true]);
 

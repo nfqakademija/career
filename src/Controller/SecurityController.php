@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use Exception;
+use Generator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,11 +35,14 @@ class SecurityController extends AbstractController
      */
     public function logout()
     {
-        throw new \Exception('This method can be blank - it will be intercepted by the logout key on your firewall');
+        throw new Exception('This method can be blank - it will be intercepted by the logout key on your firewall');
     }
 
     /**
      * @Route("/profile", name="profile")
+     * @param UrlGeneratorInterface $urlGenerator
+     * @param UserInterface|null $user
+     * @return RedirectResponse|Response
      */
     public function profile(UrlGeneratorInterface $urlGenerator, UserInterface $user = null)
     {
@@ -52,6 +57,10 @@ class SecurityController extends AbstractController
         return new RedirectResponse($urlGenerator->generate('app_login'));
     }
 
+    /**
+     * @param array<String> $userRoles
+     * @return Generator
+     */
     private function roleNames(array $userRoles)
     {
         foreach ($userRoles as $role) {

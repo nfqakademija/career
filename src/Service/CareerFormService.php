@@ -46,7 +46,7 @@ class CareerFormService
         $careerForm = $this->careerFormRepository->findOneBy(['fkUser' => $user]) ?? new CareerForm();
         $careerForm->setFkUser($user);
         $careerForm->setFkCareerProfile($careerProfile);
-        $careerForm->setIsArchived(0);
+        $careerForm->setIsArchived(false);
         if (!$careerForm->getId()) {
             $careerForm->onPrePersist();
         }
