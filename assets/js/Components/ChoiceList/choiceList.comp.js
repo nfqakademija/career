@@ -6,13 +6,21 @@ import {
   isActionCalled
 } from "../../Actions/action";
 
+import { checkForAnswerId } from "../../helpers/helpers";
+
 class ChoiceList extends React.Component {
   onSelect = event => {
     const selectedIndex = event.target.options.selectedIndex;
     const choiceId = event.target.options[selectedIndex].getAttribute(
       "data-value"
     );
-    this.props.onSetAnswers(this.props.criteriaId, choiceId);
+
+    let answerId = checkForAnswerId(
+      this.props.choiceList,
+      this.props.criteriaId
+    );
+
+    this.props.onSetAnswers(this.props.criteriaId, choiceId, answerId);
     this.props.onUpdateChoiceAnswer(this.props.criteriaId, choiceId);
     this.props.onSetChangedValues(true);
   };
@@ -53,8 +61,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onSetAnswers: (criteriaId, choiceId) =>
-    dispatch(setAnswers(criteriaId, choiceId)),
+  onSetAnswers: (criteriaId, choiceId, answerId) =>
+    dispatch(setAnswers(criteriaId, choiceId, answerId)),
   onUpdateChoiceAnswer: (criteriaId, choiceId) =>
     dispatch(updateChoiceAnswerUserSide(criteriaId, choiceId)),
   onSetChangedValues: bollean => dispatch(isActionCalled(bollean))

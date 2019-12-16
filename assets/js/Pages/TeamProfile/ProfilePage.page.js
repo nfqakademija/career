@@ -26,6 +26,7 @@ class ProfilePage extends React.Component {
     Axios.get(`/api/teams/${this.props.teams[0].id}/users`)
       .then(res => {
         this.setState({ profileNames: res.data.list });
+        console.log(res.data.list);
       })
       .catch(err => console.log(err));
   }
@@ -56,7 +57,7 @@ class ProfilePage extends React.Component {
 
   render() {
     return (
-      <div className="profilePage">
+      <div className="teamProfilePage">
         <div className="teamUsers">
           {this.state.profileNames.map(profileNames => (
             <ProfileButtons
@@ -69,9 +70,10 @@ class ProfilePage extends React.Component {
         </div>
 
         <div>
-          {this.state.fullProfile.length === 0 ? (
-            this.state.fullProfile === null ? (
-              <h1>No data about this profile yet.</h1>
+          {this.state.fullProfile === 404 ||
+          this.state.fullProfile.length === 0 ? (
+            this.state.fullProfile === 404 ? (
+              <h1 style={{textAlign:"center"}}>No Data About This Profile Yet. Try Again Later</h1>
             ) : null
           ) : (
             <React.Fragment>

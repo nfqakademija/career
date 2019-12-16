@@ -28,7 +28,7 @@ class User extends React.Component {
     if (this.state.userProfile.length === 0) {
       return (
         <div className="user">
-          <h1>No data about your profile.</h1>
+          <h1>Loading...</h1>
         </div>
       );
     }
