@@ -29,7 +29,7 @@ class ManagerFeedbackController extends AbstractFOSRestController
     /** @var ViewHandlerInterface */
     private $viewHandler;
 
-    /** @var ManagerAnswerListViewFactory  */
+    /** @var ManagerAnswerListViewFactory */
     private $managerAnswerListViewFactory;
 
     /** @var ManagerFeedbackService */
@@ -86,7 +86,8 @@ class ManagerFeedbackController extends AbstractFOSRestController
     {
         $requestObject = new ManagerFeedbackRequest($request);
 
-        $user = $this->userRepository->findBy(['fkCareerForm' => $requestObject->getFormId()]);
+        $careerForm = $this->careerFormRepository->findOneBy(['id' => $slug]);
+        $user = $this->userRepository->findOneBy(['id' => $careerForm->getFkUser()]);
         $this->denyAccessUnlessGranted('user_id', $user->getId());
 
         if (!$this->managerFeedbackService->handleSave($requestObject)) {
@@ -106,11 +107,14 @@ class ManagerFeedbackController extends AbstractFOSRestController
     public function getFeedbackAction(string $slug)
     {
 
-        $user = $this->userRepository->findBy(['fkCareerForm' => $slug]);
-        if ($user) {
+        $careerForm = $this->careerFormRepository->findOneBy(['id' => $slug]);
+
+        if ($careerForm) {
+            $user = $this->userRepository->findOneBy(['id' => $careerForm->getFkUser()]);
             $this->denyAccessUnlessGranted('user_id', $user->getId());
         }
-        $userAnswers = $this->userAnswerRepository->findBy(['fkCareerForm' => (int) $slug]);
+
+        $userAnswers = $this->userAnswerRepository->findBy(['fkCareerForm' => (int)$slug]);
         $feedback = $this->managerAnswerRepository->findBy(['fkUserAnswer' => $userAnswers]);
 
         if (!$feedback) {

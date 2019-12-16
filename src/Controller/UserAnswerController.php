@@ -95,9 +95,10 @@ class UserAnswerController extends AbstractFOSRestController
      */
     public function getAnswerAction(string $slug)
     {
-        $user = $this->userRepository->findBy(['fkCareerForm' => $slug]);
+        $careerForm = $this->careerFormRepository->findOneBy(['id' => $slug]);
 
-        if ($user) {
+        if ($careerForm) {
+            $user = $this->userRepository->findOneBy(['id' => $careerForm->getFkUser()]);
             $this->denyAccessUnlessGranted('user_id', $user->getId());
         }
 
