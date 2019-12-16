@@ -8,6 +8,7 @@ use App\Repository\CareerFormRepository;
 use App\Repository\UserAnswerRepository;
 use App\Request\UserAnswerRequest;
 use App\Service\UserAnswerService;
+use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\View\ViewHandlerInterface;
@@ -63,8 +64,8 @@ class UserAnswerController extends AbstractFOSRestController
     /**
      * Post new UserAnswer (self evaluation)
      * @param Request $request
-     * @return JsonResponse|Response
-     * @throws \Exception
+     * @return Response
+     * @throws Exception
      */
     public function postAnswerAction(Request $request)
     {
@@ -80,14 +81,14 @@ class UserAnswerController extends AbstractFOSRestController
     }
 
     /**
-     * Get list of user answers by career form id
-     * @param $slug
+     * Get list of user answers by career form id (type of string passed by request)
+     * @param string $slug
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
-    public function getAnswerAction($slug)
+    public function getAnswerAction(string $slug)
     {
-        $answers = $this->userAnswerRepository->findBy(['fkCareerForm' => $slug]);
+        $answers = $this->userAnswerRepository->findBy(['fkCareerForm' => (int) $slug]);
 
         if (!$answers) {
             return new Response(Response::HTTP_NOT_FOUND);

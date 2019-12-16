@@ -8,13 +8,12 @@ use App\View\FormView;
 
 class FormViewFactory
 {
-
     /**
      * @var CriteriaViewFactory
      */
     private $criteriaViewFactory;
 
-    /** @var UseriewFactory */
+    /** @var UserViewFactory */
     private $userViewFactory;
 
     /** @var ProfileViewFactory */
