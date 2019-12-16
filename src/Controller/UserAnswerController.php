@@ -6,6 +6,7 @@ use App\Factory\FormViewFactory;
 use App\Factory\UserAnswerListViewFactory;
 use App\Repository\CareerFormRepository;
 use App\Repository\UserAnswerRepository;
+use App\Repository\UserRepository;
 use App\Request\UserAnswerRequest;
 use App\Service\UserAnswerService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -16,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UserAnswerController extends AbstractFOSRestController
 {
-    /** @var UserAnswerService  */
+    /** @var UserAnswerService */
     private $userAnswerService;
 
     /** @var CareerFormRepository */
@@ -34,6 +35,9 @@ class UserAnswerController extends AbstractFOSRestController
     /** @var UserAnswerListViewFactory */
     private $userAnswerListViewFactory;
 
+    /** @var UserRepository */
+    private $userRepository;
+
     /**
      * UserAnswerController constructor.
      * @param UserAnswerService $answerService
@@ -42,6 +46,7 @@ class UserAnswerController extends AbstractFOSRestController
      * @param ViewHandlerInterface $viewHandler
      * @param FormViewFactory $formViewFactory
      * @param UserAnswerListViewFactory $userAnswerListViewFactory
+     * @param UserRepository $userRepository
      */
     public function __construct(
         UserAnswerService $answerService,
@@ -49,14 +54,17 @@ class UserAnswerController extends AbstractFOSRestController
         UserAnswerRepository $userAnswerRepository,
         ViewHandlerInterface $viewHandler,
         FormViewFactory $formViewFactory,
-        UserAnswerListViewFactory $userAnswerListViewFactory
-    ) {
+        UserAnswerListViewFactory $userAnswerListViewFactory,
+        UserRepository $userRepository
+    )
+    {
         $this->userAnswerService = $answerService;
         $this->formViewFactory = $formViewFactory;
         $this->viewHandler = $viewHandler;
         $this->careerFormRepository = $careerFormRepository;
         $this->userAnswerRepository = $userAnswerRepository;
         $this->userAnswerListViewFactory = $userAnswerListViewFactory;
+        $this->userRepository = $userRepository;
     }
 
 
@@ -87,6 +95,11 @@ class UserAnswerController extends AbstractFOSRestController
      */
     public function getAnswerAction($slug)
     {
+        $user = $this->userRepository->findBy(['fkCareerForm' => $slug]);
+        if ($user) {
+            $this->denyAccessUnlessGranted('user_id', $user->getId());
+        }
+
         $answers = $this->userAnswerRepository->findBy(['fkCareerForm' => $slug]);
 
         if (!$answers) {

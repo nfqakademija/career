@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Factory\FormListViewFactory;
 use App\Factory\FormViewFactory;
 use App\Factory\ListViewFactory;
 use App\Repository\CareerFormRepository;
@@ -43,10 +42,10 @@ class CareerFormController extends AbstractFOSRestController
     /** @var UserRepository */
     private $userRepository;
 
-    /** @var ListViewFactory  */
+    /** @var ListViewFactory */
     private $listViewFactory;
 
-    /** @var CareerFormService  */
+    /** @var CareerFormService */
     private $careerFormService;
 
     /**
@@ -67,7 +66,8 @@ class CareerFormController extends AbstractFOSRestController
         FormViewFactory $formViewFactory,
         ListViewFactory $listViewFactory,
         CareerFormService $careerFormService
-    ) {
+    )
+    {
         $this->formViewFactory = $formViewFactory;
         $this->viewHandler = $viewHandler;
         $this->careerFormRepository = $careerFormRepository;
@@ -99,6 +99,8 @@ class CareerFormController extends AbstractFOSRestController
     {
         $user = $this->userRepository->findOneBy(['id' => $slug]);
 
+        $this->denyAccessUnlessGranted('user_id', $slug);
+
         $careerForm = $this->careerFormService->getUserCareerForm($user);
         if (!$careerForm) {
             return new Response(Response::HTTP_NOT_FOUND);
@@ -113,7 +115,7 @@ class CareerFormController extends AbstractFOSRestController
      */
     public function getEvaluationListAction()
     {
-        $formList = $this->careerFormRepository->findBy(['underEvaluation'  => true]);
+        $formList = $this->careerFormRepository->findBy(['underEvaluation' => true]);
         $this->listViewFactory->setViewFactory(FormViewFactory::class);
         return $this->viewHandler->handle(View::create($this->listViewFactory->create($formList)));
     }
@@ -125,7 +127,9 @@ class CareerFormController extends AbstractFOSRestController
      */
     public function getEvaluationAction($slug)
     {
-        $user = $this->userRepository->findOneBy(['id' => $slug, 'underEvaluation'  => true]);
+        $user = $this->userRepository->findOneBy(['id' => $slug, 'underEvaluation' => true]);
+
+        $this->denyAccessUnlessGranted('user_id', $slug);
 
         $careerForm = $this->careerFormService->getUserCareerForm($user);
         if (!$careerForm) {

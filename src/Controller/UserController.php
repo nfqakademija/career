@@ -87,6 +87,7 @@ class UserController extends AbstractFOSRestController
      */
     public function getUserAction(int $id)
     {
+        $this->denyAccessUnlessGranted('user_id', $id);
         $user = $this->userRepository->findOneBy(['id' => $id]);
 
         if (!$user) {
@@ -111,6 +112,7 @@ class UserController extends AbstractFOSRestController
 
     public function getTeamUsersAction($teamId)
     {
+        $this->denyAccessUnlessGranted('team_id', $teamId);
         $users = $this->userRepository->findTeamUsers($teamId);
 
         if (!$users) {

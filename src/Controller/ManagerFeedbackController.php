@@ -8,6 +8,7 @@ use App\Factory\ManagerAnswerViewFactory;
 use App\Repository\CareerFormRepository;
 use App\Repository\ManagerAnswerRepository;
 use App\Repository\UserAnswerRepository;
+use App\Repository\UserRepository;
 use App\Request\ManagerFeedbackRequest;
 use App\Service\ManagerFeedbackService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -18,26 +19,29 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ManagerFeedbackController extends AbstractFOSRestController
 {
-    /** @var UserAnswerRepository  */
+    /** @var UserAnswerRepository */
     private $userAnswerRepository;
 
-    /** @var ManagerAnswerRepository  */
+    /** @var ManagerAnswerRepository */
     private $managerAnswerRepository;
 
-    /** @var ViewHandlerInterface  */
+    /** @var ViewHandlerInterface */
     private $viewHandler;
 
-    /** @var ManagerAnswerViewFactory  */
+    /** @var ManagerAnswerViewFactory */
     private $managerAnswerListViewFactory;
 
-    /** @var ManagerFeedbackService  */
+    /** @var ManagerFeedbackService */
     private $managerFeedbackService;
 
-    /** @var FormViewFactory  */
+    /** @var FormViewFactory */
     private $formViewFactory;
 
-    /** @var CareerFormRepository  */
+    /** @var CareerFormRepository */
     private $careerFormRepository;
+
+    /** @var UserRepository */
+    private $userRepository;
 
     /**
      * ManagerFeedbackController constructor.
@@ -48,6 +52,7 @@ class ManagerFeedbackController extends AbstractFOSRestController
      * @param ManagerFeedbackService $managerFeedbackService
      * @param FormViewFactory $formViewFactory
      * @param CareerFormRepository $careerFormRepository
+     * @param UserRepository $userRepository
      */
     public function __construct(
         ViewHandlerInterface $viewHandler,
@@ -56,7 +61,8 @@ class ManagerFeedbackController extends AbstractFOSRestController
         ManagerAnswerRepository $managerAnswerRepository,
         ManagerFeedbackService $managerFeedbackService,
         FormViewFactory $formViewFactory,
-        CareerFormRepository $careerFormRepository
+        CareerFormRepository $careerFormRepository,
+        UserRepository $userRepository
     ) {
         $this->viewHandler = $viewHandler;
         $this->userAnswerRepository = $userAnswerRepository;
@@ -65,6 +71,7 @@ class ManagerFeedbackController extends AbstractFOSRestController
         $this->managerFeedbackService = $managerFeedbackService;
         $this->formViewFactory = $formViewFactory;
         $this->careerFormRepository = $careerFormRepository;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -75,6 +82,9 @@ class ManagerFeedbackController extends AbstractFOSRestController
     public function postFeedbackAction(Request $request)
     {
         $requestObject = new ManagerFeedbackRequest($request);
+
+        $user = $this->userRepository->findBy(['fkCareerForm' => $requestObject->getFormId()]);
+        $this->denyAccessUnlessGranted('user_id', $user->getId());
 
         if (!$this->managerFeedbackService->handleSave($requestObject)) {
             return new Response(Response::HTTP_NOT_FOUND);
@@ -92,6 +102,10 @@ class ManagerFeedbackController extends AbstractFOSRestController
      */
     public function getFeedbackAction($slug)
     {
+        $user = $this->userRepository->findBy(['fkCareerForm' => $slug]);
+        if ($user) {
+            $this->denyAccessUnlessGranted('user_id', $user->getId());
+        }
         $userAnswers = $this->userAnswerRepository->findBy(['fkCareerForm' => $slug]);
         $feedback = $this->managerAnswerRepository->findBy(['fkUserAnswer' => $userAnswers]);
 
