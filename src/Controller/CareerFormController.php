@@ -67,8 +67,7 @@ class CareerFormController extends AbstractFOSRestController
         FormViewFactory $formViewFactory,
         ListViewFactory $listViewFactory,
         CareerFormService $careerFormService
-    )
-    {
+    ) {
         $this->formViewFactory = $formViewFactory;
         $this->viewHandler = $viewHandler;
         $this->careerFormRepository = $careerFormRepository;

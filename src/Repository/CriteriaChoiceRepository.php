@@ -46,5 +46,4 @@ class CriteriaChoiceRepository extends ServiceEntityRepository
     {
         $this->entityManager->flush();
     }
-
 }

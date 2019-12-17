@@ -88,7 +88,6 @@ class CriteriaListController extends AbstractFOSRestController
         if (!$this->criteriaListService->handleCriteriaChoiceCreation($requestObject)) {
             return new Response(Response::HTTP_NOT_FOUND);
         }
-
         return new Response(json_encode(['message' => 'Created']), Response::HTTP_CREATED);
     }
 
