@@ -14,12 +14,6 @@ class User extends React.Component {
     };
   }
   componentDidMount() {
-    // Axios.get(`/api/forms/${this.props.userId}`)
-    //   .then(res => {
-    //     this.props.onSetCareerFormId(res.data.id);
-    //     this.setState({ userProfile: res.data });
-    //   })
-    //   .catch(err => console.log(err));
     Axios.get(`/api/forms/${this.props.userId}`, {
       headers: { Authorization: `Bearer ${this.props.token}` }
     })
@@ -33,7 +27,7 @@ class User extends React.Component {
   render() {
     if (this.state.userProfile.length === 0) {
       return (
-        <div className="user">
+        <div className="user"> 
           <h1>Loading...</h1>
         </div>
       );
@@ -41,6 +35,7 @@ class User extends React.Component {
     return (
       <div className="user">
         <MountUserProfile data={this.state.userProfile} />
+       
       </div>
     );
   }

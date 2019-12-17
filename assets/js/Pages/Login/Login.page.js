@@ -1,20 +1,10 @@
 import React from "react";
 import "./Login.style.scss";
 import { connect } from "react-redux";
-import {
-  setEmail,
-  setFullName,
-  setUserId,
-  setTitle,
-  setProfessionId,
-  setRoles,
-  setLogged,
-  setTeams,
-  setPassword,
-  setToken
-} from "../../Actions/action";
+import { setEmail, setLogged, setPassword } from "../../Actions/action";
 import Axios from "axios";
 import { Redirect } from "react-router-dom";
+import { setLoginInfo } from "../../thunk/setLoginInfo";
 
 class Login extends React.Component {
   change = e => {
@@ -30,32 +20,14 @@ class Login extends React.Component {
   submit = e => {
     e.preventDefault();
 
-    const {
-      onSetRoles,
-      onSetFullName,
-      onSetUserId,
-      onSetProfessionId,
-      onSetTitle,
-      onSetLogged,
-      onSetTeams,
-      onSetToken
-    } = this.props;
-
     Axios.post("/api/login_check", {
       username: this.props.email,
       password: this.props.password
     })
       .then(response => {
         if (response.data !== 401 && response.data !== 404) {
-          const data = response.data.data;
-          onSetFullName(data.firstName + " " + data.lastName);
-          onSetUserId(data.id);
-          onSetProfessionId(data.professionId);
-          onSetRoles(data.roles);
-          onSetTitle(data.professionTitle);
-          onSetLogged(!this.props.logged);
-          onSetTeams(data.teams);
-          onSetToken(response.data.token);
+          this.props.onSetLoginInfo(response.data);
+          localStorage.setItem("jwt", JSON.stringify(response.data));
         } else {
           alert("Login Failed");
         }
@@ -113,15 +85,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onSetEmail: email => dispatch(setEmail(email)),
-  onSetFullName: name => dispatch(setFullName(name)),
-  onSetUserId: userId => dispatch(setUserId(userId)),
-  onSetTitle: title => dispatch(setTitle(title)),
-  onSetProfessionId: professionId => dispatch(setProfessionId(professionId)),
   onSetPassword: password => dispatch(setPassword(password)),
-  onSetRoles: roles => dispatch(setRoles(roles)),
   onSetLogged: logged => dispatch(setLogged(logged)),
-  onSetTeams: teams => dispatch(setTeams(teams)),
-  onSetToken: token => dispatch(setToken(token))
+  onSetLoginInfo: data => dispatch(setLoginInfo(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

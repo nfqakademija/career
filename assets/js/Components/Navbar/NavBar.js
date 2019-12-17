@@ -53,6 +53,7 @@ class NavBar extends React.Component {
   logout = () => {
     this.props.onSetLogged(!this.props.logged);
     this.props.onResetApp();
+    localStorage.removeItem('jwt');
   }
 
   render() {

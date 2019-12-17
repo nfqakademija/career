@@ -12,8 +12,16 @@ import Error from "./Pages/Error/Error";
 
 import { withRouter } from "react-router";
 import { setManagerPage } from "./Actions/action";
+import { setLoginInfo } from "./thunk/setLoginInfo";
 
 class App extends React.Component {
+  componentDidMount() {
+    if (localStorage.getItem("jwt") !== null) {
+      const data = localStorage.getItem("jwt");
+      this.props.onSetLoginInfo(JSON.parse(data));
+    }
+  }
+
   render() {
     this.props.location.pathname === "/profiles"
       ? this.props.onSetManagerPage(true)
@@ -40,10 +48,6 @@ class App extends React.Component {
           <Route path="/login" component={Login} />
 
           <Route component={Error} />
-
-          {/* {this.props.location.pathname === "profiles"
-            ? this.props.onSetManagerPage(true)
-            : this.props.onSetManagerPage(false)} */}
         </Switch>
         <Footer />
       </div>
@@ -57,7 +61,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onSetManagerPage: profile => dispatch(setManagerPage(profile))
+  onSetManagerPage: profile => dispatch(setManagerPage(profile)),
+  onSetLoginInfo: data => dispatch(setLoginInfo(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App));
