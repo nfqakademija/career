@@ -87,6 +87,10 @@ export const setCriteriaList = criteriaList => ({
   criteriaList
 });
 
+export const restartCompetenceAndCriteriaLists = () => ({
+  type: 'restartCompetenceAndCriteriaLists'
+})
+
 export const setPositionIncludedCriterias = positionIncludedCriterias => ({
   type: "setPositionIncludedCriterias",
   positionIncludedCriterias

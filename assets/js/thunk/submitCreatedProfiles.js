@@ -1,7 +1,7 @@
 import Axios from "axios";
+import { restartCompetenceAndCriteriaLists } from "../Actions/action";
 
 export const submitCreatedProfiles = (obj) => (dispatch, getState) => {
-  console.log(obj)
   Axios.post(
     "/api/profiles",
     {
@@ -13,6 +13,7 @@ export const submitCreatedProfiles = (obj) => (dispatch, getState) => {
   )
     .then(function (response) {
       alert("Created successfully");
+      dispatch(restartCompetenceAndCriteriaLists())
     })
     .catch(function (error) {
       console.log(error);

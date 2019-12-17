@@ -40,6 +40,12 @@ export const hrPage = (state = initialState, action) => {
         ...state,
         positionIncludedCriterias: action.positionIncludedCriterias
       };
+    case 'restartCompetenceAndCriteriaLists':
+      return {
+        ...state,
+        competenceList: [],
+        criteriaList: []
+      }
     default:
       return state;
   }

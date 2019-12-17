@@ -9,18 +9,27 @@ import Login from "./Pages/Login/Login.page";
 import { connect } from "react-redux";
 import User from "./Pages/UserProfile/user.page";
 import Error from "./Pages/Error/Error";
-
 import { withRouter } from "react-router";
 import { setManagerPage, setEmail } from "./Actions/action";
 import { setLoginInfo } from "./thunk/setLoginInfo";
+import decode from 'jwt-decode';
 
 class App extends React.Component {
   componentDidMount() {
     if (localStorage.getItem("jwt") !== null) {
       const data = localStorage.getItem("jwt");
       const email = localStorage.getItem('email');
-      this.props.onSetEmail(JSON.parse(email));
-      this.props.onSetLoginInfo(JSON.parse(data));
+
+      const token = JSON.parse(data)
+      const decoded = decode(token.token);
+      if (decoded.exp < Date.now() / 1000) {
+        localStorage.removeItem('jwt');
+        this.props.history.push('/login');
+      }
+      else {
+        this.props.onSetEmail(JSON.parse(email));
+        this.props.onSetLoginInfo(JSON.parse(data));
+      }
     }
   }
 
