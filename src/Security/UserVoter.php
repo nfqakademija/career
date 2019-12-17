@@ -56,16 +56,15 @@ class UserVoter extends Voter
     private function canViewByUser($subject, User $user)
     {
         if ($this->security->isGranted('ROLE_HEAD')) {
-
             // checking if logged manager team Id matches with given user team Id
             $findUserTeams = $subject->getTeam();
             $managerTeams = $user->getTeam();
             foreach ($managerTeams as $managerTeam) {
                 foreach ($findUserTeams as $findUserTeam) {
-                    if ($managerTeam->getId() === $findUserTeam->getId())
+                    if ($managerTeam->getId() === $findUserTeam->getId()) {
                         return true;
+                    }
                 }
-
             }
             return false;
         }
@@ -83,8 +82,9 @@ class UserVoter extends Voter
         // checking if logged manager team Id matches with given Id
         $managerTeams = $user->getTeam();
         foreach ($managerTeams as $managerTeam) {
-            if ($managerTeam->getId() === (int)$subject)
+            if ($managerTeam->getId() === (int)$subject) {
                 return true;
+            }
         }
         return false;
     }
