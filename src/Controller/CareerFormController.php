@@ -2,15 +2,13 @@
 
 namespace App\Controller;
 
-use App\Entity\CareerForm;
-use App\Entity\User;
-use App\Factory\FormListViewFactory;
 use App\Factory\FormViewFactory;
 use App\Factory\ListViewFactory;
 use App\Repository\CareerFormRepository;
 use App\Repository\CareerProfileRepository;
 use App\Repository\UserRepository;
-use App\Service\CareerProfileService;
+use App\Service\CareerFormService;
+use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\View\ViewHandlerInterface;
@@ -22,7 +20,7 @@ use FOS\RestBundle\View\View;
  * endpoints:
  * /api/forms/{slug} - get career form by User id.
  * If User does not have a career form assigned, create one by career profile;
- * /api/form/list - get career form list; TODO: get career form list by team;
+ * /api/form/list - get career form list;
  * /api/answers - post answer
  * /api/answers/{slug} - get answers by form id
  *
@@ -45,13 +43,22 @@ class CareerFormController extends AbstractFOSRestController
     /** @var UserRepository */
     private $userRepository;
 
-    /** @var ListViewFactory  */
+    /** @var ListViewFactory */
     private $listViewFactory;
 
-    /** @var CareerProfileService */
-    private $careerProfileService;
+    /** @var CareerFormService */
+    private $careerFormService;
 
-
+    /**
+     * CareerFormController constructor.
+     * @param CareerFormRepository $careerFormRepository
+     * @param CareerProfileRepository $careerProfileRepository
+     * @param UserRepository $userRepository
+     * @param ViewHandlerInterface $viewHandler
+     * @param FormViewFactory $formViewFactory
+     * @param ListViewFactory $listViewFactory
+     * @param CareerFormService $careerFormService
+     */
     public function __construct(
         CareerFormRepository $careerFormRepository,
         CareerProfileRepository $careerProfileRepository,
@@ -59,19 +66,20 @@ class CareerFormController extends AbstractFOSRestController
         ViewHandlerInterface $viewHandler,
         FormViewFactory $formViewFactory,
         ListViewFactory $listViewFactory,
-        CareerProfileService $careerProfileService
-    ) {
+        CareerFormService $careerFormService
+    )
+    {
         $this->formViewFactory = $formViewFactory;
         $this->viewHandler = $viewHandler;
         $this->careerFormRepository = $careerFormRepository;
         $this->careerProfileRepository = $careerProfileRepository;
         $this->userRepository = $userRepository;
         $this->listViewFactory = $listViewFactory;
-        $this->careerProfileService = $careerProfileService;
+        $this->careerFormService = $careerFormService;
     }
 
     /**
-     *
+     * Get all registered career forms
      * @return Response
      */
     public function getFormListAction()
@@ -83,25 +91,52 @@ class CareerFormController extends AbstractFOSRestController
 
 
     /**
-     *
+     * Get CareerForm by user id
      * @param $slug
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
-    public function getFormAction(int $slug)
+    public function getFormAction($slug)
     {
-        $careerForm = $this->careerFormRepository->findOneBy(['fkUser' => $slug]) ?? new CareerForm();
+        $user = $this->userRepository->findOneBy(['id' => $slug]);
 
-        if (!$careerForm->getId()) {
-            $user = $this->userRepository->findOneBy(['id' => $slug]);
-            $careerProfile = $this->careerProfileRepository->findOneBy(['profession' => $user->getProfession()->getId()]);
-            $careerForm->setFkUser($user);
-            $careerForm->setFkCareerProfile($careerProfile);
-            $careerForm->setIsArchived(0);
-            $careerForm->setCreatedAt(new \DateTime("now"));
-            $careerForm->setUnderEvaluation(false);
-            $this->careerFormRepository->save($careerForm);
+        $this->denyAccessUnlessGranted('user', $user);
+
+        $careerForm = $this->careerFormService->getUserCareerForm($user);
+        if (!$careerForm) {
+            return new Response(Response::HTTP_NOT_FOUND);
         }
+
+        return $this->viewHandler->handle(View::create($this->formViewFactory->create($careerForm)));
+    }
+
+    /**
+     * Get career forms that are under evaluation
+     * @return Response
+     */
+    public function getEvaluationListAction()
+    {
+        $formList = $this->careerFormRepository->findBy(['underEvaluation' => true]);
+        $this->listViewFactory->setViewFactory(FormViewFactory::class);
+        return $this->viewHandler->handle(View::create($this->listViewFactory->create($formList)));
+    }
+
+    /**
+     * Get CareerForm under evaluation by user id
+     * @param int $slug
+     * @return Response
+     */
+    public function getEvaluationAction(int $slug)
+    {
+        $user = $this->userRepository->findOneBy(['id' => $slug, 'underEvaluation' => true]);
+
+        $this->denyAccessUnlessGranted('user', $user);
+
+        $careerForm = $this->careerFormService->getUserCareerForm($user);
+        if (!$careerForm) {
+            return new Response(Response::HTTP_NOT_FOUND);
+        }
+
         return $this->viewHandler->handle(View::create($this->formViewFactory->create($careerForm)));
     }
 }

@@ -1,7 +1,11 @@
 import React from "react";
-import { setComment, updateCommentAnswerUserSide } from "../../Actions/action";
+import {
+  setComment,
+  updateCommentAnswerUserSide,
+  isActionCalled
+} from "../../Actions/action";
 import { connect } from "react-redux";
-// import picturePress from '../../../pics/press.svg';
+import { checkForAnswerId } from "../../helpers/helpers";
 
 class Comments extends React.Component {
   constructor() {
@@ -34,11 +38,24 @@ class Comments extends React.Component {
 
   handle = () => {
     this.setState({ changeComment: !this.state.changeComment });
-    this.props.onSetComment(this.props.criteriaId, this.state.inputValue);
+
+    let answerId = checkForAnswerId(
+      this.props.choiceList,
+      this.props.criteriaId
+    );
+
+    this.props.onSetComment(
+      this.props.criteriaId,
+      this.state.inputValue,
+      answerId
+    );
+
     this.props.onUpdateCommentAnswer(
       this.props.criteriaId,
       this.state.inputValue
     );
+
+    this.props.onSetChangedValues(true);
   };
 
   render() {
@@ -64,7 +81,9 @@ class Comments extends React.Component {
                 this.setState({ inputValue: value.target.value })
               }
             />
-            <button onClick={this.handle}>Save</button>
+            <button className="commentButton" onClick={this.handle}>
+              Save
+            </button>
           </React.Fragment>
         ) : (
           <React.Fragment>
@@ -92,10 +111,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onSetComment: (criteriaId, comment) =>
-    dispatch(setComment(criteriaId, comment)),
+  onSetComment: (criteriaId, comment, answerId) =>
+    dispatch(setComment(criteriaId, comment, answerId)),
   onUpdateCommentAnswer: (criteriaId, comment) =>
-    dispatch(updateCommentAnswerUserSide(criteriaId, comment))
+    dispatch(updateCommentAnswerUserSide(criteriaId, comment)),
+  onSetChangedValues: bollean => dispatch(isActionCalled(bollean))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Comments);

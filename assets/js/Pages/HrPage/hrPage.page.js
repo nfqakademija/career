@@ -1,45 +1,41 @@
 import React from "react";
-import Axios from "axios";
 import "./hrPage.style.scss";
 import CheckBox from "../../Components/checkbox/checkbox.comp";
+import { connect } from "react-redux";
+import { getHrPageCriterias } from "../../thunk/getHrPageCriterias";
+import { getHrPagePositions } from "../../thunk/getHrPagePositions";
+import {
+  setCompetenceList,
+  setCriteriaList,
+  setCurrentPosition
+} from "../../Actions/action";
+import { getPositionIncludedCriterias } from "../../thunk/getPostionIncludedCriterias";
+import { submitCreatedProfiles } from "../../thunk/submitCreatedProfiles";
 
 class HrPage extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      profiles: [],
-      positions: [],
-      position: null,
-      competenceList: [],
-      criteriaList: [],
       show: []
     };
   }
 
   componentDidMount() {
-    Axios.get("/api/criteria/list")
-      .then(res => {
-        this.setState({ profiles: res.data.list });
-      })
-      .catch(err => console.log(err));
-
-    Axios.get("/api/profession/list")
-      .then(res => {
-        this.setState({ positions: res.data.list });
-      })
-      .catch(err => console.log(err));
+    this.props.onSetHrPageCriterias();
+    this.props.onSetHrPagePositions();
   }
 
   add = (competenceId, criteriaId) => {
-    var joined = this.state.competenceList.concat(competenceId);
-    this.state.competenceList.includes(competenceId)
+    var joined = this.props.competenceList.concat(competenceId);
+    this.props.competenceList.includes(competenceId)
       ? null
-      : this.setState({ competenceList: joined });
-    joined = this.state.criteriaList.concat(criteriaId);
-    this.state.criteriaList.includes(criteriaId)
+      : this.props.onSetCompetenceList(joined);
+
+    joined = this.props.criteriaList.concat(criteriaId);
+    this.props.criteriaList.includes(criteriaId)
       ? null
-      : this.setState({ criteriaList: joined });
+      : this.props.onSetCriteriaList(joined);
   };
 
   remove = (competenceId, criteriaId, criteriaList) => {
@@ -47,30 +43,29 @@ class HrPage extends React.Component {
     let max;
     let count = 0;
     criteriaList.forEach(element => (max = element.id));
-    this.state.criteriaList.forEach(element => {
+    this.props.criteriaList.forEach(element => {
       if (element >= min && element <= max) {
         count++;
       }
     });
 
     if (count === 1) {
-      let copy = [...this.state.competenceList];
+      let copy = [...this.props.competenceList];
       let index = copy.indexOf(competenceId);
       copy.splice(index, 1);
-      this.setState({ competenceList: copy });
+      this.props.onSetCompetenceList(copy);
     }
 
-    let copy = [...this.state.criteriaList];
+    let copy = [...this.props.criteriaList];
     let index = copy.indexOf(criteriaId);
     copy.splice(index, 1);
-    this.setState({ criteriaList: copy });
+    this.props.onSetCriteriaList(copy);
   };
 
   submit = () => {
-    //copy object without reference(dirty way). We can use loadash.
-    let copy = JSON.parse(JSON.stringify(this.state.profiles));
-    //to remove 0 which we assign below
-    Array.prototype.remove = function() {
+    let copy = JSON.parse(JSON.stringify(this.props.profiles));
+
+    Array.prototype.remove = function () {
       var what,
         a = arguments,
         L = a.length,
@@ -85,14 +80,14 @@ class HrPage extends React.Component {
     };
     //if competence isn't in list it's set to 0
     copy.forEach((element, i) =>
-      this.state.competenceList.includes(element.id) ? null : (copy[i] = 0)
+      this.props.competenceList.includes(element.id) ? null : (copy[i] = 0)
     );
 
     copy.remove(0);
     //same steps but with criteria
     copy.map((data, index) =>
       data.criteriaList.map((criteria, i) => {
-        this.state.criteriaList.includes(criteria.id)
+        this.props.criteriaList.includes(criteria.id)
           ? null
           : (copy[index].criteriaList[i] = 0);
       })
@@ -101,34 +96,22 @@ class HrPage extends React.Component {
     copy.map((data, index) => copy[index].criteriaList.remove(0));
 
     let obj = {
-      position: this.state.position,
+      position: this.props.currentPosition,
       competences: copy
     };
 
-    if (this.state.position === null || copy.length === 0) {
+    if (this.props.currentPosition === null || copy.length === 0) {
       alert("Select position or criterias");
     } else {
-      this.sendData(obj);
+      this.props.onSubmitCreatedProfiles(obj);
     }
   };
 
-  sendData = obj => {
-    console.log(obj);
-
-    Axios.post("/api/profiles", {
-      data: obj
-    })
-      .then(function(response) {
-        alert("Created successfully");
-      })
-      .catch(function(error) {
-        console.log(error);
-        alert("Something went wrong... Try again later");
-      });
-  };
-
   positonInput = e => {
-    this.setState({ position: e.target.value });
+    this.props.onSetCurrentPosition(e.target.value);
+    if (e.target.value !== null) {
+      this.props.onGetPositionIncludedCriterias(e.target.value);
+    }
   };
 
   toogle = i => {
@@ -146,18 +129,18 @@ class HrPage extends React.Component {
     return (
       <div className="hrPage">
         <label>Choose position: </label>
-        <select onChange={e => this.positonInput(e)}>
+        <select className="choiceListSelect" onChange={this.positonInput}>
           <option id={null} value={null}>
             --Select--
           </option>
-          {this.state.positions.map(positions => (
+          {this.props.positions.map(positions => (
             <option key={positions.id} value={positions.id}>
               {positions.title}
             </option>
           ))}
         </select>
 
-        {this.state.profiles.map((competences, i) => {
+        {this.props.profiles.map((competences, i) => {
           return (
             <React.Fragment key={competences.id}>
               <div className="competence">
@@ -165,9 +148,9 @@ class HrPage extends React.Component {
                   style={
                     this.state.show.includes(i)
                       ? {
-                          borderBottom: "none",
-                          borderRadius: "30px 30px 0px 0px"
-                        }
+                        borderBottom: "none",
+                        borderRadius: "30px 30px 0px 0px"
+                      }
                       : { borderRadius: "30px 30px 30px 30px" }
                   }
                   onClick={() => this.toogle(i)}
@@ -193,6 +176,10 @@ class HrPage extends React.Component {
                               competenceId={competences.id}
                               criteriaId={criterias.id}
                               criteriaList={competences.criteriaList}
+                              positionIncludes={
+                                this.props.positionIncludedCriterias
+                              }
+                              competenceName={criterias.title}
                             />
                           </td>
                         </tr>
@@ -204,10 +191,33 @@ class HrPage extends React.Component {
             </React.Fragment>
           );
         })}
-        <button onClick={this.submit}>Save</button>
+        <button className="submitButton" onClick={this.submit}>Save</button>
       </div>
     );
   }
 }
 
-export default HrPage;
+const mapStateToProps = state => ({
+  profiles: state.hrPage.profiles,
+  positions: state.hrPage.positions,
+  currentPosition: state.hrPage.currentPosition,
+  competenceList: state.hrPage.competenceList,
+  criteriaList: state.hrPage.criteriaList,
+  positionIncludedCriterias: state.hrPage.positionIncludedCriterias,
+  token: state.token.token
+});
+
+const mapDispatchToProps = dispatch => ({
+  onSetHrPageCriterias: () => dispatch(getHrPageCriterias()),
+  onSetHrPagePositions: () => dispatch(getHrPagePositions()),
+  onSetCurrentPosition: currentPosition =>
+    dispatch(setCurrentPosition(currentPosition)),
+  onSetCompetenceList: competenceList =>
+    dispatch(setCompetenceList(competenceList)),
+  onSetCriteriaList: criteriaList => dispatch(setCriteriaList(criteriaList)),
+  onGetPositionIncludedCriterias: positionId =>
+    dispatch(getPositionIncludedCriterias(positionId)),
+  onSubmitCreatedProfiles: obj => dispatch(submitCreatedProfiles(obj))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(HrPage);

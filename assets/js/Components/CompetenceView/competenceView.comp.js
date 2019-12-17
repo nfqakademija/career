@@ -1,5 +1,6 @@
 import React from "react";
 import Profile from "../Profile.v2/profile.comp";
+import { connect } from "react-redux";
 
 class CompetenceView extends React.Component {
   constructor() {
@@ -21,10 +22,25 @@ class CompetenceView extends React.Component {
     }
   };
 
+  componentDidUpdate(prev, curr) {
+    if (
+      prev.showProfile !== curr.showProfile &&
+      prev.name !== this.props.name &&
+      curr.showProfile.length !== 0
+    ) {
+      this.setState({ showProfile: [] });
+    }
+  }
+
   render() {
     const { name, position, competence, submit } = this.props;
     return (
       <div className="mountProfile">
+        {this.props.isValueChanged ? (
+          <h4 style={{ textAlign: "center", color: "red" }}>
+            You have unsaved changes!
+          </h4>
+        ) : null}
         <div className="u-flexCenter">
           <h4>Name: {name}</h4>
           <h4>Position: {position}</h4>
@@ -65,4 +81,8 @@ class CompetenceView extends React.Component {
   }
 }
 
-export default CompetenceView;
+const mapStateToProps = state => ({
+  isValueChanged: state.trackUserChanges.isActionCalled
+});
+
+export default connect(mapStateToProps, null)(CompetenceView);

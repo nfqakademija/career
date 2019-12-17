@@ -9,17 +9,24 @@ use App\Factory\CriteriaListViewFactory;
 
 class CompetenceViewFactory
 {
-    /**
-     * @var CriteriaViewFactory
-     */
+    /** @var CriteriaViewFactory */
     private $criteriaViewFactory;
 
+    /**
+     * CompetenceViewFactory constructor.
+     * @param CriteriaViewFactory $criteriaViewFactory
+     */
     public function __construct(CriteriaViewFactory $criteriaViewFactory)
     {
         $this->criteriaViewFactory = $criteriaViewFactory;
     }
 
-    public function create(Competence $competence): CompetenceView
+    /**
+     * Create view from Competence object
+     * @param Competence $competence
+     * @return CompetenceView
+     */
+    public function create(Competence $competence)
     {
         /** @var CompetenceView $competenceView */
         $competenceView = new CompetenceView();

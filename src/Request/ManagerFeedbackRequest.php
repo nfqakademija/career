@@ -9,30 +9,26 @@ use Symfony\Component\HttpFoundation\Request;
 class ManagerFeedbackRequest
 {
 
-    /** @var bool|mixed  */
+    /** @var int|null  */
     private $formId;
 
-    /** @var bool|mixed  */
-    private $criteriaId;
-
-    /** @var bool|mixed  */
+    /** @var array  */
     private $evaluation;
 
-    /** @var bool|mixed  */
-    private $comment;
+    /** @var array  */
+    private $comments;
 
 
     public function __construct(Request $request)
     {
         $json = (array)json_decode(((string)$request->getContent()), true);
-        $this->formId = ArrayFieldDispatcher::dispatchField($json, 'formId');
-        $this->criteriaId =  ArrayFieldDispatcher::dispatchField($json, 'criteriaId');
-        $this->evaluation =  ArrayFieldDispatcher::dispatchField($json, 'evaluation');
-        $this->comment = ArrayFieldDispatcher::dispatchField($json, 'comment');
+        $this->formId = ArrayFieldDispatcher::dispatchField($json, 'formId') ?? null;
+        $this->evaluation = ArrayFieldDispatcher::dispatchField($json, 'choiceAnswers') ?? array();
+        $this->comments = ArrayFieldDispatcher::dispatchField($json, 'commentAnswers') ?? array();
     }
 
     /**
-     * @return bool|mixed
+     * @return int
      */
     public function getFormId()
     {
@@ -40,15 +36,7 @@ class ManagerFeedbackRequest
     }
 
     /**
-     * @return bool|mixed
-     */
-    public function getCriteriaId()
-    {
-        return $this->criteriaId;
-    }
-
-    /**
-     * @return bool|mixed
+     * @return array
      */
     public function getEvaluation()
     {
@@ -56,10 +44,10 @@ class ManagerFeedbackRequest
     }
 
     /**
-     * @return bool|mixed
+     * @return array
      */
     public function getComment()
     {
-        return $this->comment;
+        return $this->comments;
     }
 }

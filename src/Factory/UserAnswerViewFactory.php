@@ -9,6 +9,11 @@ use App\View\UserAnswerView;
 class UserAnswerViewFactory
 {
 
+    /**
+     * Create view from UserAnswer object
+     * @param UserAnswer $userAnswer
+     * @return UserAnswerView
+     */
     public function create(UserAnswer $userAnswer): UserAnswerView
     {
         $userAnswerView = new UserAnswerView();

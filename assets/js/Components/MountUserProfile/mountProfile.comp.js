@@ -1,41 +1,35 @@
 import React from "react";
 import { connect } from "react-redux";
 import "./mountProfile.style.scss";
-import Axios from "axios";
 import { restartAnswers } from "../../Actions/action";
 import CompetenceView from "../CompetenceView/competenceView.comp";
 import { getUserAnswer } from "../../thunk/getUserAnswer";
+import { getTeamLeadAnswer } from "../../thunk/getTeamLeadAnswer";
+import { submitAnswers } from "../../thunk/submitAnswers";
 
 class MountProfile extends React.Component {
   componentDidMount() {
     this.props.onGetUserAnswer(this.props.formId);
+    this.props.onGetTeamLeadAnswer(this.props.formId);
   }
 
   submit = () => {
-    let obj = {
-      formId: this.props.formId,
-      choiceAnswers: this.props.answers,
-      commentAnswers: this.props.comments
-    };
-    console.log(obj);
-    if (this.props.answers.length === 0 && this.props.comments.length === 0) {
-      alert("You haven't changed anything.");
-    } else {
-      Axios.post("/api/answers", {
-        data: obj
-      })
-        .then(function(response) {
-          alert("Created successfully");
-        })
-        .catch(function(error) {
-          console.log(error);
-          alert("Something went wrong... Try again later");
-        });
-      this.props.onRestartAnswers();
-    }
+    this.props.onSubmitAnswers(
+      "/api/answers",
+      this.props.formId,
+      this.props.answers,
+      this.props.comments
+    );
   };
 
   render() {
+    if (this.props.data === 404) {
+      return (
+        <h1 style={{ textAlign: "center" }}>
+          No Data About This Profile. Try Again Later.
+        </h1>
+      );
+    }
     return (
       <div className="mountProfile">
         <CompetenceView
@@ -58,7 +52,10 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onRestartAnswers: () => dispatch(restartAnswers()),
-  onGetUserAnswer: formId => dispatch(getUserAnswer(formId))
+  onGetUserAnswer: formId => dispatch(getUserAnswer(formId)),
+  onGetTeamLeadAnswer: formId => dispatch(getTeamLeadAnswer(formId)),
+  onSubmitAnswers: (api, formId, answers, comments) =>
+    dispatch(submitAnswers(api, formId, answers, comments))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MountProfile);

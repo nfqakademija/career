@@ -8,8 +8,12 @@ use App\View\ChoiceView;
 
 class ChoiceViewFactory
 {
-
-    public function create(CriteriaChoice $criteriaChoice): ChoiceView
+    /**
+     * Create view from CriteriaChoice object
+     * @param CriteriaChoice $criteriaChoice
+     * @return ChoiceView
+     */
+    public function create(CriteriaChoice $criteriaChoice)
     {
         /** @var ChoiceView $choiceView */
         $choiceView = new ChoiceView();

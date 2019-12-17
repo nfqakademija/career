@@ -8,18 +8,23 @@ use App\View\FormView;
 
 class FormViewFactory
 {
-
     /**
      * @var CriteriaViewFactory
      */
     private $criteriaViewFactory;
 
-    /** @var UseriewFactory */
+    /** @var UserViewFactory */
     private $userViewFactory;
 
     /** @var ProfileViewFactory */
     private $profileViewFactory;
 
+    /**
+     * FormViewFactory constructor.
+     * @param CriteriaViewFactory $criteriaViewFactory
+     * @param UserViewFactory $userViewFactory
+     * @param ProfileViewFactory $profileViewFactory
+     */
     public function __construct(
         CriteriaViewFactory $criteriaViewFactory,
         UserViewFactory $userViewFactory,
@@ -30,7 +35,12 @@ class FormViewFactory
         $this->criteriaViewFactory = $criteriaViewFactory;
     }
 
-    public function create(CareerForm $form): FormView
+    /**
+     * Create view from Form object
+     * @param CareerForm $form
+     * @return FormView
+     */
+    public function create(CareerForm $form)
     {
         /** @var FormView $formView */
         $formView = new FormView();

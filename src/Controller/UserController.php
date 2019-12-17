@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Factory\ListViewFactory;
 use App\Factory\UserListViewFactory;
 use App\Factory\UserViewFactory;
 use App\Repository\UserRepository;
@@ -16,7 +17,6 @@ use FOS\RestBundle\View\View;
  * Class UserController
  *
  * endpoints:
- * /api/users/logins/ - get user from login;
  * /api/users/{id} - get user information by id;
  * /api/user/all - get all active registered users;
  * /api/teams/{id}/manager - get team manager;
@@ -41,43 +41,23 @@ class UserController extends AbstractFOSRestController
     /** @var UserListViewFactory */
     private $userListViewFactory;
 
+    /** @var ListViewFactory  */
+    private $listViewFactory;
+
     public function __construct(
         UserRepository $userRepository,
         UserPasswordEncoderInterface $passwordEncoder,
         ViewHandlerInterface $viewHandler,
         UserViewFactory $userViewFactory,
-        UserListViewFactory $userListViewFactory
+        UserListViewFactory $userListViewFactory,
+        ListViewFactory $listViewFactory
     ) {
         $this->userRepository = $userRepository;
         $this->passwordEncoder = $passwordEncoder;
         $this->viewHandler = $viewHandler;
         $this->userViewFactory = $userViewFactory;
+        $this->listViewFactory = $listViewFactory;
         $this->userListViewFactory = $userListViewFactory;
-    }
-
-
-    /**
-     * @param Request $request
-     * @return Response
-     */
-    public function postUserLoginAction(Request $request)
-    {
-        // Fetch data from JSON
-        $data = json_decode($request->getContent(), true);
-
-        $user = $this->userRepository->findOneBy(['email' => $data['email']]);
-
-        if (!$user) {
-            // fail authentication with a custom error
-            return new Response(Response::HTTP_NOT_FOUND);
-        }
-
-        if (!$this->passwordEncoder->isPasswordValid($user, $data['password'])) {
-            // fail authentication because bad password
-            return new Response(Response::HTTP_UNAUTHORIZED);
-        }
-
-        return $this->viewHandler->handle(View::create($this->userViewFactory->create($user)));
     }
 
     /**
@@ -88,6 +68,8 @@ class UserController extends AbstractFOSRestController
     public function getUserAction(int $id)
     {
         $user = $this->userRepository->findOneBy(['id' => $id]);
+        $this->denyAccessUnlessGranted('user', $user);
+
 
         if (!$user) {
             // user not found
@@ -97,19 +79,11 @@ class UserController extends AbstractFOSRestController
         return $this->viewHandler->handle(View::create($this->userViewFactory->create($user)));
     }
 
-    public function getUserAllAction()
-    {
-        $user = $this->userRepository->findBy(['isActive' => 1]);
-
-        if (!$user) {
-            // users not found
-            return new Response(Response::HTTP_NOT_FOUND);
-        }
-
-        return $this->viewHandler->handle(View::create($this->userListViewFactory->create($user)));
-    }
-
-    public function getTeamManagerAction($teamId)
+    /**
+     * @param int $teamId
+     * @return Response
+     */
+    public function getTeamManagerAction(int $teamId)
     {
         $manager = $this->userRepository->findTeamManager($teamId);
 
@@ -118,11 +92,17 @@ class UserController extends AbstractFOSRestController
             return new Response(Response::HTTP_NOT_FOUND);
         }
 
-        return $this->viewHandler->handle(View::create($this->userListViewFactory->create($manager)));
+        $this->listViewFactory->setViewFactory(UserViewFactory::class);
+        return $this->viewHandler->handle(View::create($this->listViewFactory->create($manager)));
     }
 
-    public function getTeamUsersAction($teamId)
+    /**
+     * @param int $teamId
+     * @return Response
+     */
+    public function getTeamUsersAction(int $teamId)
     {
+        $this->denyAccessUnlessGranted('team', $teamId);
         $users = $this->userRepository->findTeamUsers($teamId);
 
         if (!$users) {
@@ -130,6 +110,7 @@ class UserController extends AbstractFOSRestController
             return new Response(Response::HTTP_NOT_FOUND);
         }
 
-        return $this->viewHandler->handle(View::create($this->userListViewFactory->create($users)));
+        $this->listViewFactory->setViewFactory(UserViewFactory::class);
+        return $this->viewHandler->handle(View::create($this->listViewFactory->create($users)));
     }
 }

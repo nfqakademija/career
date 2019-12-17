@@ -8,16 +8,23 @@ use App\View\UserView;
 
 class UserViewFactory
 {
-    /**
-     * @var TeamViewFactory
-     */
+    /** @var TeamViewFactory */
     private $teamViewFactory;
 
+    /**
+     * UserViewFactory constructor.
+     * @param TeamViewFactory $teamViewFactory
+     */
     public function __construct(TeamViewFactory $teamViewFactory)
     {
         $this->teamViewFactory = $teamViewFactory;
     }
 
+    /**
+     * Create a view from User object
+     * @param User $user
+     * @return UserView
+     */
     public function create(User $user): UserView
     {
         $userView = new UserView();

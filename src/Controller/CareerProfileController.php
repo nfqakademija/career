@@ -40,7 +40,14 @@ class CareerProfileController extends AbstractFOSRestController
     /** @var ListViewFactory */
     private $listViewFactory;
 
-
+    /**
+     * CareerProfileController constructor.
+     * @param ViewHandlerInterface $viewHandler
+     * @param CareerProfileRepository $careerProfileRepository
+     * @param ProfileViewFactory $profileViewFactory
+     * @param CareerProfileService $careerProfileService
+     * @param ListViewFactory $listViewFactory
+     */
     public function __construct(
         ViewHandlerInterface $viewHandler,
         CareerProfileRepository $careerProfileRepository,
@@ -56,14 +63,15 @@ class CareerProfileController extends AbstractFOSRestController
     }
 
     /**
-     *
+     * Post new CareerProfile
      * @param Request $request
      * @return Response
+     * @throws \Exception
      */
     public function postProfileAction(Request $request)
     {
         $requestObject = new CareerProfileRequest($request);
-        if (!$this->careerProfileService->handleCareerProfileSave($requestObject)) {
+        if (!$this->careerProfileService->handleSave($requestObject)) {
             return new Response(Response::HTTP_NOT_FOUND);
         }
 
@@ -71,7 +79,7 @@ class CareerProfileController extends AbstractFOSRestController
     }
 
     /**
-     *
+     * Get a list of career profiles
      * @return Response
      */
     public function getProfileListAction()
@@ -82,7 +90,7 @@ class CareerProfileController extends AbstractFOSRestController
     }
 
     /**
-     *
+     * Get CareerProfile by occupation/profession
      * @param string $slug
      * @return Response
      */

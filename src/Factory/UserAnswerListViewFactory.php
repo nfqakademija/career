@@ -8,26 +8,34 @@ use App\View\UserAnswerListView;
 class UserAnswerListViewFactory
 {
 
-    /**
-     * @var UserAnswerViewFactory
-     */
+    /** @var UserAnswerViewFactory */
     private $userAnswerViewFactory;
 
+    /**
+     * UserAnswerListViewFactory constructor.
+     * @param UserAnswerViewFactory $userAnswerViewFactory
+     */
     public function __construct(
         UserAnswerViewFactory $userAnswerViewFactory
     ) {
         $this->userAnswerViewFactory = $userAnswerViewFactory;
     }
 
-    public function create(Array $userAnswers): UserAnswerListView
+    /**
+     * Create view of list of UserAnswerView objects
+     * @param array $userAnswers
+     * @return UserAnswerListView
+     */
+    public function create(Array $userAnswers)
     {
         /** @var UserAnswerListView $userAnswerListView */
         $userAnswerListView = new UserAnswerListView();
         foreach ($userAnswers as $key => $userAnswer) {
             $userAnswerView = $this->userAnswerViewFactory->create($userAnswer);
+            $userAnswerListView->list[$key]['answerId'] = $userAnswerView->id;
             $userAnswerListView->list[$key]['criteriaId'] = $userAnswerView->criteria;
-            $userAnswerListView->list[$key]['choiceId'] = ($userAnswerView->choice)? $userAnswerView->choice: null;
-            $userAnswerListView->list[$key]['comment'] = ($userAnswerView->comment)? $userAnswerView->comment: null;
+            $userAnswerListView->list[$key]['choiceId'] = ($userAnswerView->choice)?? null;
+            $userAnswerListView->list[$key]['comment'] = ($userAnswerView->comment)?? null;
         }
 
         return $userAnswerListView;

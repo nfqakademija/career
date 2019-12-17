@@ -9,6 +9,11 @@ use App\View\ProfessionView;
 class ProfessionViewFactory
 {
 
+    /**
+     * Create view from Profession object
+     * @param Profession $profession
+     * @return ProfessionView
+     */
     public function create(Profession $profession) : ProfessionView
     {
         /** @var ProfessionView $professionView */

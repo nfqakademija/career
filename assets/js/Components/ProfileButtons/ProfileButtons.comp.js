@@ -1,16 +1,11 @@
 import React from "react";
-// import { setSelectedProfile } from "../../Actions/action";
-// import Axios from 'axios';
-// import { connect } from "react-redux";
-
+import "./profileButtons.style.scss";
 class ProfileButtons extends React.Component {
   render() {
     const { id, name, handle } = this.props;
     return (
-      <div>
-        <button onClick={() => handle(id)}>
-          {name}
-        </button>
+      <div className="profileButtons">
+        <button onClick={() => handle(id)}>{name}</button>
       </div>
     );
   }

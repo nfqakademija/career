@@ -2,17 +2,14 @@
 
 namespace App\Controller;
 
-use App\Entity\Criteria;
-use App\Entity\CriteriaChoice;
 use App\Factory\CompetenceViewFactory;
 use App\Factory\ListViewFactory;
 use App\Repository\CompetenceRepository;
-use App\Repository\CriteriaChoiceRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Request\CriteriaListRequest;
+use App\Service\CriteriaListService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\ViewHandlerInterface;
 use FOS\RestBundle\View\View;
-use App\Repository\CriteriaRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -30,46 +27,48 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CriteriaListController extends AbstractFOSRestController
 {
-    /** @var CriteriaRepository  */
-    private $criteriaRepository;
-
-    /** @var CompetenceRepository  */
+    /** @var CompetenceRepository */
     private $competenceRepository;
 
-    /** @var ViewHandlerInterface  */
+    /** @var ViewHandlerInterface */
     private $viewHandler;
 
-    /** @var CompetenceViewFactory  */
+    /** @var CompetenceViewFactory */
     private $competenceViewFactory;
-
-    /** @var EntityManagerInterface  */
-    private $entityManager;
-
-    /** @var CriteriaChoiceRepository  */
-    private $criteriaChoiceRepository;
 
     /** @var ListViewFactory */
     private $listViewFactory;
 
+    /** @var CriteriaListService */
+    private $criteriaListService;
+
+
+    /**
+     * CriteriaListController constructor.
+     * @param ViewHandlerInterface $viewHandler
+     * @param CompetenceRepository $competenceRepository
+     * @param CompetenceViewFactory $competenceViewFactory
+     * @param ListViewFactory $listViewFactory
+     * @param CriteriaListService $criteriaListService
+     */
     public function __construct(
         ViewHandlerInterface $viewHandler,
-        CriteriaRepository $criteriaRepository,
         CompetenceRepository $competenceRepository,
         CompetenceViewFactory $competenceViewFactory,
-        EntityManagerInterface $entityManager,
-        CriteriaChoiceRepository $criteriaChoiceRepository,
-        ListViewFactory $listViewFactory
+        ListViewFactory $listViewFactory,
+        CriteriaListService $criteriaListService
     ) {
         $this->viewHandler = $viewHandler;
         $this->competenceViewFactory = $competenceViewFactory;
-        $this->criteriaRepository = $criteriaRepository;
         $this->competenceRepository = $competenceRepository;
-        $this->entityManager = $entityManager;
-        $this->criteriaChoiceRepository = $criteriaChoiceRepository;
         $this->listViewFactory = $listViewFactory;
+        $this->criteriaListService = $criteriaListService;
     }
 
-
+    /**
+     * Get all competences-criteria-choice structure
+     * @return Response
+     */
     public function getCriteriaListAction()
     {
         $competenceList = $this->competenceRepository->findBy([
@@ -85,33 +84,12 @@ class CriteriaListController extends AbstractFOSRestController
      */
     public function postCriteriaChoiceCreateAction(Request $request)
     {
-        // Fetch data from JSON
-        $data = json_decode($request->getContent(), true);
-
-        $choices = (array_key_exists('choice', $data)) ? (array)$data : null;
-
-        if (count($choices) < 2) {
-            return new Response(Response::HTTP_NO_CONTENT);
+        $requestObject = new CriteriaListRequest($request);
+        if (!$this->criteriaListService->handleCriteriaChoiceCreation($requestObject)) {
+            return new Response(Response::HTTP_NOT_FOUND);
         }
 
-        $criteria = new Criteria();
-        $criteriaChoice = new CriteriaChoice();
-        $criteria->setFkCompetence($data['id']);
-        $criteria->setTitle($data['title']);
-        $criteria->setIsApplicable(1);
-        $this->entityManager->persist($criteria);
-
-
-        foreach ($choices as $key => $choice) {
-            foreach ($choice as $item => $value) {
-                $criteriaChoice->setFkCriteria($criteria);
-                $criteriaChoice->setTitle($value['title']);
-                $criteriaChoice->setIsApplicable(1);
-                $this->entityManager->persist($criteriaChoice);
-            }
-        }
-        $this->entityManager->flush();
-        return new Response(Response::HTTP_CREATED);
+        return new Response(json_encode(['message' => 'Created']), Response::HTTP_CREATED);
     }
 
     /**
@@ -120,11 +98,12 @@ class CriteriaListController extends AbstractFOSRestController
      */
     public function postCriteriaEditAction(Request $request)
     {
-        if (!$this->renameRow($request, $this->criteriaRepository)) {
+        $requestObject = new CriteriaListRequest($request);
+        if (!$this->criteriaListService->handleCriteriaUpdate($requestObject)) {
             return new Response(Response::HTTP_NOT_FOUND);
         }
 
-        return new Response(Response::HTTP_OK);
+        return new Response(json_encode(['message' => 'Updated']), Response::HTTP_OK);
     }
 
     /**
@@ -133,11 +112,12 @@ class CriteriaListController extends AbstractFOSRestController
      */
     public function postCriteriaRemoveAction(Request $request)
     {
-        if (!$this->setRowNotApplicable($request, $this->criteriaRepository)) {
+        $requestObject = new CriteriaListRequest($request);
+        if (!$this->criteriaListService->handleCriteriaDelete($requestObject)) {
             return new Response(Response::HTTP_NOT_FOUND);
         }
 
-        return new Response(Response::HTTP_OK);
+        return new Response(json_encode(['message' => 'Removed']), Response::HTTP_OK);
     }
 
     /**
@@ -146,11 +126,12 @@ class CriteriaListController extends AbstractFOSRestController
      */
     public function postCriteriaChoiceEditAction(Request $request)
     {
-        if (!$this->renameRow($request, $this->criteriaChoiceRepository)) {
+        $requestObject = new CriteriaListRequest($request);
+        if (!$this->criteriaListService->handleCriteriaChoiceUpdate($requestObject)) {
             return new Response(Response::HTTP_NOT_FOUND);
         }
 
-        return new Response(Response::HTTP_OK);
+        return new Response(json_encode(['message' => 'Updated']), Response::HTTP_OK);
     }
 
     /**
@@ -159,38 +140,11 @@ class CriteriaListController extends AbstractFOSRestController
      */
     public function postCriteriaChoiceRemoveAction(Request $request)
     {
-
-        if (!$this->setRowNotApplicable($request, $this->criteriaChoiceRepository)) {
+        $requestObject = new CriteriaListRequest($request);
+        if (!$this->criteriaListService->handleCriteriaChoiceDelete($requestObject)) {
             return new Response(Response::HTTP_NOT_FOUND);
         }
 
-        return new Response(Response::HTTP_OK);
-    }
-
-    private function renameRow($request, $repository)
-    {
-        $data = json_decode($request->getContent(), true);
-        $entity = $repository->findOneBy(['id' => $data['id']]);
-
-        if (!$entity) {
-            return false;
-        }
-        $entity->setTitle($data['title']);
-        $this->entityManager->flush();
-        return true;
-    }
-
-    private function setRowNotApplicable($request, $repository)
-    {
-        $data = json_decode($request->getContent(), true);
-        $row = $repository->findOneBy(['id' => $data['id']]);
-
-        if (!$row) {
-            return false;
-        }
-
-        $row->setIsApplicable(0);
-        $this->entityManager->flush();
-        return true;
+        return new Response(json_encode(['message' => 'Deleted']), Response::HTTP_OK);
     }
 }

@@ -17,6 +17,10 @@ class CompetenceRepository extends ServiceEntityRepository
     /** @var EntityManager  */
     private $entityManager;
 
+    /**
+     * CompetenceRepository constructor.
+     * @param RegistryInterface $registry
+     */
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Competence::class);

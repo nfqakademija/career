@@ -19,10 +19,10 @@ class HomePage extends React.Component {
             {this.props.logged ? (
               <h5>Welcome, {this.props.name}</h5>
             ) : (
-              <Link to="login">
-                <button>Login</button>
-              </Link>
-            )}
+                <Link to="login">
+                  <button>Login</button>
+                </Link>
+              )}
           </div>
           <img src={picture} />
         </header>

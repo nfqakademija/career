@@ -1,119 +1,111 @@
 @import url("https://fonts.googleapis.com/css?family=Overpass:700&display=swap");
 
-.homePage{
+.homePage {
+  background-color: white;
+  min-height: 100vh;
+  font-family: "Overpass", sans-serif;
+  padding-bottom: 50px;
 
-    background-color: white;
-    min-height: 100vh;
-    font-family: 'Overpass', sans-serif;
-    padding-bottom: 50px;
-    
-    header{
-        color:white;
-        min-height: 60vh;
-        background-color: #e06b12;
-        padding-top:100px;
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
+  header {
+    color: white;
+    min-height: 60vh;
+    background-color: #e06b12;
+    padding-top: 100px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 
-        img{
-            width: 400px;
-        }
+    img {
+      width: 400px;
+    }
+  }
+
+  .u-flexCenter {
+    text-align: center;
+  }
+
+  h1 {
+    letter-spacing: 2px;
+  }
+
+  a {
+    text-decoration: none;
+    color: black;
+  }
+
+  button {
+    font-size: 19px;
+    background-color: transparent;
+    border: solid 2px black;
+    padding: 5px 30px;
+    border-radius: 50px;
+  }
+
+  button:hover {
+    transition: all 0.3s;
+    padding: 5px 60px;
+  }
+
+  @media screen and (max-width: 600px) {
+    header {
+      display: block;
+      text-align: center;
     }
 
-    .u-flexCenter{
+    button {
+      margin-bottom: 20px;
+    }
+    header {
+      img {
+        width: 250px;
+      }
+    }
+  }
+
+  .contentHeader {
+    text-align: center;
+  }
+
+  .content {
+    img {
+      width: 400px;
+    }
+
+    .u-reverseRow {
+      flex-direction: row-reverse;
+    }
+
+    .content-Box {
+      line-height: 40px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin: 20px 0;
+      font-size: 20px;
+      margin: 50px 0;
+
+      .content-Box-width {
+        width: 40%;
+      }
+    }
+
+    @media screen and (max-width: 960px) {
+      .content-Box {
+        display: block;
         text-align: center;
-    }
 
-    h1{
-        letter-spacing: 2px;
-    }
-
-    a{
-        text-decoration: none;
-        color: black;
-    }
-
-    button{
-        font-size: 19px;
-        background-color: transparent;
-        border: solid 2px black;
-        padding: 5px 30px;
-        border-radius: 50px;
-    }
-
-    button:hover{
-        transition: all 0.3s;
-        padding: 5px 60px;
-    }
-
-    @media screen and (max-width: 600px){
-        header{
-            display: block;
-            text-align: center;
+        p {
+          text-align: justify;
         }
-
-        button{
-            margin-bottom: 20px;
+        .content-Box-width {
+          width: 80%;
+          margin: 0 auto;
         }
-        header{
-            img{
-                width: 250px;
-            }
-        }
+      }
     }
+  }
 
-    .contentHeader{
-        // display: flex;
-        // border-bottom: solid 2px black;
-        text-align: center;
-    }
-
-    .content{
-        img{
-            width: 400px;
-        }
-
-        .u-reverseRow{
-            flex-direction: row-reverse;
-        }
-
-        .content-Box{
-            // letter-spacing: 1px;
-            line-height: 40px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            margin: 20px 0;
-            font-size: 20px;
-            margin: 50px 0;
-
-            .content-Box-width{
-                width: 40%;
-            }
-        }
-
-        
-
-        @media screen and (max-width: 960px){
-            
-            .content-Box{
-                display: block;
-                text-align: center;
-                
-                p{
-                    text-align: justify;
-                }
-                .content-Box-width{
-                    width: 80%;
-                    margin: 0 auto;
-                }
-            }
-        }
-    }
-
-    .u-textCenter{
-        text-align: center;
-    }
+  .u-textCenter {
+    text-align: center;
+  }
 }
-

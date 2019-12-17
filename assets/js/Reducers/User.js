@@ -1,5 +1,6 @@
 const initialState = {
   email: "",
+  password: "",
   name: null,
   userId: null,
   title: null,
@@ -7,7 +8,7 @@ const initialState = {
   professionId: null,
   roles: [],
   logged: false,
-  teams: [],
+  teams: []
   // choiceList: []
 };
 
@@ -17,6 +18,11 @@ export const user = (state = initialState, action) => {
       return {
         ...state,
         email: action.email
+      };
+    case "setPassword":
+      return {
+        ...state,
+        password: action.password
       };
     case "setFullName":
       return {
@@ -63,11 +69,11 @@ export const user = (state = initialState, action) => {
     //     ...state,
     //     choiceList: action.choiceList
     //   };
-      // case 'setCommentList':
-      //   return{
-      //     ...state,
-      //     commentList: action.commentList
-      //   }
+    // case 'setCommentList':
+    //   return{
+    //     ...state,
+    //     commentList: action.commentList
+    //   }
 
     default:
       return state;

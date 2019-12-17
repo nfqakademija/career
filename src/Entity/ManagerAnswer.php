@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\Timestampable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -9,6 +10,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ManagerAnswer
 {
+
+    /** Timestampable trait */
+    use Timestampable;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -32,10 +37,6 @@ class ManagerAnswer
      */
     private $comment;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $createdAt;
 
     public function getId(): ?int
     {
@@ -74,18 +75,6 @@ class ManagerAnswer
     public function setComment(?string $comment): self
     {
         $this->comment = $comment;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
 
         return $this;
     }

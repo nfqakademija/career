@@ -3,19 +3,30 @@
 
 namespace App\Factory;
 
+use App\Entity\User;
 use App\View\UserListView;
+use App\View\UserView;
 
 class UserListViewFactory
 {
     /** @var UserViewFactory */
     private $userViewFactory;
 
+    /**
+     * UserListViewFactory constructor.
+     * @param UserViewFactory $userViewFactory
+     */
     public function __construct(UserViewFactory $userViewFactory)
     {
         $this->userViewFactory = $userViewFactory;
     }
 
-    public function create(Array $users): UserListView
+    /**
+     * Create view of list of UserView objects
+     * @param array $users
+     * @return UserListView
+     */
+    public function create(Array $users)
     {
         /** @var UserListView $userListView */
         $userListView = new UserListView();

@@ -6,8 +6,10 @@ use App\Factory\FormViewFactory;
 use App\Factory\UserAnswerListViewFactory;
 use App\Repository\CareerFormRepository;
 use App\Repository\UserAnswerRepository;
+use App\Repository\UserRepository;
 use App\Request\UserAnswerRequest;
 use App\Service\UserAnswerService;
+use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\View\ViewHandlerInterface;
@@ -16,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UserAnswerController extends AbstractFOSRestController
 {
-    /** @var UserAnswerService  */
+    /** @var UserAnswerService */
     private $userAnswerService;
 
     /** @var CareerFormRepository */
@@ -34,14 +36,27 @@ class UserAnswerController extends AbstractFOSRestController
     /** @var UserAnswerListViewFactory */
     private $userAnswerListViewFactory;
 
+    /** @var UserRepository */
+    private $userRepository;
 
+    /**
+     * UserAnswerController constructor.
+     * @param UserAnswerService $answerService
+     * @param CareerFormRepository $careerFormRepository
+     * @param UserAnswerRepository $userAnswerRepository
+     * @param ViewHandlerInterface $viewHandler
+     * @param FormViewFactory $formViewFactory
+     * @param UserAnswerListViewFactory $userAnswerListViewFactory
+     * @param UserRepository $userRepository
+     */
     public function __construct(
         UserAnswerService $answerService,
         CareerFormRepository $careerFormRepository,
         UserAnswerRepository $userAnswerRepository,
         ViewHandlerInterface $viewHandler,
         FormViewFactory $formViewFactory,
-        UserAnswerListViewFactory $userAnswerListViewFactory
+        UserAnswerListViewFactory $userAnswerListViewFactory,
+        UserRepository $userRepository
     ) {
         $this->userAnswerService = $answerService;
         $this->formViewFactory = $formViewFactory;
@@ -49,20 +64,28 @@ class UserAnswerController extends AbstractFOSRestController
         $this->careerFormRepository = $careerFormRepository;
         $this->userAnswerRepository = $userAnswerRepository;
         $this->userAnswerListViewFactory = $userAnswerListViewFactory;
+        $this->userRepository = $userRepository;
     }
 
 
     /**
-     *
+     * Post new UserAnswer (self evaluation)
      * @param Request $request
-     * @return JsonResponse|Response
-     * @throws \Exception
+     * @return Response
+     * @throws Exception
      */
     public function postAnswerAction(Request $request)
     {
         $requestObject = new UserAnswerRequest($request);
 
-        if (!$this->userAnswerService->handleSaveUserAnswers($requestObject)) {
+        $careerForm = $this->careerFormRepository->findOneBy(['id' => $requestObject->getFormId()]);
+
+        if ($careerForm) {
+            $user = $this->userRepository->findOneBy(['id' => $careerForm->getFkUser()]);
+            $this->denyAccessUnlessGranted('user', $user);
+        }
+
+        if (!$this->userAnswerService->handleSave($requestObject)) {
             return new Response(Response::HTTP_NOT_FOUND);
         }
 
@@ -72,14 +95,21 @@ class UserAnswerController extends AbstractFOSRestController
     }
 
     /**
-     *
-     * @param $slug
+     * Get list of user answers by career form id (type of string passed by request)
+     * @param string $slug
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
-    public function getAnswerAction(int $slug)
+    public function getAnswerAction(string $slug)
     {
-        $answers = $this->userAnswerRepository->findBy(['fkCareerForm' => $slug]);
+        $careerForm = $this->careerFormRepository->findOneBy(['id' => $slug]);
+
+        if ($careerForm) {
+            $user = $this->userRepository->findOneBy(['id' => $careerForm->getFkUser()]);
+            $this->denyAccessUnlessGranted('user', $user);
+        }
+
+        $answers = $this->userAnswerRepository->findBy(['fkCareerForm' => (int) $slug]);
 
         if (!$answers) {
             return new Response(Response::HTTP_NOT_FOUND);

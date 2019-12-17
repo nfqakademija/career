@@ -4,28 +4,33 @@
 namespace App\Request;
 
 use App\Utils\ArrayFieldDispatcher;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 
 class UserAnswerRequest
 {
-    /** @var bool|int */
+    /** @var int|null */
     private $formId;
 
-    /** @var bool|array  */
+    /** @var array  */
     private $answers;
 
-    /** @var bool|array  */
+    /** @var array  */
     private $comments;
+
+    /** @var  bool|null */
+    private $underEvaluation;
 
     public function __construct(Request $request)
     {
         $json = (array)json_decode(((string)$request->getContent()), true);
-        $this->formId = ArrayFieldDispatcher::dispatchField($json, 'formId');
-        $this->answers = ArrayFieldDispatcher::dispatchField($json, 'choiceAnswers');
-        $this->comments = ArrayFieldDispatcher::dispatchField($json, 'commentAnswers');
+        $this->formId = ArrayFieldDispatcher::dispatchField($json, 'formId') ?? null;
+        $this->answers = ArrayFieldDispatcher::dispatchField($json, 'choiceAnswers') ?? array();
+        $this->comments = ArrayFieldDispatcher::dispatchField($json, 'commentAnswers') ?? array();
+        $this->underEvaluation = ArrayFieldDispatcher::dispatchField($json, 'underEvaluation') ?? null;
     }
     /**
-     * @return bool|mixed
+     * @return int
      */
     public function getFormId()
     {
@@ -33,7 +38,7 @@ class UserAnswerRequest
     }
 
     /**
-     * @return bool|mixed
+     * @return array
      */
     public function getAnswers()
     {
@@ -41,7 +46,7 @@ class UserAnswerRequest
     }
 
     /**
-     * @return bool|mixed
+     * @return array
      */
     public function getComments()
     {
@@ -49,18 +54,10 @@ class UserAnswerRequest
     }
 
     /**
-     * @return array
+     * @return bool|null
      */
-    public function getChoiceIds()
+    public function isUnderEvaluation()
     {
-        if (!$this->answers) {
-            return false;
-        }
-
-        $choiceIds = array();
-        foreach ($this->answers as $answer) {
-            $choiceIds[] = (int) ArrayFieldDispatcher::dispatchField($answer, 'choiceId');
-        }
-        return $choiceIds;
+        return $this->underEvaluation;
     }
 }
