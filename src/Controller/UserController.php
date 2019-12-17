@@ -17,7 +17,6 @@ use FOS\RestBundle\View\View;
  * Class UserController
  *
  * endpoints:
- * /api/users/logins/ - get user from login;
  * /api/users/{id} - get user information by id;
  * /api/user/all - get all active registered users;
  * /api/teams/{id}/manager - get team manager;
@@ -61,31 +60,6 @@ class UserController extends AbstractFOSRestController
         $this->userListViewFactory = $userListViewFactory;
     }
 
-
-    /**
-     * @param Request $request
-     * @return Response
-     */
-    public function postUserLoginAction(Request $request)
-    {
-        // Fetch data from JSON
-        $data = json_decode($request->getContent(), true);
-
-        $user = $this->userRepository->findOneBy(['email' => $data['email']]);
-
-        if (!$user) {
-            // fail authentication with a custom error
-            return new Response(Response::HTTP_NOT_FOUND);
-        }
-
-        if (!$this->passwordEncoder->isPasswordValid($user, $data['password'])) {
-            // fail authentication because bad password
-            return new Response(Response::HTTP_UNAUTHORIZED);
-        }
-
-        return $this->viewHandler->handle(View::create($this->userViewFactory->create($user)));
-    }
-
     /**
      *
      * @param int $id
@@ -93,8 +67,9 @@ class UserController extends AbstractFOSRestController
      */
     public function getUserAction(int $id)
     {
-        $this->denyAccessUnlessGranted('user_id', $id);
         $user = $this->userRepository->findOneBy(['id' => $id]);
+        $this->denyAccessUnlessGranted('user', $user);
+
 
         if (!$user) {
             // user not found
@@ -127,7 +102,7 @@ class UserController extends AbstractFOSRestController
      */
     public function getTeamUsersAction(int $teamId)
     {
-        $this->denyAccessUnlessGranted('team_id', $teamId);
+        $this->denyAccessUnlessGranted('team', $teamId);
         $users = $this->userRepository->findTeamUsers($teamId);
 
         if (!$users) {

@@ -90,16 +90,14 @@ class ManagerFeedbackController extends AbstractFOSRestController
 
         if ($careerForm) {
             $user = $this->userRepository->findOneBy(['id' => $careerForm->getFkUser()]);
-            $this->denyAccessUnlessGranted('user_id', $user->getId());
+            $this->denyAccessUnlessGranted('user', $user);
         }
 
         if (!$this->managerFeedbackService->handleSave($requestObject)) {
             return new Response(Response::HTTP_NOT_FOUND);
         }
 
-        $form = $this->careerFormRepository->findOneBy(['id' => $requestObject->getFormId()]);
-
-        return $this->viewHandler->handle(View::create($this->formViewFactory->create($form)));
+        return $this->viewHandler->handle(View::create($this->formViewFactory->create($careerForm)));
     }
 
     /**
@@ -114,7 +112,7 @@ class ManagerFeedbackController extends AbstractFOSRestController
 
         if ($careerForm) {
             $user = $this->userRepository->findOneBy(['id' => $careerForm->getFkUser()]);
-            $this->denyAccessUnlessGranted('user_id', $user->getId());
+            $this->denyAccessUnlessGranted('user', $user);
         }
 
         $userAnswers = $this->userAnswerRepository->findBy(['fkCareerForm' => (int)$slug]);
