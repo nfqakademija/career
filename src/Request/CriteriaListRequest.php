@@ -77,8 +77,6 @@ class CriteriaListRequest
         return $this->choiceTitle;
     }
 
-
-
     /**
      * @return array|bool
      */
@@ -86,5 +84,4 @@ class CriteriaListRequest
     {
         return $this->choices;
     }
-
 }
