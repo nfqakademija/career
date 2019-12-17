@@ -18,7 +18,6 @@ use FOS\RestBundle\View\View;
  *
  * endpoints:
  * /api/users/{id} - get user information by id;
- * /api/user/all - get all active registered users;
  * /api/teams/{id}/manager - get team manager;
  * /api/teams/{id}/user - get team members;
  *
