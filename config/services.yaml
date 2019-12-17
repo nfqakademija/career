@@ -27,3 +27,13 @@ services:
     # please note that last definitions always *replace* previous ones
     App\Service\:
         resource: '../src/Service'
+        tags: ['service.service_arguments']
+
+    App\Factory\:
+        resource: '../src/Factory'
+        public: true
+
+    acme_api.event.authentication_success_listener:
+        class: App\EventListener\AuthenticationSuccessListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }

@@ -1,21 +1,27 @@
-import { combineReducers } from 'redux';
-import { profilesList } from './profilesList';
-import { selectedProfile } from './selectedProfile';
-import { user } from './User';
-import { trackUserChanges } from './trackUserChanges';
+import { combineReducers } from "redux";
+import { managerPage } from "./managerPage";
+import { user } from "./User";
+import { trackUserChanges } from "./trackUserChanges";
+import { answerListUserSide } from "./answerListUserSide";
+import { answerListTeamLeadSide } from "./answerListTeamLeadSide";
+import { hrPage } from './hrPage'
+import { token } from "./token";
 //rootReducer
 
 const appReducer = combineReducers({
-    profilesList,
-    selectedProfile,
-    user,
-    trackUserChanges
-})
+  managerPage,
+  user,
+  trackUserChanges,
+  answerListUserSide,
+  answerListTeamLeadSide,
+  token,
+  hrPage
+});
 
-export const allReducer = (state, action) =>{
-    if(action.type === "RESET_APP"){
-        state = undefined;
-    }
+export const allReducer = (state, action) => {
+  if (action.type === "RESET_APP") {
+    state = undefined;
+  }
 
-    return appReducer(state, action);
-}
+  return appReducer(state, action);
+};

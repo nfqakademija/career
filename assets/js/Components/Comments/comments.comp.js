@@ -1,7 +1,11 @@
 import React from "react";
-import { setComment } from "../../Actions/action";
+import {
+  setComment,
+  updateCommentAnswerUserSide,
+  isActionCalled
+} from "../../Actions/action";
 import { connect } from "react-redux";
-// import picturePress from '../../../pics/press.svg';
+import { checkForAnswerId } from "../../helpers/helpers";
 
 class Comments extends React.Component {
   constructor() {
@@ -14,19 +18,58 @@ class Comments extends React.Component {
   }
 
   componentDidMount() {
+    const checkForAnswer = this.checkForAnswer();
+    checkForAnswer === null
+      ? null
+      : this.setState({ inputValue: checkForAnswer });
+  }
+
+  checkForAnswer = () => {
     for (let i = 0; i < this.props.choiceList.length; i++) {
-      if (this.props.choiceList[i].criteriaId === this.props.criteriaId) {
-        this.setState({ inputValue: this.props.choiceList[i].comment });
+      if (
+        this.props.choiceList[i].criteriaId === this.props.criteriaId &&
+        this.props.choiceList[i].comment !== null
+      ) {
+        return this.props.choiceList[i].comment;
       }
     }
-  }
+    return null;
+  };
 
   handle = () => {
     this.setState({ changeComment: !this.state.changeComment });
-    this.props.onSetComment(this.props.criteriaId, this.state.inputValue);
+
+    let answerId = checkForAnswerId(
+      this.props.choiceList,
+      this.props.criteriaId
+    );
+
+    this.props.onSetComment(
+      this.props.criteriaId,
+      this.state.inputValue,
+      answerId
+    );
+
+    this.props.onUpdateCommentAnswer(
+      this.props.criteriaId,
+      this.state.inputValue
+    );
+
+    this.props.onSetChangedValues(true);
   };
 
   render() {
+    if (this.props.managerPage) {
+      let answer = "Not answered";
+      const check = this.checkForAnswer();
+      check === null ? null : (answer = check);
+      return (
+        <div className="comment-Box">
+          <span className="comment">{answer}</span>
+        </div>
+      );
+    }
+
     return (
       <div>
         {this.state.changeComment ? (
@@ -38,7 +81,9 @@ class Comments extends React.Component {
                 this.setState({ inputValue: value.target.value })
               }
             />
-            <button onClick={this.handle}>Save</button>
+            <button className="commentButton" onClick={this.handle}>
+              Save
+            </button>
           </React.Fragment>
         ) : (
           <React.Fragment>
@@ -61,12 +106,16 @@ class Comments extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  choiceList: state.user.choiceList
+  choiceList: state.answerListUserSide.choiceList,
+  managerPage: state.managerPage.selected
 });
 
 const mapDispatchToProps = dispatch => ({
-  onSetComment: (criteriaId, comment) =>
-    dispatch(setComment(criteriaId, comment))
+  onSetComment: (criteriaId, comment, answerId) =>
+    dispatch(setComment(criteriaId, comment, answerId)),
+  onUpdateCommentAnswer: (criteriaId, comment) =>
+    dispatch(updateCommentAnswerUserSide(criteriaId, comment)),
+  onSetChangedValues: bollean => dispatch(isActionCalled(bollean))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Comments);

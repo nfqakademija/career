@@ -1,9 +1,9 @@
 import React from "react";
 import "./user.style.scss";
 import Axios from "axios";
-import MountProfile from "../../Components/MountProfile/mountProfile.comp";
+import MountUserProfile from "../../Components/MountUserProfile/mountProfile.comp";
 import { connect } from "react-redux";
-import { setCareerFormId, setAnswers, setChoiceList } from "../../Actions/action";
+import { setCareerFormId } from "../../Actions/action";
 
 class User extends React.Component {
   constructor() {
@@ -14,10 +14,11 @@ class User extends React.Component {
     };
   }
   componentDidMount() {
-    Axios.get(`/api/forms/${this.props.userId}`)
+    Axios.get(`/api/forms/${this.props.userId}`, {
+      headers: { Authorization: `Bearer ${this.props.token}` }
+    })
       .then(res => {
-        // console.log(res.data);
-        this.props.onSetCareerFormId(res.data.id)
+        this.props.onSetCareerFormId(res.data.id);
         this.setState({ userProfile: res.data });
       })
       .catch(err => console.log(err));
@@ -25,23 +26,28 @@ class User extends React.Component {
 
   render() {
     if (this.state.userProfile.length === 0) {
-      return <h1>Loading...</h1>;
+      return (
+        <div className="user">
+          <h1>Loading...</h1>
+        </div>
+      );
     }
     return (
       <div className="user">
-        <MountProfile data={this.state.userProfile} />
+        <MountUserProfile data={this.state.userProfile} />
+
       </div>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  userId: state.user.userId
+  userId: state.user.userId,
+  token: state.token.token
 });
 
-const mapDispatchToProps = dispatch =>({
-  onSetCareerFormId: formId => dispatch(setCareerFormId(formId)),
-  onSetAnswers: answers => dispatch(setAnswers(answers))
-})
+const mapDispatchToProps = dispatch => ({
+  onSetCareerFormId: formId => dispatch(setCareerFormId(formId))
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(User);

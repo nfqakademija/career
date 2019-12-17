@@ -17,12 +17,12 @@ class HomePage extends React.Component {
             <p>Solution for companies to manage employees career profiles.</p>
             <br />
             {this.props.logged ? (
-              <h5>Have a great day!</h5>
+              <h5>Welcome, {this.props.name}</h5>
             ) : (
-              <Link to="login">
-                <button>Login</button>
-              </Link>
-            )}
+                <Link to="login">
+                  <button>Login</button>
+                </Link>
+              )}
           </div>
           <img src={picture} />
         </header>
@@ -77,7 +77,8 @@ class HomePage extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  logged: state.user.logged
+  logged: state.user.logged,
+  name: state.user.name
 });
 
 export default connect(mapStateToProps, null)(HomePage);

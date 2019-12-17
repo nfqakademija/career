@@ -1,71 +1,39 @@
 import React from "react";
 import "./Login.style.scss";
 import { connect } from "react-redux";
-import {
-  setEmail,
-  setFullName,
-  setUserId,
-  setTitle,
-  setProfessionId,
-  setRoles,
-  setLogged,
-  setTeams
-} from "../../Actions/action";
+import { setEmail, setLogged, setPassword } from "../../Actions/action";
 import Axios from "axios";
-import { Redirect } from 'react-router-dom';
+import { Redirect } from "react-router-dom";
+import { setLoginInfo } from "../../thunk/setLoginInfo";
 
 class Login extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      password: "",
-    };
-  }
-
   change = e => {
     if (e.target.name === "email") {
       this.props.onSetEmail(e.target.value);
     }
 
     if (e.target.name === "password") {
-      this.setState({ password: e.target.value });
+      this.props.onSetPassword(e.target.value);
     }
   };
 
   submit = e => {
     e.preventDefault();
 
-    const {
-      onSetRoles,
-      onSetCareerFormId,
-      onSetFullName,
-      onSetUserId,
-      onSetProfessionId,
-      onSetTitle,
-      onSetLogged,
-      onSetTeams
-    } = this.props;
-
-    Axios.post("/api/users/logins", {
-      email: this.props.email,
-      password: this.state.password
+    Axios.post("/api/login_check", {
+      username: this.props.email,
+      password: this.props.password
     })
       .then(response => {
         if (response.data !== 401 && response.data !== 404) {
-          onSetFullName(response.data.firstName + " " + response.data.lastName);
-          onSetUserId(response.data.id);
-          onSetProfessionId(response.data.professionId);
-          onSetRoles(response.data.roles);
-          onSetTitle(response.data.professionTitle);
-          onSetLogged(!this.props.logged);
-          onSetTeams(response.data.teams)
-          // console.log("Success");
+          this.props.onSetLoginInfo(response.data);
+          localStorage.setItem("jwt", JSON.stringify(response.data));
+          localStorage.setItem('email', JSON.stringify(this.props.email));
         } else {
-         alert("Login Failed");
+          alert("Login Failed");
         }
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
   };
@@ -104,7 +72,7 @@ class Login extends React.Component {
             Submit
           </button>
         </form>
-        {this.props.logged?<Redirect to="/" />: null}
+        {this.props.logged ? <Redirect to="/" /> : null}
       </div>
     );
   }
@@ -112,19 +80,15 @@ class Login extends React.Component {
 
 const mapStateToProps = state => ({
   email: state.user.email,
+  password: state.user.password,
   logged: state.user.logged
 });
 
 const mapDispatchToProps = dispatch => ({
   onSetEmail: email => dispatch(setEmail(email)),
-  onSetFullName: name => dispatch(setFullName(name)),
-  onSetUserId: userId => dispatch(setUserId(userId)),
-  onSetTitle: title => dispatch(setTitle(title)),
-  // onSetCareerFormId: formId => dispatch(setCareerFormId(formId)),
-  onSetProfessionId: professionId => dispatch(setProfessionId(professionId)),
-  onSetRoles: roles => dispatch(setRoles(roles)),
+  onSetPassword: password => dispatch(setPassword(password)),
   onSetLogged: logged => dispatch(setLogged(logged)),
-  onSetTeams: teams => dispatch(setTeams(teams))
+  onSetLoginInfo: data => dispatch(setLoginInfo(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

@@ -7,21 +7,15 @@ use Doctrine\Common\Collections\Collection;
 
 class FormView
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     public $id;
 
     /** @var datetime */
     public $createdAt;
 
-    /**
-     * @var ProfileView
-     */
+    /** @var ProfileView */
     public $profile;
 
-    /**
-     * @var UserView
-     */
+    /** @var UserView */
     public $userView;
 }

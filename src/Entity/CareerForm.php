@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\Timestampable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,17 +12,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CareerForm
 {
+    /** Timestampable trait */
+    use Timestampable;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
     private $id;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $createdAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\CareerProfile", inversedBy="careerForms")
@@ -45,6 +44,12 @@ class CareerForm
      */
     private $isArchived;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $underEvaluation;
+
+
     public function __construct()
     {
         $this->userAnswers = new ArrayCollection();
@@ -53,18 +58,6 @@ class CareerForm
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
     }
 
     public function getFkCareerProfile(): ?CareerProfile
@@ -130,6 +123,18 @@ class CareerForm
     public function setIsArchived(bool $isArchived): self
     {
         $this->isArchived = $isArchived;
+
+        return $this;
+    }
+
+    public function getUnderEvaluation(): ?bool
+    {
+        return $this->underEvaluation;
+    }
+
+    public function setUnderEvaluation(bool $underEvaluation): self
+    {
+        $this->underEvaluation = $underEvaluation;
 
         return $this;
     }

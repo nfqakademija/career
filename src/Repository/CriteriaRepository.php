@@ -4,6 +4,9 @@ namespace App\Repository;
 
 use App\Entity\Criteria;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -14,25 +17,35 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class CriteriaRepository extends ServiceEntityRepository
 {
+    /** @var EntityManager */
     private $entityManager;
 
+    /**
+     * CriteriaRepository constructor.
+     * @param RegistryInterface $registry
+     */
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Criteria::class);
         $this->entityManager = $this->getEntityManager();
     }
 
-    public function fetchChoicesByCriteria(int $id, int $isApplicable = 1)
+    /**
+     * @param Criteria $criteria
+     * @throws ORMException
+     */
+    public function create(Criteria $criteria)
     {
-        $query = $this->entityManager->createQuery(
-            'SELECT ch.id, ch.title AS Choice '
-            . 'FROM App\Entity\CriteriaChoice ch '
-            . 'JOIN App\Entity\Criteria cr '
-            . 'WHERE cr.id = ch.fkCriteria '
-            . 'AND cr.id = :id '
-            . 'AND cr.isApplicable = :isApplicable'
-        )
-            ->setParameters(['isApplicable' => $isApplicable, 'id' => $id]);
-        return $query->getResult();
+        $this->entityManager->persist($criteria);
     }
+
+    /**
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function save()
+    {
+        $this->entityManager->flush();
+    }
+
 }

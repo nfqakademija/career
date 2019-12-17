@@ -1,116 +1,114 @@
-.tablev2, .hrPage{
+.tablev2,
+.hrPage,
+.teamProfilePage .teamUserProfiles {
+  tr {
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    border-collapse: collapse;
+  }
 
-    tr,td{
-        border: solid 2px black;
+  table {
+    border-collapse: collapse;
+    margin: 0;
+    padding: 10px 0;
+    width: 100%;
+    table-layout: fixed;
+    font-size: 13px;
+  }
+
+  table caption {
+    font-size: 1.5em;
+  }
+
+  table tr {
+    padding: 0.35em;
+  }
+
+  table th,
+  table td {
+    padding: 0.625em;
+    text-align: center;
+  }
+
+  table th {
+    font-size: 0.85em;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  td {
+    padding: 0;
+  }
+
+  .comment {
+    word-wrap: break-word;
+  }
+
+  .commentButton {
+    margin: 5px;
+  }
+
+  .choiceListSelect,
+  input,
+  .comment-Box {
+    width: 100%;
+    text-overflow: ellipsis;
+  }
+
+  .choiceListSelect,
+  .commentButton {
+    background-color: white;
+    border: solid 1px black;
+    border-radius: 10px;
+  }
+
+  @media screen and (max-width: 800px) {
+    table {
+      border: 0;
+      width: 100%;
     }
 
-    table {
-        border-collapse: collapse;
-        margin: 0;
-        padding: 10px 0;
-        width: 100%;
-        table-layout: fixed;
-        font-size: 13px;
-      }
-      
-      table caption {
-        font-size: 1.5em;
-        // margin: .5em 0 .75em;
-      }
-      
-      table tr {
-        // background-color: #f8f8f8;
-        // border: 1px solid #ddd;
-        // height: 4px;
-        padding: .35em;
-      }
-      
-      table th,
-      table td {
-        padding: .625em;
-        // padding:0;
-        text-align: center;
-        // height: 4px;
-      }
-      
-      table th {
-        font-size: .85em;
-        letter-spacing: .1em;
-        text-transform: uppercase;
-      }
-      td{
-        padding:0;
-      }
-      
-      @media screen and (max-width: 800px) {
-        table {
-          border: 0;
-          width: 100%;
-        }
-      
-        table caption {
-          font-size: 1.3em;
-        }
-        
-        table thead {
-          border: none;
-          clip: rect(0 0 0 0);
-          height: 1px;
-          margin: -1px;
-          overflow: hidden;
-          padding: 0;
-          position: absolute;
-          width: 1px;
-        }
-        
-        table tr {
-          border-bottom: 3px solid #ddd;
-          display: block;
-          margin-bottom: .625em;
-        }
-        
-        table td {
-          border-bottom: 1px solid #ddd;
-          display: block;
-          font-size: .8em;
-          text-align: right;
-        }
-        
-        table td::before {
-          /*
-          * aria-label has no advantage, it won't be read inside a table
-          content: attr(aria-label);
-          */
-          content: attr(data-label);
-          float: left;
-          font-weight: bold;
-          text-transform: uppercase;
-        }
-        
-        table td:last-child {
-          border-bottom: 0;
-        }
-      }
+    table caption {
+      font-size: 1.3em;
+    }
 
-      i{
-        color:red;
-        font-size: 20px;
-      }
-}
+    table thead {
+      border: none;
+      clip: rect(0 0 0 0);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      width: 1px;
+    }
 
-// .comment-Box{
-//  margin: auto;
-// }
+    table tr {
+      border-bottom: 3px solid #ddd;
+      display: block;
+      margin-bottom: 0.625em;
+    }
 
-.comment{
-word-wrap: break-word;
-}
+    table td {
+      border-bottom: 1px solid #ddd;
+      display: block;
+      font-size: 0.8em;
+      text-align: right;
+    }
 
-.commentButton{
-  margin: 5px;
-}
+    table td::before {
+      content: attr(data-label);
+      float: left;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
 
-select, input, .comment-Box{
-  width: 100%;
-  text-overflow: ellipsis;
+    table td:last-child {
+      border-bottom: 0;
+    }
+  }
+
+  i {
+    color: red;
+    font-size: 20px;
+  }
 }

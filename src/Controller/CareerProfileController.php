@@ -2,26 +2,22 @@
 
 namespace App\Controller;
 
-use App\Entity\CareerProfile;
+use App\Factory\ListViewFactory;
 use App\Factory\ProfileViewFactory;
+use App\Request\CareerProfileRequest;
+use App\Service\CareerProfileService;
 use FOS\RestBundle\View\ViewHandlerInterface;
-use App\Factory\ProfileListViewFactory;
 use App\Repository\CareerProfileRepository;
-use App\Repository\CriteriaRepository;
-use App\Repository\ProfessionRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 
 /**
  * Class CareerProfileController
  *
  * endpoints:
- * /api/profiles/{slug} - get career profile title and id by profession id;
+ * /api/profiles/{slug} - get career profile by profession;
  * /api/profile/list - get all career profiles;
  * /api/profiles - post new career profile
  *
@@ -29,96 +25,78 @@ use Symfony\Component\Serializer\Serializer;
  */
 class CareerProfileController extends AbstractFOSRestController
 {
-    private $criteriaRepository = null;
-    private $careerProfileRepository = null;
-    private $professionRepository = null;
+    /** @var CareerProfileRepository */
+    private $careerProfileRepository;
+
+    /** @var ViewHandlerInterface */
     private $viewHandler;
-    private $profileListViewFactory;
+
+    /** @var ProfileViewFactory */
     private $profileViewFactory;
 
+    /** @var  CareerProfileService */
+    private $careerProfileService;
 
+    /** @var ListViewFactory */
+    private $listViewFactory;
+
+    /**
+     * CareerProfileController constructor.
+     * @param ViewHandlerInterface $viewHandler
+     * @param CareerProfileRepository $careerProfileRepository
+     * @param ProfileViewFactory $profileViewFactory
+     * @param CareerProfileService $careerProfileService
+     * @param ListViewFactory $listViewFactory
+     */
     public function __construct(
         ViewHandlerInterface $viewHandler,
-        CriteriaRepository $criteriaRepository,
-        ProfessionRepository $professionRepository,
         CareerProfileRepository $careerProfileRepository,
-        ProfileListViewFactory $profileListViewFactory,
-        ProfileViewFactory $profileViewFactory
+        ProfileViewFactory $profileViewFactory,
+        CareerProfileService $careerProfileService,
+        ListViewFactory $listViewFactory
     ) {
         $this->viewHandler = $viewHandler;
-        $this->profileListViewFactory = $profileListViewFactory;
         $this->profileViewFactory = $profileViewFactory;
-        $this->professionRepository = $professionRepository;
         $this->careerProfileRepository = $careerProfileRepository;
-        $this->criteriaRepository = $criteriaRepository;
+        $this->careerProfileService = $careerProfileService;
+        $this->listViewFactory = $listViewFactory;
     }
 
     /**
-     *
+     * Post new CareerProfile
      * @param Request $request
      * @return Response
+     * @throws \Exception
      */
     public function postProfileAction(Request $request)
     {
-        // Fetch data from JSON
-        $data = ((array)json_decode(((string)$request->getContent()), true))['data'];
-
-        // Get position ID from data
-        $positionId = (int)array_shift($data)['position'];
-
-        // Check if position has its career profile and create career profile object depending on the decision
-        $existingProfile = $this->careerProfileRepository->findOneBy(['profession' => $positionId]);
-        $careerProfile = ($existingProfile) ? $existingProfile : new CareerProfile();
-
-        // Get competence array from data
-        $competences = (array)array_shift($data)['competences'];
-        // Gather all checked criteria ids
-        $checkedCriteriaIdList = array();
-        foreach ($competences as $competenceId => $competenceBody) {
-            foreach ($competenceBody as $key => $value) {
-                if ($key === 'criteriaList') {
-                    foreach ($value as $item => $field) {
-                        $checkedCriteriaIdList[] = ((int)$field['id']);
-                    }
-                }
-            }
+        $requestObject = new CareerProfileRequest($request);
+        if (!$this->careerProfileService->handleSave($requestObject)) {
+            return new Response(Response::HTTP_NOT_FOUND);
         }
 
-        // get available Criterias from Database by criteria ids
-        $checkedCriteriaObjects = $this->criteriaRepository->findBy(array('id' => $checkedCriteriaIdList));
-        // loop through checked criterias and add to Criteria array
-        if ($checkedCriteriaObjects != null) {
-            foreach ($checkedCriteriaObjects as $criteria) {
-                $careerProfile->addFkCriterion($criteria);
-            }
-        }
-
-        $profession = $this->professionRepository->findOneBy(['id' => $positionId]);
-        $careerProfile->setProfession($profession);
-        $careerProfile->setIsArchived(0);
-
-        $this->careerProfileRepository->save($careerProfile);
         return new Response(json_encode(['message' => 'Created']), Response::HTTP_CREATED);
     }
 
     /**
-     *
+     * Get a list of career profiles
      * @return Response
      */
     public function getProfileListAction()
     {
         $profileList = $this->careerProfileRepository->findBy(['isArchived' => 0]);
-        return $this->viewHandler->handle(View::create($this->profileListViewFactory->create($profileList)));
+        $this->listViewFactory->setViewFactory(ProfileViewFactory::class);
+        return $this->viewHandler->handle(View::create($this->listViewFactory->create($profileList)));
     }
 
     /**
-     *
+     * Get CareerProfile by occupation/profession
      * @param string $slug
      * @return Response
      */
     public function getProfileAction($slug)
     {
-        $careerProfile = $this->careerProfileRepository->findOneBy(['profession' => $slug]);
+        $careerProfile = $this->careerProfileRepository->findOneBy(['profession' => $slug, 'isArchived' => 0]);
         if (!$careerProfile) {
             return new Response(Response::HTTP_NOT_FOUND);
         }

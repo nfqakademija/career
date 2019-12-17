@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\Timestampable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,6 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CareerProfile
 {
+    /** Timestampable trait */
+    use Timestampable;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -38,6 +42,7 @@ class CareerProfile
      * @ORM\Column(type="boolean")
      */
     private $isArchived;
+
 
     public function __construct()
     {
