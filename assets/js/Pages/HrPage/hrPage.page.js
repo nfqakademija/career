@@ -129,7 +129,7 @@ class HrPage extends React.Component {
     return (
       <div className="hrPage">
         <label>Choose position: </label>
-        <select onChange={this.positonInput}>
+        <select className="choiceListSelect" onChange={this.positonInput}>
           <option id={null} value={null}>
             --Select--
           </option>
@@ -191,7 +191,7 @@ class HrPage extends React.Component {
             </React.Fragment>
           );
         })}
-        <button onClick={this.submit}>Save</button>
+        <button className="submitButton" onClick={this.submit}>Save</button>
       </div>
     );
   }
