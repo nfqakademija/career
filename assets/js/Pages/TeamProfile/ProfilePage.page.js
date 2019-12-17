@@ -28,7 +28,6 @@ class ProfilePage extends React.Component {
     })
       .then(res => {
         this.setState({ profileNames: res.data.list });
-        console.log(res.data.list);
       })
       .catch(err => console.log(err));
   }
@@ -62,39 +61,42 @@ class ProfilePage extends React.Component {
   render() {
     return (
       <div className="teamProfilePage">
+        <h2 style={{ textAlign: "center" }}>Team Members</h2>
         <div className="teamUsers">
-          {this.state.profileNames.map(profileNames => (
-            <ProfileButtons
-              key={profileNames.id}
-              id={profileNames.id}
-              name={profileNames.firstName + " " + profileNames.lastName}
-              handle={this.selectedUser}
-            />
-          ))}
+          {this.state.profileNames
+            .filter(check => check.id !== this.props.userId)
+            .map(profileNames => (
+              <ProfileButtons
+                key={profileNames.id}
+                id={profileNames.id}
+                name={profileNames.firstName + " " + profileNames.lastName}
+                handle={this.selectedUser}
+              />
+            ))}
         </div>
 
-        <div>
+        <div className="teamUserProfiles">
           {this.state.fullProfile === 404 ||
-          this.state.fullProfile.length === 0 ? (
-            this.state.fullProfile === 404 ? (
-              <h1 style={{ textAlign: "center" }}>
-                No Data About This Profile Yet. Try Again Later
+            this.state.fullProfile.length === 0 ? (
+              this.state.fullProfile === 404 ? (
+                <h1 style={{ textAlign: "center" }}>
+                  No Data About This Profile Yet. Try Again Later
               </h1>
-            ) : null
-          ) : (
-            <React.Fragment>
-              <CompetenceView
-                name={
-                  this.state.fullProfile.userView.firstName +
-                  " " +
-                  this.state.fullProfile.userView.lastName
-                }
-                position={this.state.fullProfile.profile.professionTitle}
-                competence={this.state.fullProfile.profile.criteriaList}
-                submit={this.submit}
-              />
-            </React.Fragment>
-          )}
+              ) : null
+            ) : (
+              <React.Fragment>
+                <CompetenceView
+                  name={
+                    this.state.fullProfile.userView.firstName +
+                    " " +
+                    this.state.fullProfile.userView.lastName
+                  }
+                  position={this.state.fullProfile.profile.professionTitle}
+                  competence={this.state.fullProfile.profile.criteriaList}
+                  submit={this.submit}
+                />
+              </React.Fragment>
+            )}
         </div>
       </div>
     );
@@ -105,7 +107,8 @@ const mapStateToProps = state => ({
   teams: state.user.teams,
   answers: state.trackUserChanges.choiceAnswers,
   comments: state.trackUserChanges.comment,
-  token: state.token.token
+  token: state.token.token,
+  userId: state.user.userId
 });
 
 const mapDispatchToProps = dispatch => ({

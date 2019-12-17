@@ -33,7 +33,7 @@ class Login extends React.Component {
           alert("Login Failed");
         }
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
   };

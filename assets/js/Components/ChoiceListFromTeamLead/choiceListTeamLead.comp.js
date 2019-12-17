@@ -51,7 +51,11 @@ class ChoiceListTeamLead extends React.Component {
     }
 
     return (
-      <select defaultValue={answer} onChange={this.onSelect}>
+      <select
+        className="choiceListSelect"
+        defaultValue={answer}
+        onChange={this.onSelect}
+      >
         {answer === "NoAnswer" ? (
           <option value={"NoAnswer"} data-value={"Not answered"}>
             --Not answered--

@@ -1,5 +1,4 @@
 import React from "react";
-import Axios from "axios";
 import "./hrPage.style.scss";
 import CheckBox from "../../Components/checkbox/checkbox.comp";
 import { connect } from "react-redux";
@@ -66,7 +65,7 @@ class HrPage extends React.Component {
   submit = () => {
     let copy = JSON.parse(JSON.stringify(this.props.profiles));
 
-    Array.prototype.remove = function() {
+    Array.prototype.remove = function () {
       var what,
         a = arguments,
         L = a.length,
@@ -109,7 +108,6 @@ class HrPage extends React.Component {
   };
 
   positonInput = e => {
-    console.log(e.target.value);
     this.props.onSetCurrentPosition(e.target.value);
     if (e.target.value !== null) {
       this.props.onGetPositionIncludedCriterias(e.target.value);
@@ -150,9 +148,9 @@ class HrPage extends React.Component {
                   style={
                     this.state.show.includes(i)
                       ? {
-                          borderBottom: "none",
-                          borderRadius: "30px 30px 0px 0px"
-                        }
+                        borderBottom: "none",
+                        borderRadius: "30px 30px 0px 0px"
+                      }
                       : { borderRadius: "30px 30px 30px 30px" }
                   }
                   onClick={() => this.toogle(i)}

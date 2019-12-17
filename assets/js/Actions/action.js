@@ -72,10 +72,10 @@ export const setPositions = positions => ({
   positions
 });
 
-export const setCurrentPosition = currentPosition =>({
-  type: 'setCurrentPosition',
+export const setCurrentPosition = currentPosition => ({
+  type: "setCurrentPosition",
   currentPosition
-})
+});
 
 export const setCompetenceList = competenceList => ({
   type: "setCompetenceList",

@@ -41,7 +41,11 @@ class ChoiceList extends React.Component {
     }
 
     return (
-      <select defaultValue={answer} onChange={this.onSelect}>
+      <select
+        className="choiceListSelect"
+        defaultValue={answer}
+        onChange={this.onSelect}
+      >
         {answer === "Not answered" ? (
           <option value="Not answered">--Not answered--</option>
         ) : null}

@@ -29,7 +29,7 @@ class Comments extends React.Component {
       if (
         this.props.choiceList[i].criteriaId === this.props.criteriaId &&
         this.props.choiceList[i].comment !== null &&
-          this.props.choiceList[i].comment !== undefined
+        this.props.choiceList[i].comment !== undefined
       ) {
         return this.props.choiceList[i].comment;
       }
@@ -84,7 +84,9 @@ class Comments extends React.Component {
                 this.setState({ inputValue: value.target.value })
               }
             />
-            <button onClick={this.handle}>Save</button>
+            <button className="commentButton" onClick={this.handle}>
+              Save
+            </button>
           </React.Fragment>
         ) : (
           <React.Fragment>

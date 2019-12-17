@@ -1,8 +1,6 @@
 .tablev2,
 .hrPage,
-.teamProfilePage {
-  // background-color: grey;
-  // padding-top: 20px;
+.teamProfilePage .teamUserProfiles {
   tr {
     border-bottom: 1px solid black;
     border-top: 1px solid black;
@@ -49,15 +47,15 @@
     margin: 5px;
   }
 
-  select,
+  .choiceListSelect,
   input,
   .comment-Box {
     width: 100%;
     text-overflow: ellipsis;
   }
 
-  select,
-  button {
+  .choiceListSelect,
+  .commentButton {
     background-color: white;
     border: solid 1px black;
     border-radius: 10px;
@@ -98,10 +96,6 @@
     }
 
     table td::before {
-      /*
-          * aria-label has no advantage, it won't be read inside a table
-          content: attr(aria-label);
-          */
       content: attr(data-label);
       float: left;
       font-weight: bold;

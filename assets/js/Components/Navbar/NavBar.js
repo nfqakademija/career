@@ -53,9 +53,10 @@ class NavBar extends React.Component {
   logout = () => {
     this.props.onSetLogged(!this.props.logged);
     this.props.onResetApp();
-    localStorage.removeItem('jwt');
-    localStorage.removeItem('email');
-  }
+    localStorage.removeItem("jwt");
+    localStorage.removeItem("email");
+    this.props.history.push("/");
+  };
 
   render() {
     return (
@@ -66,13 +67,12 @@ class NavBar extends React.Component {
             this.state.route === "/"
               ? { background: "rgb(224, 107, 18)", width: this.state.width }
               : {
-                  background: "rgb(209, 209, 209)",
-                  borderColor: "white",
-                  color:"black",
-                  width: "100%"
-                }
+                background: "rgb(209, 209, 209)",
+                borderColor: "white",
+                color: "black",
+                width: "100%"
+              }
           }
-          // onScroll={{width: "100%"}}
         >
           <div className="d-flex flex-grow-1">
             <span className="w-100 d-lg-none d-block"></span>
@@ -116,21 +116,21 @@ class NavBar extends React.Component {
                 </li>
               ) : null}
               {this.props.roles.includes("ROLE_HEAD") &&
-              this.props.logged === true ? (
-                <li className="nav-item">
-                  <Link className="nav-link" to="/profiles">
-                    <span className="my-color">Team Profiles</span>
-                  </Link>
-                </li>
-              ) : null}
+                this.props.logged === true ? (
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/profiles">
+                      <span className="my-color">Team Profiles</span>
+                    </Link>
+                  </li>
+                ) : null}
               {this.props.roles.includes("ROLE_ADMIN") &&
-              this.props.logged === true ? (
-                <li className="nav-item">
-                  <Link className="nav-link" to="/hrprofiles">
-                    <span className="my-color">Create Profiles</span>
-                  </Link>
-                </li>
-              ) : null}
+                this.props.logged === true ? (
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/hrprofiles">
+                      <span className="my-color">Create Profiles</span>
+                    </Link>
+                  </li>
+                ) : null}
               {this.props.logged ? (
                 <li className="nav-item">
                   <div className="nav-link">
@@ -142,10 +142,7 @@ class NavBar extends React.Component {
               ) : null}
               {this.props.logged ? (
                 <li className="nav-item">
-                  <div
-                    className="nav-link"
-                    onClick={this.logout}
-                  >
+                  <div className="nav-link" onClick={this.logout}>
                     <span className="logout my-color">Logout</span>
                   </div>
                 </li>

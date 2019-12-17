@@ -1,7 +1,8 @@
-.error{
-    padding-top: 100px;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.error {
+  padding-top: 100px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

@@ -1,5 +1,9 @@
 import React from "react";
-import { setComment, updateCommentAnswerUserSide, isActionCalled } from "../../Actions/action";
+import {
+  setComment,
+  updateCommentAnswerUserSide,
+  isActionCalled
+} from "../../Actions/action";
 import { connect } from "react-redux";
 import { checkForAnswerId } from "../../helpers/helpers";
 
@@ -40,7 +44,11 @@ class Comments extends React.Component {
       this.props.criteriaId
     );
 
-    this.props.onSetComment(this.props.criteriaId, this.state.inputValue, answerId);
+    this.props.onSetComment(
+      this.props.criteriaId,
+      this.state.inputValue,
+      answerId
+    );
 
     this.props.onUpdateCommentAnswer(
       this.props.criteriaId,
@@ -73,7 +81,9 @@ class Comments extends React.Component {
                 this.setState({ inputValue: value.target.value })
               }
             />
-            <button onClick={this.handle}>Save</button>
+            <button className="commentButton" onClick={this.handle}>
+              Save
+            </button>
           </React.Fragment>
         ) : (
           <React.Fragment>
@@ -105,7 +115,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(setComment(criteriaId, comment, answerId)),
   onUpdateCommentAnswer: (criteriaId, comment) =>
     dispatch(updateCommentAnswerUserSide(criteriaId, comment)),
-    onSetChangedValues: bollean => dispatch(isActionCalled(bollean))
+  onSetChangedValues: bollean => dispatch(isActionCalled(bollean))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Comments);

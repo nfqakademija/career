@@ -24,7 +24,11 @@ class MountProfile extends React.Component {
 
   render() {
     if (this.props.data === 404) {
-      return <h1 style={{textAlign:"center"}}>No Data About This Profile. Try Again Later.</h1>;
+      return (
+        <h1 style={{ textAlign: "center" }}>
+          No Data About This Profile. Try Again Later.
+        </h1>
+      );
     }
     return (
       <div className="mountProfile">

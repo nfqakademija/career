@@ -27,7 +27,7 @@ class User extends React.Component {
   render() {
     if (this.state.userProfile.length === 0) {
       return (
-        <div className="user"> 
+        <div className="user">
           <h1>Loading...</h1>
         </div>
       );
@@ -35,7 +35,7 @@ class User extends React.Component {
     return (
       <div className="user">
         <MountUserProfile data={this.state.userProfile} />
-       
+
       </div>
     );
   }

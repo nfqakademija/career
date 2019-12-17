@@ -36,14 +36,14 @@ class App extends React.Component {
           <Route exact path="/" component={HomePage} />
 
           {this.props.roles.includes("ROLE_HEAD") &&
-          this.props.logged === true ? (
-            <Route path="/profiles" component={ProfilePage} />
-          ) : null}
+            this.props.logged === true ? (
+              <Route path="/profiles" component={ProfilePage} />
+            ) : null}
 
           {this.props.roles.includes("ROLE_ADMIN") &&
-          this.props.logged === true ? (
-            <Route path="/hrprofiles" component={HrProfiles} />
-          ) : null}
+            this.props.logged === true ? (
+              <Route path="/hrprofiles" component={HrProfiles} />
+            ) : null}
 
           {this.props.logged ? <Route path="/user" component={User} /> : null}
 
