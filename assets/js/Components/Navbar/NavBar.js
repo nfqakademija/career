@@ -54,6 +54,7 @@ class NavBar extends React.Component {
     this.props.onSetLogged(!this.props.logged);
     this.props.onResetApp();
     localStorage.removeItem('jwt');
+    localStorage.removeItem('email');
   }
 
   render() {

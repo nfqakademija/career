@@ -11,13 +11,15 @@ import User from "./Pages/UserProfile/user.page";
 import Error from "./Pages/Error/Error";
 
 import { withRouter } from "react-router";
-import { setManagerPage } from "./Actions/action";
+import { setManagerPage, setEmail } from "./Actions/action";
 import { setLoginInfo } from "./thunk/setLoginInfo";
 
 class App extends React.Component {
   componentDidMount() {
     if (localStorage.getItem("jwt") !== null) {
       const data = localStorage.getItem("jwt");
+      const email = localStorage.getItem('email');
+      this.props.onSetEmail(JSON.parse(email));
       this.props.onSetLoginInfo(JSON.parse(data));
     }
   }
@@ -62,7 +64,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onSetManagerPage: profile => dispatch(setManagerPage(profile)),
-  onSetLoginInfo: data => dispatch(setLoginInfo(data))
+  onSetLoginInfo: (data) => dispatch(setLoginInfo(data)),
+  onSetEmail: email => dispatch(setEmail(email))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App));

@@ -28,6 +28,7 @@ class Login extends React.Component {
         if (response.data !== 401 && response.data !== 404) {
           this.props.onSetLoginInfo(response.data);
           localStorage.setItem("jwt", JSON.stringify(response.data));
+          localStorage.setItem('email', JSON.stringify(this.props.email));
         } else {
           alert("Login Failed");
         }
