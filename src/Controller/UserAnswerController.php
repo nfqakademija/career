@@ -78,6 +78,13 @@ class UserAnswerController extends AbstractFOSRestController
     {
         $requestObject = new UserAnswerRequest($request);
 
+        $careerForm = $this->careerFormRepository->findOneBy(['id' => $requestObject->getFormId()]);
+
+        if ($careerForm) {
+            $user = $this->userRepository->findOneBy(['id' => $careerForm->getFkUser()]);
+            $this->denyAccessUnlessGranted('user', $user);
+        }
+
         if (!$this->userAnswerService->handleSave($requestObject)) {
             return new Response(Response::HTTP_NOT_FOUND);
         }
@@ -99,7 +106,7 @@ class UserAnswerController extends AbstractFOSRestController
 
         if ($careerForm) {
             $user = $this->userRepository->findOneBy(['id' => $careerForm->getFkUser()]);
-            $this->denyAccessUnlessGranted('user_id', $user->getId());
+            $this->denyAccessUnlessGranted('user', $user);
         }
 
         $answers = $this->userAnswerRepository->findBy(['fkCareerForm' => (int) $slug]);

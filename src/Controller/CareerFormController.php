@@ -100,7 +100,7 @@ class CareerFormController extends AbstractFOSRestController
     {
         $user = $this->userRepository->findOneBy(['id' => $slug]);
 
-        $this->denyAccessUnlessGranted('user_id', $slug);
+        $this->denyAccessUnlessGranted('user', $user);
 
         $careerForm = $this->careerFormService->getUserCareerForm($user);
         if (!$careerForm) {
@@ -130,7 +130,7 @@ class CareerFormController extends AbstractFOSRestController
     {
         $user = $this->userRepository->findOneBy(['id' => $slug, 'underEvaluation' => true]);
 
-        $this->denyAccessUnlessGranted('user_id', $slug);
+        $this->denyAccessUnlessGranted('user', $user);
 
         $careerForm = $this->careerFormService->getUserCareerForm($user);
         if (!$careerForm) {

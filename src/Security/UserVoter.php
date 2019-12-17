@@ -12,8 +12,8 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 class UserVoter extends Voter
 {
 
-    const USER_ID = 'user_id';
-    const TEAM_ID = 'team_id';
+    const USER = 'user';
+    const TEAM = 'team';
 
     private $security;
 
@@ -28,7 +28,7 @@ class UserVoter extends Voter
     protected function supports($attribute, $subject)
     {
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, [self::USER_ID, self::TEAM_ID])) {
+        if (!in_array($attribute, [self::USER, self::TEAM])) {
             return false;
         }
         return true;
@@ -44,21 +44,21 @@ class UserVoter extends Voter
         }
 
         switch ($attribute) {
-            case self::USER_ID:
-                return $this->canViewByUserId($subject, $user);
-            case self::TEAM_ID:
-                return $this->canViewByTeamId($subject, $user);
+            case self::USER:
+                return $this->canViewByUser($subject, $user);
+            case self::TEAM:
+                return $this->canViewByTeam($subject, $user);
         }
 
         throw new \LogicException('This code should not be reached!');
     }
 
-    private function canViewByUserId($subject, User $user)
+    private function canViewByUser($subject, User $user)
     {
         if ($this->security->isGranted('ROLE_HEAD')) {
-            $findUser = $this->userRepository->findOneBy(['id' => $subject]);
 
-            $findUserTeams = $findUser->getTeam();
+            // checking if logged manager team Id matches with given user team Id
+            $findUserTeams = $subject->getTeam();
             $managerTeams = $user->getTeam();
             foreach ($managerTeams as $managerTeam) {
                 foreach ($findUserTeams as $findUserTeam) {
@@ -71,11 +71,11 @@ class UserVoter extends Voter
         }
 
         // checking if logged user Id matches with given Id
-        return $user->getId() === (int)$subject;
+        return $user->getId() === (int)$subject->getId();
     }
 
 
-    private function canViewByTeamId($subject, User $user)
+    private function canViewByTeam($subject, User $user)
     {
         if (!$this->security->isGranted('ROLE_HEAD')) {
             return false;
