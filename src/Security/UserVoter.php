@@ -57,14 +57,21 @@ class UserVoter extends Voter
     {
         if ($this->security->isGranted('ROLE_HEAD')) {
             $findUser = $this->userRepository->findOneBy(['id' => $subject]);
-            $findUserTeam = $findUser->getTeam();
-            $managerTeam = $user->getTeam();
-            return $managerTeam['id'] === $findUserTeam['id'];
 
+            $findUserTeams = $findUser->getTeam();
+            $managerTeams = $user->getTeam();
+            foreach ($managerTeams as $managerTeam) {
+                foreach ($findUserTeams as $findUserTeam) {
+                    if ($managerTeam->getId() === $findUserTeam->getId())
+                        return true;
+                }
+
+            }
+            return false;
         }
 
         // checking if logged user Id matches with given Id
-        return $user->getId() === $subject;
+        return $user->getId() === (int)$subject;
     }
 
 
@@ -74,7 +81,11 @@ class UserVoter extends Voter
             return false;
         }
         // checking if logged manager team Id matches with given Id
-        $managerTeam = $user->getTeam();
-        return $managerTeam['id'] === $subject;
+        $managerTeams = $user->getTeam();
+        foreach ($managerTeams as $managerTeam) {
+            if ($managerTeam->getId() === (int)$subject)
+                return true;
+        }
+        return false;
     }
 }
